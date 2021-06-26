@@ -1,0 +1,11 @@
+GDPR
+Key concepts: Lawful processing, Data subject rights, Data controllers vs. data processors, Privacy by design
+Data subject rights: The right to be forgotten, The right to access, The right to portability, The right to restriction of processing, The right to rectify, The right to object
+Data minimization
+The Privacy Engineer's Manifesto
+Szükséges nyilatkozatok
+Valami könnyen érthető összefoglaló a weboldalra, külön menüpontban
+
+Functional programming
+
+REST API
