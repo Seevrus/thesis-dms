@@ -1,0 +1,14 @@
+{
+    "name": "tz/thesis-dms",
+    "description": "Document management system using PHP RESTful APIs",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Zoltan Till",
+            "email": "tiller2004@gmail.com"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^5.4"
+    }
+}
