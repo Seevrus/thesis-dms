@@ -1,0 +1,18 @@
+GET https://reqres.in/api/users
+
+###
+GET http://localhost/rest-practice/api/post/read.php
+
+###
+GET http://localhost/rest-practice/api/post/read_single.php?id=7
+
+###
+POST http://localhost/rest-practice/api/post/create.php
+Content-Type: application/json
+
+{
+  "title": "My entertainment Post",
+  "body": "This is a sample entertainment post.",
+  "author": "Dr. Till Zoltán",
+  "category_id": "4"
+}
