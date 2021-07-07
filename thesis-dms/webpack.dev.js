@@ -20,7 +20,19 @@ module.exports = merge(common, {
         use: [
           'style-loader',
           'css-loader',
-          'postcss-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins() {
+                  return [
+                    // eslint-disable-next-line global-require
+                    require('autoprefixer'),
+                  ];
+                },
+              },
+            },
+          },
           'sass-loader',
         ],
       },

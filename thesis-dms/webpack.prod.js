@@ -11,7 +11,19 @@ module.exports = merge(common, {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'scss-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins() {
+                  return [
+                    // eslint-disable-next-line global-require
+                    require('autoprefixer'),
+                  ];
+                },
+              },
+            },
+          },
           'sass-loader',
         ],
       },
