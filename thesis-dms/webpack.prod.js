@@ -34,6 +34,9 @@ module.exports = merge(common, {
       chunks: 'all',
     },
   },
+  output: {
+    publicPath: '/thesis-dms/public',
+  },
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
