@@ -1,11 +1,23 @@
-// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
-@import "../node_modules/bootstrap/scss/functions";
+@import "~bootstrap/scss/bootstrap";
 
-// 2. Include any default variable overrides here
+.btn-primary {
+  margin-inline-end: 5px;
+}
 
-// 3. Include remainder of required Bootstrap stylesheets
-@import "../node_modules/bootstrap/scss/variables";
-@import "../node_modules/bootstrap/scss/mixins";
+hr {
+margin-top: 1rem;
+margin-bottom: 1rem;
+border: 0;
+border-top: 3px solid gray;
+}
 
-// 4. Include any optional Bootstrap components as you like
-// https://getbootstrap.com/docs/5.0/customize/sass/
+li.nav-item {
+  padding-right: 5px;
+}
+
+.list-group-item {
+border: none;
+position: relative;
+display: block;
+padding: 0.5rem 0.2rem;
+}
