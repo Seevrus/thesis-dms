@@ -1,4 +1,15 @@
 <?php
+require_once '../../../vendor/autoload.php';
+use Firebase\JWT\JWT;
+
+require_once '../../../csrf_protection/checkCsrfToken.php';
+require_once '../../../db/connectToDb.php';
+require_once '../../../db/selectUser.php';
+
+session_start();
+
+header('Content-Type: application/json');
+
 function getUserIP()
 {
     // Get real visitor IP behind CloudFlare network
@@ -27,56 +38,68 @@ function getSecretKey()
     return $keyFileContent['secret_key'];
 }
 
-header('Content-Type: application/json');
-
-// case 1: not from Hungary
-// just a simple check for the sake of the idea
-// TODO: check it on not localhost
-$ip = getUserIP();
-$res = file_get_contents('https://www.iplocate.io/api/lookup/' . $ip);
-$res = json_decode($res);
-$country = $res->county_code;
-
-if (!is_null($country) && $country != 'HU') {
+// CSRF Protection
+if(!checkCsrfToken()) {
     http_response_code(403);
-    echo json_encode(
-        array(
-            'outcome' => 'failure',
-            'message' => 'Request must originate from Hungary!'
-        )
-    );
-}
-
-// Verify login
-require_once '../../db/connectToDb.php';
-require_once '../../db/selectUser.php';
-$data = json_decode(file_get_contents("php://input"));
-$pdo = connectToDb();
-$fetchUserJSON = selectUser($pdo, $data->taxNumber, $data->password);
-$fetchUser = json_decode($fetchUserJSON);
-
-use Firebase\JWT\JWT;
-if ($fetchUser->outcome == 'success') {
-    // Issue Token
-
-    $issuedAt   = new DateTimeImmutable();
-    $expire     = $issuedAt->modify('+15 minutes')->getTimestamp();
-    $serverName = "localhost";
-    $username   = $data->taxNumber;
-
-    $payload = [
-        'iat'  => $issuedAt->getTimestamp(),         // Issued at: time when the token was generated
-        'iss'  => $serverName,                       // Issuer
-        'nbf'  => $issuedAt->getTimestamp(),         // Not before
-        'exp'  => $expire,                           // Expire
-        'userName' => $username,                     // User name
-    ];
-    $key = getSecretKey();
-    $jwt = JWT::encode($payload, $key);
-
-    echo($jwt);
+        echo json_encode(
+            array(
+                'outcome' => 'failure',
+                'message' => 'You do not have permission to access this page!'
+            )
+        );
 } else {
-    http_response_code(403);
-    echo $fetchUserJSON;
+    // case 1: not from Hungary
+    // just a simple check for the sake of the idea
+    // TODO: check it on not localhost
+    $ip = getUserIP();
+    $res = file_get_contents('https://www.iplocate.io/api/lookup/' . $ip);
+    $res = json_decode($res);
+    $country = $res->country_code;
+
+    if (!is_null($country) && $country != 'HU') {
+        http_response_code(403);
+        echo json_encode(
+            array(
+                'outcome' => 'failure',
+                'message' => 'Request must originate from Hungary!'
+            )
+        );
+    }
+
+    // Verify login
+    $credentials = json_decode(file_get_contents("php://input"));
+    $pdo = connectToDb();
+    $fetchUserJSON = selectUser($pdo, $credentials->taxNumber, $credentials->password);
+    $fetchUser = json_decode($fetchUserJSON);
+
+    if ($fetchUser->outcome == 'success') {
+        // Issue Token
+
+        $issuedAt   = new DateTimeImmutable();
+        $expire     = $issuedAt->modify('+15 minutes')->getTimestamp();
+        $serverName = "localhost";
+        $username   = $credentials->taxNumber;
+
+        $payload = [
+            'iat'  => $issuedAt->getTimestamp(),         // Issued at: time when the token was generated
+            'iss'  => $serverName,                       // Issuer
+            'nbf'  => $issuedAt->getTimestamp(),         // Not before
+            'exp'  => $expire,                           // Expire
+            'userName' => $username,                     // User name
+        ];
+        $key = getSecretKey();
+        $jwt = JWT::encode($payload, $key);
+
+        echo json_encode(
+          array(
+              'outcome' => 'success',
+              'message' => 'User successfully logged in',
+              'token' => $jwt
+          )
+      );
+    } else {
+        http_response_code(403);
+        echo $fetchUserJSON;
+    }
 }
 ?>
