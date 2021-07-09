@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import loginService from '../../../services/loginService';
 
 const LoginForm = () => {
   const [taxNumber, setTaxNumber] = useState('');
   const [loginPwd, setLoginPwd] = useState('');
+  const [taxNumberError, setTaxNumberError] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   const onTaxNumberChange = (e) => {
     const taxNumberInput = e.target.value;
@@ -24,6 +27,21 @@ const LoginForm = () => {
     }
   };
 
+  const onLoginAttempt = async (e) => {
+    e.preventDefault();
+    setLoginError('');
+
+    if (taxNumber < 1e9 || taxNumber > 1e10) {
+      setTaxNumberError('Hiba: Az adóazonosító jel 10 számjegyből állhat!');
+    }
+
+    setTaxNumberError('');
+    const response = await loginService(taxNumber, loginPwd);
+    if (response.outcome === 'failure') {
+      setLoginError(response.message);
+    }
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-md-center">
@@ -40,6 +58,11 @@ const LoginForm = () => {
                 required
               />
             </div>
+            {taxNumberError && (
+              <div className="alert alert-danger" role="alert">
+                {taxNumberError}
+              </div>
+            )}
             <div className="mb-3">
               <label htmlFor="login-pwd" className="form-label">Jelszó</label>
               <input
@@ -52,8 +75,13 @@ const LoginForm = () => {
                 required
               />
             </div>
-            <button type="button" className="btn btn-primary">Belépés</button>
+            <button type="button" className="btn btn-primary" onClick={onLoginAttempt}>Belépés</button>
             <button type="button" className="btn btn-primary" disabled>Elfelejtettem a jelszavam</button>
+            {loginError && (
+              <div className="alert alert-danger" role="alert">
+                {loginError}
+              </div>
+            )}
           </form>
         </div>
       </div>

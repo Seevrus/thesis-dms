@@ -1,22 +1,52 @@
 <?php
-function selectUser(PDO $pdo, string $taxId, string $password)
+function selectUser(PDO $pdo, string $taxNumber, string $password)
 {
     // do some clean-up
-    $taxId = htmlentities($taxId);
+    $taxNumber = htmlentities($taxNumber);
     $password = htmlentities($password);
     $query = 'SELECT * FROM dolgozo WHERE adoazonosito = :ad';
 
     // try to fetch the user
     $stmt = $pdo->prepare("SELECT * FROM dolgozo WHERE adoazonosito = :ad");
-    $stmt->execute(array( ':ad' => $taxId));
+    $stmt->execute(array( ':ad' => $taxNumber));
     $row = $stmt->fetch(PDO::FETCH_ASSOC);  // an array
 
-    // case 1: user not found
-    if (!$row) return false;
+    // case 2: user not found
+    if (!$row) {
+        return json_encode(
+            array(
+                'outcome' => 'failure',
+                'message' => 'User cannot be found'
+            )
+        );
+    }
+
+    // case 3: inactive user
+
+    // case 4: wrong password
+
+    // case 5: wrong password, third attempt
+
+    // case 6: successful login
 
     // case 2: wrong password
-    if (!password_verify($password, $row['jelszo'])) return false;
+    if (!password_verify($password, $row['jelszo'])) {
+        return json_encode(
+            array(
+                'outcome' => 'failure',
+                'message' => 'Invalid credentials'
+            )
+        );
+    }
 
-    return true;
+    return json_encode(
+        array(
+            'outcome' => 'success',
+            'message' => 'User found',
+            'taxNumber' => $row['adoazonosito'],
+            'email' => $row['email'],
+            'emailStatus' => $row['email_statusz']
+        )
+    );
 }
 ?>

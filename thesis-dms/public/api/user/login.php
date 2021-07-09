@@ -1,4 +1,26 @@
 <?php
+function getUserIP()
+{
+    // Get real visitor IP behind CloudFlare network
+    if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+        $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+        $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+    }
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
+
+    if (filter_var($client, FILTER_VALIDATE_IP)) {
+        $ip = $client;
+    } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
+        $ip = $forward;
+    } else {
+        $ip = $remote;
+    }
+
+    return $ip;
+}
+
 function getSecretKey()
 {
     $keyFileContent = parse_ini_file('../../../key.ini');
@@ -7,22 +29,40 @@ function getSecretKey()
 
 header('Content-Type: application/json');
 
+// case 1: not from Hungary
+// just a simple check for the sake of the idea
+// TODO: check it on not localhost
+$ip = getUserIP();
+$res = file_get_contents('https://www.iplocate.io/api/lookup/' . $ip);
+$res = json_decode($res);
+$country = $res->county_code;
+
+if (!is_null($country) && $country != 'HU') {
+    http_response_code(403);
+    echo json_encode(
+        array(
+            'outcome' => 'failure',
+            'message' => 'Request must originate from Hungary!'
+        )
+    );
+}
+
 // Verify login
 require_once '../../db/connectToDb.php';
 require_once '../../db/selectUser.php';
 $data = json_decode(file_get_contents("php://input"));
 $pdo = connectToDb();
-$isLoginValid = selectUser($pdo, $data->taxId, $data->password);
+$fetchUserJSON = selectUser($pdo, $data->taxNumber, $data->password);
+$fetchUser = json_decode($fetchUserJSON);
 
 use Firebase\JWT\JWT;
-if ($isLoginValid) {
+if ($fetchUser->outcome == 'success') {
     // Issue Token
-    include_once '../../../vendor/autoload.php';
 
     $issuedAt   = new DateTimeImmutable();
     $expire     = $issuedAt->modify('+15 minutes')->getTimestamp();
     $serverName = "localhost";
-    $username   = $data->taxId;
+    $username   = $data->taxNumber;
 
     $payload = [
         'iat'  => $issuedAt->getTimestamp(),         // Issued at: time when the token was generated
@@ -36,10 +76,7 @@ if ($isLoginValid) {
 
     echo($jwt);
 } else {
-    echo json_encode(
-        array(
-          'message' => 'User cannot log in'
-        )
-    );
+    http_response_code(403);
+    echo $fetchUserJSON;
 }
 ?>

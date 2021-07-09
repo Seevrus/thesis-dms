@@ -8,10 +8,13 @@ module.exports = merge(common, {
   devServer: {
     contentBase: path.join(__dirname, 'public', 'fe_dist'),
     compress: false,
+    historyApiFallback: true,
     hot: true,
     inline: true,
     port: 3000,
-    historyApiFallback: true,
+    proxy: {
+      '/api': 'http://localhost/thesis-dms/public',
+    },
   },
   module: {
     rules: [

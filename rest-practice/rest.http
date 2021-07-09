@@ -16,3 +16,11 @@ Content-Type: application/json
   "author": "Dr. Till Zoltán",
   "category_id": "4"
 }
+
+###
+GET http://localhost/thesis-dms/public/api/user/login.php
+
+{
+  "taxNumber": "1234567890",
+  "password": "61460983"
+}
