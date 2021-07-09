@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: localhost
--- Létrehozás ideje: 2021. Júl 09. 09:09
+-- Létrehozás ideje: 2021. Júl 09. 09:26
 -- Kiszolgáló verziója: 8.0.19
 -- PHP verzió: 7.4.3
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `dms_demo`
 --
+CREATE DATABASE IF NOT EXISTS `dms_demo` DEFAULT CHARACTER SET latin2 COLLATE latin2_hungarian_ci;
+USE `dms_demo`;
 
 -- --------------------------------------------------------
 
@@ -28,6 +30,7 @@ SET time_zone = "+00:00";
 -- Tábla szerkezet ehhez a táblához `ceg`
 --
 
+DROP TABLE IF EXISTS `ceg`;
 CREATE TABLE `ceg` (
   `cegkod` int UNSIGNED NOT NULL,
   `cegnev` varchar(45) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL
@@ -46,6 +49,7 @@ INSERT INTO `ceg` (`cegkod`, `cegnev`) VALUES
 -- Tábla szerkezet ehhez a táblához `cegnel_dolgozik`
 --
 
+DROP TABLE IF EXISTS `cegnel_dolgozik`;
 CREATE TABLE `cegnel_dolgozik` (
   `ceg_cegkod` int UNSIGNED NOT NULL,
   `dolgozo_adoazonosito` int UNSIGNED NOT NULL,
@@ -59,6 +63,7 @@ CREATE TABLE `cegnel_dolgozik` (
 -- Tábla szerkezet ehhez a táblához `dokumentum`
 --
 
+DROP TABLE IF EXISTS `dokumentum`;
 CREATE TABLE `dokumentum` (
   `azon` int UNSIGNED NOT NULL,
   `dolgozo_adoazonosito` int UNSIGNED NOT NULL,
@@ -74,6 +79,7 @@ CREATE TABLE `dokumentum` (
 -- Tábla szerkezet ehhez a táblához `dolgozo`
 --
 
+DROP TABLE IF EXISTS `dolgozo`;
 CREATE TABLE `dolgozo` (
   `adoazonosito` int UNSIGNED NOT NULL,
   `felhasznalo_statusz` tinyint UNSIGNED NOT NULL DEFAULT '1',
@@ -108,6 +114,7 @@ INSERT INTO `dolgozo` (`adoazonosito`, `felhasznalo_statusz`, `nev`, `email`, `e
 -- Tábla szerkezet ehhez a táblához `dolgozo_dokumentumot`
 --
 
+DROP TABLE IF EXISTS `dolgozo_dokumentumot`;
 CREATE TABLE `dolgozo_dokumentumot` (
   `azon` int UNSIGNED NOT NULL,
   `dolgozo_adoazonosito` int UNSIGNED NOT NULL,
