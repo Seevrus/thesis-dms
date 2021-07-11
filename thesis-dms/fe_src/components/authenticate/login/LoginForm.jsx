@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import loginService from '../../../services/loginService';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, selectErrorMessage } from '../../../store/usersSlice';
 
 const LoginForm = () => {
-  const [taxNumber, setTaxNumber] = useState('');
-  const [loginPwd, setLoginPwd] = useState('');
+  const dispatch = useDispatch();
+
+  const [taxNumber, setTaxNumber] = useState('1315760217');
+  const [loginPwd, setLoginPwd] = useState('49937335');
   const [taxNumberError, setTaxNumberError] = useState('');
   const [loginError, setLoginError] = useState('');
 
@@ -33,13 +36,14 @@ const LoginForm = () => {
 
     if (taxNumber < 1e9 || taxNumber > 1e10) {
       setTaxNumberError('Hiba: Az adóazonosító jel 10 számjegyből állhat!');
+      return false;
     }
 
     setTaxNumberError('');
-    const response = await loginService(taxNumber, loginPwd);
-    if (response.outcome === 'failure') {
-      setLoginError(response.message);
-    }
+    dispatch(login({ taxNumber, loginPwd }))
+      .then(() => {
+        setLoginError(useSelector(selectErrorMessage));
+      });
   };
 
   return (

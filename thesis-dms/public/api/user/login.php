@@ -104,8 +104,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(
                     array(
                         'outcome' => 'pending',
-                        'state' => 0,
+                        'status' => 0,
                         'message' => 'User should register an email address',
+                        'taxNumber' => $jwtDecoded->taxNumber,
+                        'expires' => $jwtDecoded->exp,
                     )
                 );
             } elseif ($emailStatus == 1) {
@@ -114,8 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(
                     array(
                         'outcome' => 'pending',
-                        'state' => 1,
+                        'status' => 1,
                         'message' => 'User should validate their email address',
+                        'taxNumber' => $jwtDecoded->taxNumber,
+                        'expires' => $jwtDecoded->exp,
                     )
                 );
             } else {
@@ -124,7 +128,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(
                     array(
                         'outcome' => 'success',
+                        'status' => 2,
                         'message' => 'User successfully logged in',
+                        'taxNumber' => $jwtDecoded->taxNumber,
+                        'expires' => $jwtDecoded->exp,
                     )
                 );
             }
