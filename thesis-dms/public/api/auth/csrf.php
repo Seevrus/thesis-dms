@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: application/json');
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (empty($_SERVER['HTTP_X_CSRF_TOKEN'])) {
         session_start();

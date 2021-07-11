@@ -14,7 +14,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
     $selectUserStmt->execute(array( ':ad' => $taxNumber));
     $userRow = $selectUserStmt->fetch(PDO::FETCH_ASSOC);
 
-    // case 2: user not found
+    // case 1: user not found
     if (!$userRow) {
         return json_encode(
             array(
@@ -24,7 +24,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         );
     }
 
-    // case 3: inactive user
+    // case 2: inactive user
     if ($userRow['felhasznalo_statusz'] == 0) {
         return json_encode(
             array(
@@ -34,7 +34,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         );
     }
 
-    // case 4.0: reset login attempts if they have occured long ago
+    // case 3.0: reset login attempts if they have occured long ago
     $updateTrialsQuery = 'UPDATE dolgozo SET probalkozas= :proba WHERE adoazonosito = :ad';
     $updateTrialsStmt = $pdo->prepare($updateTrialsQuery);
 
@@ -47,7 +47,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         $userRow = $selectUserStmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // case 4.5: too many login attempts
+    // case 3.5: too many login attempts
     $currentNumberOfAttempts = $userRow['probalkozas'];
     if ($currentNumberOfAttempts > $MAX_ATTEMPTS_PER_TIMESPAN && $hoursSinceLastTrial < $MAX_ATTEMPT_TIMESPAN_HOURS) {
         return json_encode(
@@ -58,7 +58,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         );
     }
 
-    // case 5: wrong password
+    // case 4: wrong password
     if (!password_verify($password, $userRow['jelszo'])) {
         // update number of trials
         $newTrials = $userRow['probalkozas'] + 1;
@@ -72,7 +72,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         );
     }
 
-    // case 6: successful login
+    // case 5: successful login
     $updateTrialsStmt->execute(array( ':proba' => 0, ':ad' => $taxNumber ));
     return json_encode(
         array(

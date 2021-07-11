@@ -1,10 +1,9 @@
 <?php
-require_once '../../../vendor/autoload.php';
-use Firebase\JWT\JWT;
-
 require_once '../../../csrf_protection/checkCsrfToken.php';
 require_once '../../../db/connectToDb.php';
 require_once '../../../db/selectUser.php';
+require_once '../../../jwt/jwtEncode.php';
+require_once '../../../jwt/jwtDecode.php';
 
 session_start();
 
@@ -32,74 +31,115 @@ function getUserIP()
     return $ip;
 }
 
-function getSecretKey()
-{
-    $keyFileContent = parse_ini_file('../../../key.ini');
-    return $keyFileContent['secret_key'];
-}
-
-// CSRF Protection
-if(!checkCsrfToken()) {
-    http_response_code(403);
-        echo json_encode(
-            array(
-                'outcome' => 'failure',
-                'message' => 'You do not have permission to access this page!'
-            )
-        );
-} else {
-    // case 1: not from Hungary
-    // just a simple check for the sake of the idea
-    // TODO: check it on not localhost
-    $ip = getUserIP();
-    $res = file_get_contents('https://www.iplocate.io/api/lookup/' . $ip);
-    $res = json_decode($res);
-    $country = $res->country_code;
-
-    if (!is_null($country) && $country != 'HU') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF Protection
+    if (!checkCsrfToken()) {
         http_response_code(403);
-        echo json_encode(
-            array(
-                'outcome' => 'failure',
-                'message' => 'Request must originate from Hungary!'
-            )
-        );
-    }
-
-    // Verify login
-    $credentials = json_decode(file_get_contents("php://input"));
-    $pdo = connectToDb();
-    $fetchUserJSON = selectUser($pdo, $credentials->taxNumber, $credentials->password);
-    $fetchUser = json_decode($fetchUserJSON);
-
-    if ($fetchUser->outcome == 'success') {
-        // Issue Token
-
-        $issuedAt   = new DateTimeImmutable();
-        $expire     = $issuedAt->modify('+15 minutes')->getTimestamp();
-        $serverName = "localhost";
-        $username   = $credentials->taxNumber;
-
-        $payload = [
-            'iat'  => $issuedAt->getTimestamp(),         // Issued at: time when the token was generated
-            'iss'  => $serverName,                       // Issuer
-            'nbf'  => $issuedAt->getTimestamp(),         // Not before
-            'exp'  => $expire,                           // Expire
-            'userName' => $username,                     // User name
-        ];
-        $key = getSecretKey();
-        $jwt = JWT::encode($payload, $key);
-
-        echo json_encode(
-          array(
-              'outcome' => 'success',
-              'message' => 'User successfully logged in',
-              'token' => $jwt
-          )
-      );
+            echo json_encode(
+                array(
+                    'outcome' => 'failure',
+                    'message' => 'You do not have permission to access this page!'
+                )
+            );
     } else {
-        http_response_code(403);
-        echo $fetchUserJSON;
+        // case 1: not from Hungary
+        // just a simple check for the sake of the idea
+        // TODO: check it on not localhost
+        $ip = getUserIP();
+        $res = file_get_contents('https://www.iplocate.io/api/lookup/' . $ip);
+        $res = json_decode($res);
+        $country = $res->country_code;
+
+        if (!is_null($country) && $country != 'HU') {
+            http_response_code(403);
+            echo json_encode(
+                array(
+                    'outcome' => 'failure',
+                    'message' => 'Request must originate from Hungary!'
+                )
+            );
+        }
+
+        // Verify login
+        $credentials = json_decode(file_get_contents("php://input"));
+
+        // case 2: invalid form of request
+        if (!isset($credentials->taxNumber) || !isset($credentials->password)) {
+            http_response_code(403);
+            echo json_encode(
+                array(
+                    'outcome' => 'failure',
+                    'message' => 'Invalid request formation!'
+                )
+            );
+            exit(1);
+        }
+
+        $pdo = connectToDb();
+        $fetchUserJSON
+            = selectUser($pdo, $credentials->taxNumber, $credentials->password);
+        $fetchUser = json_decode($fetchUserJSON);
+
+        if ($fetchUser->outcome == 'success') {
+            // Issue Token
+            $emailStatus = $fetchUser->emailStatus;
+            $jwt = jwtEncode($fetchUser->taxNumber, $emailStatus);
+
+            // set jwt as a cookie
+            $jwtDecoded = jwtDecode($jwt);
+            // TODO: set $secure to true in production
+            setcookie(
+                'token',
+                $jwt,
+                $jwtDecoded->exp,
+                '/',
+                $jwtDecoded->iss,
+                false,
+                true
+            );
+
+            if ($emailStatus == 0) {
+                // case 1: no email address present, 
+                // user should register one
+                echo json_encode(
+                    array(
+                        'outcome' => 'pending',
+                        'state' => 0,
+                        'message' => 'User should register an email address',
+                    )
+                );
+            } elseif ($emailStatus == 1) {
+                // case 2: email address is not yet validated, 
+                // user should present the validation code
+                echo json_encode(
+                    array(
+                        'outcome' => 'pending',
+                        'state' => 1,
+                        'message' => 'User should validate their email address',
+                    )
+                );
+            } else {
+                // case 3: valid email address is present, 
+                // user is considered to be logged in
+                echo json_encode(
+                    array(
+                        'outcome' => 'success',
+                        'message' => 'User successfully logged in',
+                    )
+                );
+            }
+        } else {
+            http_response_code(403);
+            echo $fetchUserJSON;
+        }
     }
+} else {
+    http_response_code(405);
+    echo json_encode(
+        array(
+            'outcome' => 'error',
+            'message' => 'Method not allowed',
+        )
+    );
 }
 ?>
