@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { checkLoginStatus, isUserLoggedin } from './store/usersSlice';
+import { checkLoginStatus, isUserLoggedin, LOGIN_STATUS } from './store/usersSlice';
 import Header from './components/header/Header';
 import LoginForm from './components/authenticate/login/LoginForm';
 import setupCsrfToken from './services/csrfService';
@@ -23,7 +23,7 @@ const App = () => {
 
   let rootComponent;
   if (loggedin === null) rootComponent = null;
-  else if (loggedin === 0) rootComponent = LoginForm;
+  else if (loggedin === LOGIN_STATUS.NOT_LOGGED_IN) rootComponent = LoginForm;
   else rootComponent = null; // TODO: default root component
 
   return (

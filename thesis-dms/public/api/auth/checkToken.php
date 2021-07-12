@@ -1,6 +1,7 @@
 <?php
-require_once '../../../jwt/jwtDecode.php';
-require_once '../../../jwt/jwtEncode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtEncode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
 header('Content-Type: application/json');
 
@@ -10,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(
             array(
                 'outcome' => 'success',
-                'status' => 0,
+                'loginStatus' => LOGIN_STATUS::NOT_LOGGED_IN,
                 'message' => 'User is currently not logged in'
             )
         );
@@ -34,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(
             array(
                 'outcome' => 'success',
-                'status' => $decodedNewToken->emailStatus,
+                'loginStatus' => LOGIN_STATUS::NOT_LOGGED_IN,
+                'emailStatus' => $decodedNewToken->emailStatus,
                 'message' => 'New token created',
                 'taxNumber' => $decodedNewToken->taxNumber,
                 'expires' => $decodedNewToken->exp,

@@ -1,9 +1,10 @@
 <?php
-require_once '../../../csrf_protection/checkCsrfToken.php';
-require_once '../../../db/connectToDb.php';
-require_once '../../../db/selectUser.php';
-require_once '../../../jwt/jwtEncode.php';
-require_once '../../../jwt/jwtDecode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtEncode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/selectUser.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
 session_start();
 
@@ -104,7 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(
                     array(
                         'outcome' => 'pending',
-                        'status' => 0,
+                        'loginStatus' => LOGIN_STATUS::LOGGED_IN,
+                        'emailStatus' => EMAIL_STATUS::NO_EMAIL,
                         'message' => 'User should register an email address',
                         'taxNumber' => $jwtDecoded->taxNumber,
                         'expires' => $jwtDecoded->exp,
@@ -116,7 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(
                     array(
                         'outcome' => 'pending',
-                        'status' => 1,
+                        'loginStatus' => LOGIN_STATUS::LOGGED_IN,
+                        'emailStatus' => EMAIL_STATUS::NOT_VALIDATED,
                         'message' => 'User should validate their email address',
                         'taxNumber' => $jwtDecoded->taxNumber,
                         'expires' => $jwtDecoded->exp,
@@ -128,7 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(
                     array(
                         'outcome' => 'success',
-                        'status' => 2,
+                        'loginStatus' => LOGIN_STATUS::LOGGED_IN,
+                        'emailStatus' => EMAIL_STATUS::VALID_EMAIL,
                         'message' => 'User successfully logged in',
                         'taxNumber' => $jwtDecoded->taxNumber,
                         'expires' => $jwtDecoded->exp,

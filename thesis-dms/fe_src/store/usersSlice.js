@@ -2,10 +2,22 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+const EMAIL_STATUS = {
+  NO_EMAIL: 'NO_EMAIL',
+  NOT_VALIDATED: 'NOT_VALIDATED',
+  VALID_EMAIL: 'VALID_EMAIL',
+};
+
+export const LOGIN_STATUS = {
+  NOT_LOGGED_IN: 'NOT_LOGGED_IN',
+  LOGGED_IN: 'LOGGED_IN',
+};
+
 const initialState = {
-  taxNumber: null,
-  loggedin: null,
+  loginStatus: null,
   expires: null,
+  taxNumber: null,
+  emailStatus: null,
   error: null,
 };
 
@@ -36,33 +48,38 @@ const usersSlice = createSlice({
   reducers: {},
   extraReducers: {
     [checkLoginStatus.fulfilled]: (state, action) => {
-      const { status, taxNumber, expires } = action.payload;
-      state.loggedin = status;
-      if (status !== 0) {
+      const { loginStatus, taxNumber, expires } = action.payload;
+      state.loginStatus = LOGIN_STATUS[loginStatus];
+      if (loginStatus !== LOGIN_STATUS.NOT_LOGGED_IN) {
         state.taxNumber = taxNumber;
         state.expires = expires;
       }
+    },
+    [checkLoginStatus.rejected]: (state) => {
+      state.error = 'API returned and error';
     },
     [login.fulfilled]: (state, action) => {
       const {
         outcome,
         message,
-        status,
+        loginStatus,
         taxNumber,
+        emailStatus,
         expires,
       } = action.payload;
       if (outcome === 'error' || outcome === 'failure') {
         state.error = message;
       } else {
-        state.loggedin = status;
+        state.loginStatus = LOGIN_STATUS[loginStatus];
         state.taxNumber = taxNumber;
+        state.emailStatus = EMAIL_STATUS[emailStatus];
         state.expires = expires;
       }
     },
   },
 });
 
-export const isUserLoggedin = (state) => state.users.loggedin;
+export const isUserLoggedin = (state) => state.users.loginStatus;
 export const selectErrorMessage = (state) => state.users.error;
 
 export default usersSlice.reducer;

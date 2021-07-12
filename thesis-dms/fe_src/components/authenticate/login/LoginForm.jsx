@@ -44,6 +44,8 @@ const LoginForm = () => {
       .then(() => {
         setLoginError(useSelector(selectErrorMessage));
       });
+
+    return true;
   };
 
   return (
