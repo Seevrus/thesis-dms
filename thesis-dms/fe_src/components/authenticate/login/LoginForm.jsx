@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, selectErrorMessage } from '../../../store/usersSlice';
+import { useDispatch } from 'react-redux';
+import { login } from '../../../store/usersSlice';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -41,8 +41,10 @@ const LoginForm = () => {
 
     setTaxNumberError('');
     dispatch(login({ taxNumber, loginPwd }))
-      .then(() => {
-        setLoginError(useSelector(selectErrorMessage));
+      .then(({ payload: { outcome, message } }) => {
+        if (outcome == 'failure') {
+          setLoginError(message);
+        }
       });
 
     return true;

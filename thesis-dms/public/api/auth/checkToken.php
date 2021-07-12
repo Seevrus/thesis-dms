@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(
             array(
                 'outcome' => 'success',
-                'loginStatus' => LOGIN_STATUS::NOT_LOGGED_IN,
+                'loginStatus' => LOGIN_STATUS::LOGGED_IN,
                 'emailStatus' => $decodedNewToken->emailStatus,
                 'message' => 'New token created',
                 'taxNumber' => $decodedNewToken->taxNumber,
