@@ -22,9 +22,13 @@ const App = () => {
   }, [loggedinState]);
 
   let rootComponent;
-  if (loggedin === null) rootComponent = null;
-  else if (loggedin === LOGIN_STATUS.NOT_LOGGED_IN) rootComponent = LoginForm;
-  else rootComponent = null; // TODO: default root component
+  if (loggedin === null) {
+    rootComponent = null;
+  } else if (loggedin === LOGIN_STATUS.NOT_LOGGED_IN) {
+    rootComponent = LoginForm;
+  } else {
+    rootComponent = null; // TODO: default root component
+  }
 
   return (
     <>

@@ -80,6 +80,6 @@ const usersSlice = createSlice({
 });
 
 export const isUserLoggedin = (state) => state.users.loginStatus;
-export const selectErrorMessage = (state) => state.users.error;
+export const loginExpires = (state) => state.users.expires;
 
 export default usersSlice.reducer;

@@ -42,7 +42,7 @@ const LoginForm = () => {
     setTaxNumberError('');
     dispatch(login({ taxNumber, loginPwd }))
       .then(({ payload: { outcome, message } }) => {
-        if (outcome == 'failure') {
+        if (outcome === 'failure') {
           setLoginError(message);
         }
       });
