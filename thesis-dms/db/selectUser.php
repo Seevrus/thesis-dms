@@ -21,7 +21,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => 'User cannot be found'
+                'message' => 'User cannot be found',
             )
         );
     }
@@ -31,7 +31,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => 'User is inactive'
+                'message' => 'User is inactive',
             )
         );
     }
@@ -55,7 +55,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => 'Too many failed login attempts'
+                'message' => 'Too many failed login attempts',
             )
         );
     }
@@ -69,7 +69,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => 'Invalid password'
+                'message' => 'Invalid password',
             )
         );
     }
@@ -82,7 +82,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
             'message' => 'User found',
             'taxNumber' => $userRow['adoazonosito'],
             'email' => $userRow['email'],
-            'emailStatus' => $userRow['email_statusz']
+            'emailStatus' => $userRow['email_statusz'],
         )
     );
 }

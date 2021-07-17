@@ -6,8 +6,6 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php'
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/selectUser.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
-session_start();
-
 header('Content-Type: application/json');
 
 function getUserIP()

@@ -1,9 +1,12 @@
 <?php
 header('Content-Type: application/json');
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (empty($_SERVER['HTTP_X_CSRF_TOKEN'])) {
-        session_start();
         if (empty($_SESSION['X_CSRF_TOKEN'])) {
             $token = bin2hex(random_bytes(32));
             $_SESSION['X_CSRF_TOKEN'] = $token;
