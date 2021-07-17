@@ -1,12 +1,19 @@
 @import "~bootstrap/scss/bootstrap";
 
+.alert-danger {
+  margin-top: 5px;
+}
+
 .btn-primary {
-  margin-bottom: 5px;
-  margin-inline-end: 5px;
+  margin-inline-end: 10px;
 }
 
 button.navbar-toggler {
   margin-right: 20px;
+}
+
+.form-container {
+  max-width: 420px;
 }
 
 .home-page-link {
@@ -14,10 +21,10 @@ button.navbar-toggler {
 }
 
 hr {
-margin-top: 1rem;
-margin-bottom: 1rem;
-border: 0;
-border-top: 3px solid gray;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 3px solid gray;
 }
 
 li.nav-item {
@@ -25,8 +32,8 @@ li.nav-item {
 }
 
 .list-group-item {
-border: none;
-position: relative;
-display: block;
-padding: 0.5rem 0.2rem;
+  border: none;
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.2rem;
 }

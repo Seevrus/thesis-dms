@@ -79,7 +79,7 @@ const usersSlice = createSlice({
   },
 });
 
-export const isUserLoggedin = (state) => state.users.loginStatus;
+export const userLoginStatus = (state) => state.users.loginStatus;
 export const loginExpires = (state) => state.users.expires;
 
 export default usersSlice.reducer;

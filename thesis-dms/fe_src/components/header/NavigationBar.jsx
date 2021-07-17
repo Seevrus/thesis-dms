@@ -7,9 +7,11 @@ import {
 import Countdown from 'react-countdown';
 import { useSelector } from 'react-redux';
 
-import { loginExpires } from '../../store/usersSlice';
+import { userLoginStatus, loginExpires, LOGIN_STATUS } from '../../store/usersSlice';
 
 const NavigationBar = () => {
+  const loggedin = useSelector(userLoginStatus);
+
   const expires = useSelector(loginExpires);
   const countDown = expires && (
   <Countdown
@@ -24,7 +26,7 @@ const NavigationBar = () => {
   />
   );
 
-  return (
+  return loggedin === LOGIN_STATUS.LOGGED_IN && (
     <Navbar collapseOnSelect bg="light" expand="lg">
       <Container>
         <Nav className="home-page-link">
