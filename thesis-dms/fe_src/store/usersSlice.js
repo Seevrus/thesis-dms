@@ -56,7 +56,7 @@ const usersSlice = createSlice({
       }
     },
     [checkLoginStatus.rejected]: (state) => {
-      state.error = 'API returned and error';
+      state.error = 'API returned an error';
     },
     [login.fulfilled]: (state, action) => {
       const {

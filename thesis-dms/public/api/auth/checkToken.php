@@ -17,31 +17,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         );
     } else {  // refresh token
         $token = $_COOKIE['token'];
-        $decodedToken = jwtDecode($token);
-        // TODO: what happens when JWT is invalid?
-        $newToken = jwtEncode($decodedToken->taxNumber, $decodedToken->emailStatus);
-        $decodedNewToken = jwtDecode($newToken);
-        // TODO: set $secure to true in production
-        setcookie(
-            'token',
-            $newToken,
-            $decodedNewToken->exp,
-            '/',
-            $decodedNewToken->iss,
-            false,
-            true
-        );
-
-        echo json_encode(
-            array(
-                'outcome' => 'success',
-                'loginStatus' => LOGIN_STATUS::LOGGED_IN,
-                'emailStatus' => $decodedNewToken->emailStatus,
-                'message' => 'New token created',
-                'taxNumber' => $decodedNewToken->taxNumber,
-                'expires' => $decodedNewToken->exp,
-            )
-        );
+        try {
+            $decodedToken = jwtDecode($token);
+            $newToken = jwtEncode($decodedToken->taxNumber, $decodedToken->emailStatus);
+            $decodedNewToken = jwtDecode($newToken);
+            // TODO: set $secure to true in production
+            setcookie(
+                'token',
+                $newToken,
+                $decodedNewToken->exp,
+                '/',
+                $decodedNewToken->iss,
+                false,
+                true
+            );
+    
+            echo json_encode(
+                array(
+                    'outcome' => 'success',
+                    'loginStatus' => LOGIN_STATUS::LOGGED_IN,
+                    'emailStatus' => $decodedNewToken->emailStatus,
+                    'message' => 'New token created',
+                    'taxNumber' => $decodedNewToken->taxNumber,
+                    'expires' => $decodedNewToken->exp,
+                )
+            );
+        } catch (Exception $e) {
+            http_response_code(403);
+            echo json_encode(
+                array(
+                    'outcome' => 'failure',
+                    'message' => 'You do not have permission to access this page!'
+                )
+            );
+        }
     }
 }
 ?>
