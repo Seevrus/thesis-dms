@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
   Container,
   Form,
 } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { login } from '../../store/usersSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { EMAIL_STATUS, login, userEmailStatus } from '../../store/usersSlice';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  // Redirect user is they are not supposed to be here
+  const emailStatus = useSelector(userEmailStatus);
+  useEffect(() => {
+    if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
+      history.push('/complete-registration');
+    }
+  }, [emailStatus]);
+  // End of redirections
 
   const [isFormValidated, setIsFormValidated] = useState(false);
   const [taxNumber, setTaxNumber] = useState('1315760217');
-  const [loginPassword, setLoginPassword] = useState('49937335');
+  const [loginPassword, setLoginPassword] = useState('Password1');
   const [taxNumberError, setTaxNumberError] = useState('');
   const [loginError, setLoginError] = useState('');
 
@@ -50,10 +61,13 @@ const LoginForm = () => {
     setTaxNumberError('');
     setIsFormValidated(true);
     dispatch(login({ taxNumber, loginPwd: loginPassword }))
-      .then(({ payload: { outcome, message } }) => {
+      // eslint-disable-next-line no-shadow
+      .then(({ payload: { emailStatus, message, outcome } }) => {
         if (outcome === 'failure') {
           setIsFormValidated(false);
           setLoginError(message);
+        } else if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
+          history.push('/complete-registration');
         }
       });
 

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-const EMAIL_STATUS = {
+export const EMAIL_STATUS = {
   NO_EMAIL: 'NO_EMAIL',
   NOT_VALIDATED: 'NOT_VALIDATED',
   VALID_EMAIL: 'VALID_EMAIL',
@@ -29,15 +29,29 @@ export const checkLoginStatus = createAsyncThunk(
   },
 );
 
-export const login = createAsyncThunk(
-  'users/login',
-  async ({ taxNumber, loginPwd }) => {
-    const credentials = { taxNumber, password: loginPwd };
+export const completeRegistration = createAsyncThunk(
+  'users/registerEmailAddress',
+  async ({ email, password }, { getState }) => {
     try {
-      const response = await axios.post('/api/user/login.php', credentials);
+      const { users: { taxNumber } } = getState();
+      const requestData = { taxNumber, email, password };
+      const response = await axios.post('/api/user/completeregistration.php', requestData);
       return response.data;
     } catch (e) {
       return e.response.data;
+    }
+  },
+);
+
+export const login = createAsyncThunk(
+  'users/login',
+  async ({ taxNumber, loginPwd }, { rejectWithValue }) => {
+    try {
+      const credentials = { taxNumber, password: loginPwd };
+      const response = await axios.post('/api/user/login.php', credentials);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
     }
   },
 );
@@ -48,9 +62,15 @@ const usersSlice = createSlice({
   reducers: {},
   extraReducers: {
     [checkLoginStatus.fulfilled]: (state, action) => {
-      const { loginStatus, taxNumber, expires } = action.payload;
+      const {
+        emailStatus,
+        loginStatus,
+        taxNumber,
+        expires,
+      } = action.payload;
       state.loginStatus = LOGIN_STATUS[loginStatus];
       if (loginStatus !== LOGIN_STATUS.NOT_LOGGED_IN) {
+        state.emailStatus = EMAIL_STATUS[emailStatus];
         state.taxNumber = taxNumber;
         state.expires = expires;
       }
@@ -60,25 +80,35 @@ const usersSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       const {
-        outcome,
-        message,
         loginStatus,
         taxNumber,
         emailStatus,
         expires,
       } = action.payload;
+      state.loginStatus = LOGIN_STATUS[loginStatus];
+      state.taxNumber = taxNumber;
+      state.emailStatus = EMAIL_STATUS[emailStatus];
+      state.expires = expires;
+    },
+    [login.rejected]: (state, action) => {
+      const { message } = action.payload;
+      state.error = message;
+    },
+    [completeRegistration.fulfilled]: (state, action) => {
+      const { emailStatus, message, outcome } = action.payload;
       if (outcome === 'error' || outcome === 'failure') {
         state.error = message;
       } else {
-        state.loginStatus = LOGIN_STATUS[loginStatus];
-        state.taxNumber = taxNumber;
-        state.emailStatus = EMAIL_STATUS[emailStatus];
-        state.expires = expires;
+        state.emailStatus = emailStatus;
       }
+    },
+    [completeRegistration.rejected]: (state) => {
+      state.error = 'API returned an error';
     },
   },
 });
 
+export const userEmailStatus = (state) => state.users.emailStatus;
 export const userLoginStatus = (state) => state.users.loginStatus;
 export const loginExpires = (state) => state.users.expires;
 
