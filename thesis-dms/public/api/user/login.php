@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($fetchUser->outcome == 'success') {
             // Issue Token
             $emailStatus = $fetchUser->emailStatus;
-            $jwt = jwtEncode($fetchUser->taxNumber, $emailStatus);
+            $jwt = jwtEncode($fetchUser->taxNumber, mapDbEmailStatus($emailStatus));
 
             // set jwt as a cookie
             $jwtDecoded = jwtDecode($jwt);
