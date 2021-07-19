@@ -13,16 +13,16 @@ const RegistrationCompletitionForm = () => {
   const dispatch = useDispatch();
 
   const [isFormValidated, setIsFormValidated] = useState(false);
-  const [emailAddress, setEmailAddress] = useState('');
-  const [emailAddressRepeat, setEmailAddressRepeat] = useState('');
-  const [emailAddressError, setEmailAddressError] = useState('');
-  const [newLoginPassword, setNewLoginPassword] = useState('');
+  const [emailAddress, setEmailAddress] = useState('till.zoltan90@gmail.com');
+  const [emailAddressRepeat, setEmailAddressRepeat] = useState('till.zoltan90@gmail.com');
+  const [emailAddressError, setEmailAddressError] = useState('Password1');
+  const [newLoginPassword, setNewLoginPassword] = useState('Password1');
   const [newLoginPasswordRepeat, setNewLoginPasswordRepeat] = useState('');
   const [newLoginPasswordError, setNewLoginPasswordError] = useState('');
   const [registrationError, setRegistrationError] = useState('');
 
   const testEmailAddress = (address) => {
-    const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+    const emailRegex = /^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
     return emailRegex.test(address);
   };
 

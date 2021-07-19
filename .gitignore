@@ -151,4 +151,5 @@ dist
 ### MISC
 thesis-dms/public/fe_dist
 db.ini
+email.ini
 key.ini

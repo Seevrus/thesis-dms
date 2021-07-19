@@ -1,7 +1,9 @@
 <?php
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/emailer.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/modifyEmail.php';
 
 header('Content-Type: application/json');
@@ -47,13 +49,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $credentials->email,
                 $passwordHash
             );
+
             $modifyEmail = json_decode($modifyEmailJSON);
+            $emailCode = $modifyEmail->emailCode;
+
+            $newLine = "\r\n";
+            $message = "";
+            $message .= "Tisztelt Felhasználónk!" . $newLine . $newLine;
+            $message .= "Ezt az e-mailt azért küldjük, mert ezzel az e-mail címmel regisztráltak a Szentistváni Mezőgazdasági Zrt. dokumentumkezelő rendszerébe. Amennyiben Ön indította el a regisztrációs folyamatot, kérem, hogy bejelentkezés után a megjelenő űrlapon írja be az alábbi kódot:" . $newLine;
+            $message .= "$emailCode" . $newLine;
+            $message .= "Amennyiben nem Ön indította el a regisztrációs folyamatot, kérem, szíveskedjen a hibát válaszüzenetben jelezni számunkra." . $newLine . $newLine;
+            $message .= "Tisztelettel," . $newLine;
+            $message .= "Szentistváni Mezőgazdasági Zrt." . $newLine;
+
+            emailer($credentials->email, "Dokumentumkezelő regisztráció", $message);
 
             echo json_encode(
                 array(
-                    'outcome' => 'success',
-                    'message' => 'Email successfully updated',
-                    'emailStatus' => EMAIL_STATUS::NOT_VALIDATED,
+                    'outcome' => $modifyEmail->outcome,
+                    'message' => $modifyEmail->message,
+                    'emailStatus' => $modifyEmail->emailStatus,
                 )
             );
         } catch (Exception $e) {
