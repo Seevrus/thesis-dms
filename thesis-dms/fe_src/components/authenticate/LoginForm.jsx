@@ -19,6 +19,9 @@ const LoginForm = () => {
     if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
       history.push('/complete-registration');
     }
+    else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
+      history.push('/email-validation');
+    }
   }, [emailStatus]);
   // End of redirections
 

@@ -1,23 +1,36 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
   Container,
   Form,
 } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { EMAIL_STATUS, completeRegistration } from '../../store/usersSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { EMAIL_STATUS, completeRegistration, userEmailStatus } from '../../store/usersSlice';
 
 const RegistrationCompletitionForm = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  // Redirect user is they are not supposed to be here
+  const emailStatus = useSelector(userEmailStatus);
+  useEffect(() => {
+    if (!emailStatus) {
+      history.push('/login');
+    } else if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
+      history.push('/complete-registration');
+    }
+  }, [emailStatus]);
+  // End of redirections
 
   const [isFormValidated, setIsFormValidated] = useState(false);
   const [emailAddress, setEmailAddress] = useState('till.zoltan90@gmail.com');
   const [emailAddressRepeat, setEmailAddressRepeat] = useState('till.zoltan90@gmail.com');
-  const [emailAddressError, setEmailAddressError] = useState('Password1');
+  const [emailAddressError, setEmailAddressError] = useState('');
   const [newLoginPassword, setNewLoginPassword] = useState('Password1');
-  const [newLoginPasswordRepeat, setNewLoginPasswordRepeat] = useState('');
+  const [newLoginPasswordRepeat, setNewLoginPasswordRepeat] = useState('Password1');
   const [newLoginPasswordError, setNewLoginPasswordError] = useState('');
   const [registrationError, setRegistrationError] = useState('');
 

@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { checkLoginStatus, LOGIN_STATUS, userLoginStatus } from './store/usersSlice';
+import EmailValidationForm from './components/authenticate/EmailValidationForm';
 import Header from './components/header/Header';
-import RegistrationCompletitionForm from './components/authenticate/RegistrationCompletitionForm';
 import LoginForm from './components/authenticate/LoginForm';
+import RegistrationCompletitionForm from './components/authenticate/RegistrationCompletitionForm';
 import setupCsrfToken from './services/csrfService';
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
           <Route exact path="/" component={rootComponent} />
           <Route exact path="/login" component={LoginForm} />
           <Route exact path="/complete-registration" component={RegistrationCompletitionForm} />
+          <Route exact path="/email-validation" component={EmailValidationForm} />
         </Switch>
       </Router>
     </>
