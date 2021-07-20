@@ -9,7 +9,7 @@ function validateEmail(PDO $pdo, string $taxNumber, string $emailCode)
 
     // TODO: for now, I assume that only a valid request can reach up to this point.
     // It would be nice to double-check this assumption
-    $checkHashQuery = 'SELECT email_kod FROM dolgozo WHERE adoazonosito = :ad';
+    $checkHashQuery = 'SELECT emailkod FROM dolgozo_emailkod WHERE dolgozo_azon = :ad';
     $checkHashStmt = $pdo->prepare($checkHashQuery);
     $checkHashStmt->execute(
         array(
@@ -17,12 +17,20 @@ function validateEmail(PDO $pdo, string $taxNumber, string $emailCode)
         )
     );
     $userRow = $checkHashStmt->fetch(PDO::FETCH_ASSOC);
-    if (password_verify($emailCode, $userRow['email_kod'])) {
-        $updateEmailQuery = 'UPDATE dolgozo SET email_statusz = :st, email_kod = NULL WHERE adoazonosito = :ad';
+    if (password_verify($emailCode, $userRow['emailkod'])) {
+        $updateEmailQuery = 'UPDATE dolgozo SET email_statusz = :st WHERE adoazonosito = :ad';
         $updateEmailStmt = $pdo->prepare($updateEmailQuery);
         $updateEmailStmt->execute(
             array(
                 ':st' => mapEmailStatusToDb(EMAIL_STATUS::VALID_EMAIL),
+                ':ad' => $taxNumber,
+            )
+        );
+
+        $deleteEmailCodeQuery = 'DELETE FROM dolgozo_emailkod WHERE dolgozo_azon = :ad';
+        $deleteEmailCodeStmt = $pdo->prepare($deleteEmailCodeQuery);
+        $deleteEmailCodeStmt->execute(
+            array(
                 ':ad' => $taxNumber,
             )
         );

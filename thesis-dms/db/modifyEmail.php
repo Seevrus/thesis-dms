@@ -14,15 +14,23 @@ function modifyEmail(PDO $pdo, string $taxNumber, string $email, string $passwor
 
     // TODO: for now, I assume that only a valid request can reach up to this point.
     // It would be nice to double-check this assumption
-    $updateEmailQuery = 'UPDATE dolgozo SET email = :em, email_statusz = :st, jelszo = :pw, email_kod = :cod WHERE adoazonosito = :ad';
+    $updateEmailQuery = 'UPDATE dolgozo SET email = :em, email_statusz = :st, jelszo = :pw WHERE adoazonosito = :ad';
     $updateEmailStmt = $pdo->prepare($updateEmailQuery);
     $updateEmailStmt->execute(
         array(
             ':em' => $email,
             ':st' => mapEmailStatusToDb(EMAIL_STATUS::NOT_VALIDATED),
             ':pw' => $passwordHash,
-            ':cod' => $emailCodeHash,
             ':ad' => $taxNumber,
+        )
+    );
+
+    $updateEmailCodeQuery = 'INSERT INTO dolgozo_emailkod (dolgozo_azon, emailkod) VALUES (:ad, :cod)';
+    $updateEmailCodeStmt = $pdo->prepare($updateEmailCodeQuery);
+    $updateEmailCodeStmt->execute(
+        array(
+            ':ad' => $taxNumber,
+            ':cod' => $emailCodeHash,
         )
     );
 
