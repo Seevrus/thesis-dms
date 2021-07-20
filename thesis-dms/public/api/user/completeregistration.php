@@ -2,6 +2,7 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/emailer.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/modifyEmail.php';
@@ -61,6 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message .= "Szentistváni Mezőgazdasági Zrt." . $newLine;
 
             emailer($credentials->email, "Dokumentumkezelő regisztráció", $message);
+
+            // Issue new token with new email status inside
+            issueNewToken($token, $modifyEmail->emailStatus);
 
             echo json_encode(
                 array(

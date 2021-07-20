@@ -2,6 +2,7 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/validateEmail.php';
 
@@ -45,6 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
 
             $validateEmail = json_decode($validateEmailJSON);
+
+            // Issue new token with new email status inside
+            issueNewToken($token, $validateEmail->emailStatus);
+
             if ($validateEmail->outcome === 'failure') {
                 http_response_code(401);
             }

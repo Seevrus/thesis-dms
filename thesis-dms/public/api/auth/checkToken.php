@@ -1,6 +1,5 @@
 <?php
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtEncode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
 header('Content-Type: application/json');
@@ -18,20 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     } else {  // refresh token
         $token = $_COOKIE['token'];
         try {
-            $decodedToken = jwtDecode($token);
-            $newToken = jwtEncode($decodedToken->taxNumber, $decodedToken->emailStatus);
-            $decodedNewToken = jwtDecode($newToken);
-            // TODO: set $secure to true in production
-            setcookie(
-                'token',
-                $newToken,
-                $decodedNewToken->exp,
-                '/',
-                $decodedNewToken->iss,
-                false,
-                true
-            );
-    
+            $decodedNewToken = issueNewToken($token);
+
             echo json_encode(
                 array(
                     'outcome' => 'success',

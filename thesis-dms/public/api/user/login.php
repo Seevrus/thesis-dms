@@ -1,8 +1,8 @@
 <?php
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtEncode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/selectUser.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
@@ -83,19 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Issue Token
             $emailStatus = $fetchUser->emailStatus;
             $jwt = jwtEncode($fetchUser->taxNumber, mapDbEmailStatus($emailStatus));
-
-            // set jwt as a cookie
-            $jwtDecoded = jwtDecode($jwt);
-            // TODO: set $secure to true in production
-            setcookie(
-                'token',
-                $jwt,
-                $jwtDecoded->exp,
-                '/',
-                $jwtDecoded->iss,
-                false,
-                true
-            );
+            $jwtDecoded = issueNewToken($jwt);
 
             if ($emailStatus == 0) {
                 // case 1: no email address present, 
