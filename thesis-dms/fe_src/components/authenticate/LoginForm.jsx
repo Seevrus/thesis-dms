@@ -18,9 +18,8 @@ const LoginForm = () => {
   useEffect(() => {
     if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
       history.push('/complete-registration');
-    }
-    else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
-      history.push('/email-validation');
+    } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
+      history.push('/validate-email');
     }
   }, [emailStatus]);
   // End of redirections

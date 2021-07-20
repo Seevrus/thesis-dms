@@ -40,7 +40,7 @@ const App = () => {
           <Route exact path="/" component={rootComponent} />
           <Route exact path="/login" component={LoginForm} />
           <Route exact path="/complete-registration" component={RegistrationCompletitionForm} />
-          <Route exact path="/email-validation" component={EmailValidationForm} />
+          <Route exact path="/validate-email" component={EmailValidationForm} />
         </Switch>
       </Router>
     </>

@@ -19,8 +19,8 @@ const RegistrationCompletitionForm = () => {
   useEffect(() => {
     if (!emailStatus) {
       history.push('/login');
-    } else if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
-      history.push('/complete-registration');
+    } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
+      history.push('/validate-email');
     }
   }, [emailStatus]);
   // End of redirections
@@ -118,12 +118,13 @@ const RegistrationCompletitionForm = () => {
     setEmailAddressError('');
     setIsFormValidated(true);
     dispatch(completeRegistration({ email: emailAddress, password: newLoginPassword }))
+      // eslint-disable-next-line no-shadow
       .then(({ payload: { emailStatus, outcome, message } }) => {
         if (outcome === 'failure') {
           setIsFormValidated(false);
           setRegistrationError(message);
         } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
-          // TODO
+          history.push('/validate-email');
         }
       });
 

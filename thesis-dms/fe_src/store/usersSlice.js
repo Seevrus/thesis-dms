@@ -31,14 +31,13 @@ export const checkLoginStatus = createAsyncThunk(
 
 export const completeRegistration = createAsyncThunk(
   'users/registerEmailAddress',
-  async ({ email, password }, { getState }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
-      const { users: { taxNumber } } = getState();
-      const requestData = { taxNumber, email, password };
+      const requestData = { email, password };
       const response = await axios.post('/api/user/completeregistration.php', requestData);
       return response.data;
     } catch (e) {
-      return e.response.data;
+      return rejectWithValue(e.response.data);
     }
   },
 );
@@ -49,6 +48,18 @@ export const login = createAsyncThunk(
     try {
       const credentials = { taxNumber, password: loginPwd };
       const response = await axios.post('/api/user/login.php', credentials);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  },
+);
+
+export const validateEmailAddress = createAsyncThunk(
+  'users/validateEmailAddress',
+  async ({ emailCode }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/api/user/emailvalidation.php', { emailCode });
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -78,6 +89,13 @@ const usersSlice = createSlice({
     [checkLoginStatus.rejected]: (state) => {
       state.error = 'API returned an error';
     },
+    [completeRegistration.fulfilled]: (state, action) => {
+      const { emailStatus } = action.payload;
+      state.emailStatus = emailStatus;
+    },
+    [completeRegistration.rejected]: (state, action) => {
+      state.error = action.payload.message;
+    },
     [login.fulfilled]: (state, action) => {
       const {
         loginStatus,
@@ -94,16 +112,12 @@ const usersSlice = createSlice({
       const { message } = action.payload;
       state.error = message;
     },
-    [completeRegistration.fulfilled]: (state, action) => {
-      const { emailStatus, message, outcome } = action.payload;
-      if (outcome === 'error' || outcome === 'failure') {
-        state.error = message;
-      } else {
-        state.emailStatus = emailStatus;
-      }
+    [validateEmailAddress.fulfilled]: (state, action) => {
+      const { emailStatus } = action.payload;
+      state.emailStatus = emailStatus;
     },
-    [completeRegistration.rejected]: (state) => {
-      state.error = 'API returned an error';
+    [validateEmailAddress.rejected]: (state, action) => {
+      state.error = action.payload.message;
     },
   },
 });

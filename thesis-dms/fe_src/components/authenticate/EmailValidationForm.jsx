@@ -1,16 +1,29 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
   Container,
   Form,
 } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { EMAIL_STATUS, completeRegistration } from '../../store/usersSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { EMAIL_STATUS, userEmailStatus, validateEmailAddress } from '../../store/usersSlice';
 
 const EmailValidationForm = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  // Redirect user is they are not supposed to be here
+  const emailStatus = useSelector(userEmailStatus);
+  useEffect(() => {
+    if (!emailStatus) {
+      history.push('/login');
+    } else if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
+      history.push('/complete-registration');
+    }
+  }, [emailStatus]);
+  // End of redirections
 
   const [isFormValidated, setIsFormValidated] = useState(false);
   const [emailCode, setEmailCode] = useState('');
@@ -48,15 +61,16 @@ const EmailValidationForm = () => {
 
     setEmailCodeError('');
     setIsFormValidated(true);
-    // dispatch(completeRegistration({ email: emailAddress, password: newLoginPassword }))
-    //   .then(({ payload: { emailStatus, outcome, message } }) => {
-    //     if (outcome === 'failure') {
-    //       setIsFormValidated(false);
-    //       setRegistrationError(message);
-    //     } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
-    //       // TODO
-    //     }
-    //   });
+    dispatch(validateEmailAddress({ emailCode }))
+      // eslint-disable-next-line no-shadow
+      .then(({ payload: { emailStatus, outcome, message } }) => {
+        if (outcome === 'failure') {
+          setIsFormValidated(false);
+          setValidationError(message);
+        } else if (emailStatus === EMAIL_STATUS.VALID_EMAIL) {
+          // TODO
+        }
+      });
 
     return true;
   };

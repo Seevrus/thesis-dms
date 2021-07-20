@@ -3,8 +3,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/emailer.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/modifyEmail.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/validateEmail.php';
 
 header('Content-Type: application/json');
 
@@ -27,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $credentials = json_decode(file_get_contents("php://input"));
 
-            if (!isset($credentials->email) || !isset($credentials->password)) {
+            if (!isset($credentials->emailCode)) {
                 http_response_code(403);
                 echo json_encode(
                     array(
@@ -38,37 +37,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit(1);
             }
 
-            $passwordHash = password_hash($credentials->password, PASSWORD_DEFAULT);
-
             $pdo = connectToDb();
-            $modifyEmailJSON = modifyEmail(
+            $validateEmailJSON = validateEmail(
                 $pdo,
                 $decodedToken->taxNumber,
-                $credentials->email,
-                $passwordHash
+                $credentials->emailCode,
             );
 
-            $modifyEmail = json_decode($modifyEmailJSON);
-            $emailCode = $modifyEmail->emailCode;
+            $validateEmail = json_decode($validateEmailJSON);
+            if ($validateEmail->outcome === 'failure') {
+                http_response_code(401);
+            }
+            echo $validateEmailJSON;
 
-            $newLine = "\r\n";
-            $message = "";
-            $message .= "Tisztelt Felhasználónk!" . $newLine . $newLine;
-            $message .= "Ezt az e-mailt azért küldjük, mert ezzel az e-mail címmel regisztráltak a Szentistváni Mezőgazdasági Zrt. dokumentumkezelő rendszerébe. Amennyiben Ön indította el a regisztrációs folyamatot, kérem, hogy bejelentkezés után a megjelenő űrlapon írja be az alábbi kódot:" . $newLine;
-            $message .= "$emailCode" . $newLine;
-            $message .= "Amennyiben nem Ön indította el a regisztrációs folyamatot, kérem, szíveskedjen a hibát válaszüzenetben jelezni számunkra." . $newLine . $newLine;
-            $message .= "Tisztelettel," . $newLine;
-            $message .= "Szentistváni Mezőgazdasági Zrt." . $newLine;
-
-            emailer($credentials->email, "Dokumentumkezelő regisztráció", $message);
-
-            echo json_encode(
-                array(
-                    'outcome' => $modifyEmail->outcome,
-                    'message' => $modifyEmail->message,
-                    'emailStatus' => $modifyEmail->emailStatus,
-                )
-            );
         } catch (Exception $e) {
             http_response_code(403);
             echo json_encode(

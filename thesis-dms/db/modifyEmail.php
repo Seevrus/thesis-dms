@@ -6,6 +6,7 @@ function modifyEmail(PDO $pdo, string $taxNumber, string $email, string $passwor
     // do some clean-up
     $taxNumber = htmlentities($taxNumber);
     $email = htmlentities($email);
+    $passwordHash = htmlentities($passwordHash);
 
     // generate an email code for validation purposes
     $emailCode = rand(100000, 999999);
