@@ -18,7 +18,7 @@ const initialState = {
   expires: null,
   taxNumber: null,
   emailStatus: null,
-  error: null,
+  message: null,
 };
 
 export const checkLoginStatus = createAsyncThunk(
@@ -48,6 +48,18 @@ export const login = createAsyncThunk(
     try {
       const credentials = { taxNumber, password: loginPwd };
       const response = await axios.post('/api/user/login.php', credentials);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  },
+);
+
+export const logout = createAsyncThunk(
+  'users/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/api/user/logout.php');
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -87,14 +99,14 @@ const usersSlice = createSlice({
       }
     },
     [checkLoginStatus.rejected]: (state) => {
-      state.error = 'API returned an error';
+      state.message = 'API returned an error';
     },
     [completeRegistration.fulfilled]: (state, action) => {
       const { emailStatus } = action.payload;
       state.emailStatus = emailStatus;
     },
     [completeRegistration.rejected]: (state, action) => {
-      state.error = action.payload.message;
+      state.message = action.payload.message;
     },
     [login.fulfilled]: (state, action) => {
       const {
@@ -109,18 +121,30 @@ const usersSlice = createSlice({
       state.expires = expires;
     },
     [login.rejected]: (state, action) => {
-      const { message } = action.payload;
-      state.error = message;
+      state.message = action.payload.message;
+    },
+    [logout.fulfilled]: (state, action) => {
+      const { loginStatus, message } = action.payload;
+      state.loginStatus = LOGIN_STATUS[loginStatus];
+      state.expires = null;
+      state.taxNumber = null;
+      state.emailStatus = null;
+      state.message = message;
+    },
+    [logout.rejected]: (state, action) => {
+      state.message = action.payload.message;
     },
     [validateEmailAddress.fulfilled]: (state, action) => {
       const { emailStatus } = action.payload;
       state.emailStatus = emailStatus;
     },
     [validateEmailAddress.rejected]: (state, action) => {
-      state.error = action.payload.message;
+      state.message = action.payload.message;
     },
   },
 });
+
+export const { reset } = usersSlice.actions;
 
 export const userEmailStatus = (state) => state.users.emailStatus;
 export const userLoginStatus = (state) => state.users.loginStatus;

@@ -6,13 +6,26 @@ import {
 } from 'react-bootstrap';
 import Countdown from 'react-countdown';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { userLoginStatus, loginExpires, LOGIN_STATUS } from '../../store/usersSlice';
 
 const NavigationBar = () => {
-  const loggedin = useSelector(userLoginStatus);
+  const history = useHistory();
 
+  const loggedin = useSelector(userLoginStatus);
   const expires = useSelector(loginExpires);
+
+  if (expires) {
+    const idleCheck = setInterval(() => {
+      if ((expires * 1000 - Date.now() < 0)) {
+        clearInterval(idleCheck);
+        history.push('/logout');
+      }
+    }, 5000);
+  }
+
   const countDown = expires && (
   <Countdown
     date={new Date(expires * 1000)}
@@ -44,11 +57,13 @@ const NavigationBar = () => {
           </Nav>
         </Navbar.Collapse>
         <Nav>
-          <Nav.Link href="#deets">
-            Kijelentkezés  (
-            {countDown}
-            )
-          </Nav.Link>
+          <Nav.Item>
+            <Link to="/logout">
+              Kijelentkezés  (
+              {countDown}
+              )
+            </Link>
+          </Nav.Item>
         </Nav>
       </Container>
     </Navbar>

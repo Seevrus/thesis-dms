@@ -6,6 +6,7 @@ import { checkLoginStatus, LOGIN_STATUS, userLoginStatus } from './store/usersSl
 import EmailValidationForm from './components/authenticate/EmailValidationForm';
 import Header from './components/header/Header';
 import LoginForm from './components/authenticate/LoginForm';
+import Logout from './components/authenticate/Logout';
 import RegistrationCompletitionForm from './components/authenticate/RegistrationCompletitionForm';
 import setupCsrfToken from './services/csrfService';
 
@@ -34,12 +35,13 @@ const App = () => {
 
   return (
     <>
-      <Header />
       <Router>
+        <Header />
         <Switch>
           <Route exact path="/" component={rootComponent} />
-          <Route exact path="/login" component={LoginForm} />
           <Route exact path="/complete-registration" component={RegistrationCompletitionForm} />
+          <Route exact path="/login" component={LoginForm} />
+          <Route exact path="/logout" component={Logout} />
           <Route exact path="/validate-email" component={EmailValidationForm} />
         </Switch>
       </Router>
