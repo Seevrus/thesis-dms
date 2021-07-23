@@ -62,12 +62,12 @@ const NavigationBar = () => {
         </Nav>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Dokumentumaim</Nav.Link>
-            <Nav.Link href="#link">Felhasználói aktivitás</Nav.Link>
-            <Nav.Link href="#link">Felhasználók kezelése</Nav.Link>
+            <Link to="/documents" className="nav-link">Dokumentumaim</Link>
+            <Link to="/user-activity" className="nav-link">Felhasználói aktivitás</Link>
+            <Link to="/user-handling" className="nav-link">Felhasználók kezelése</Link>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets">Profilom</Nav.Link>
+            <Link to="/profile" className="nav-link">Profilom</Link>
           </Nav>
         </Navbar.Collapse>
         <Nav>
