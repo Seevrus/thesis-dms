@@ -5,13 +5,19 @@ import {
   Navbar,
 } from 'react-bootstrap';
 import Countdown from 'react-countdown';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { userLoginStatus, loginExpires, LOGIN_STATUS } from '../../store/usersSlice';
+import {
+  checkLoginStatus,
+  loginExpires,
+  LOGIN_STATUS,
+  userLoginStatus,
+} from '../../store/usersSlice';
 
 const NavigationBar = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const loggedin = useSelector(userLoginStatus);
@@ -25,6 +31,12 @@ const NavigationBar = () => {
       }
     }, 5000);
   }
+
+  const recordActivity = (e) => {
+    if (e.target.href && !e.target.href.includes('/logout')) {
+      dispatch(checkLoginStatus());
+    }
+  };
 
   const countDown = expires && (
   <Countdown
@@ -40,11 +52,13 @@ const NavigationBar = () => {
   );
 
   return loggedin === LOGIN_STATUS.LOGGED_IN && (
-    <Navbar collapseOnSelect bg="light" expand="lg">
+    <Navbar collapseOnSelect bg="light" expand="lg" onClick={recordActivity}>
       <Container>
         <Nav className="home-page-link">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Brand href="#home">Kezdőlap</Navbar.Brand>
+          <Link to="/" className="navbar-brand">
+            Kezdőlap
+          </Link>
         </Nav>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -58,7 +72,7 @@ const NavigationBar = () => {
         </Navbar.Collapse>
         <Nav>
           <Nav.Item>
-            <Link to="/logout">
+            <Link to="/logout" className="nav-link">
               Kijelentkezés  (
               {countDown}
               )
