@@ -1,4 +1,6 @@
 <?php
+error_reporting(0);
+
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.php';
@@ -114,16 +116,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 // case 3: valid email address is present, 
                 // user is considered to be logged in
-                echo json_encode(
-                    array(
-                        'outcome' => 'success',
-                        'loginStatus' => LOGIN_STATUS::LOGGED_IN,
-                        'emailStatus' => EMAIL_STATUS::VALID_EMAIL,
-                        'message' => 'User successfully logged in',
-                        'taxNumber' => $jwtDecoded->taxNumber,
-                        'expires' => $jwtDecoded->exp,
-                    )
+                $authResponse = array(
+                    'outcome' => 'success',
+                    'loginStatus' => LOGIN_STATUS::LOGGED_IN,
+                    'emailStatus' => EMAIL_STATUS::VALID_EMAIL,
+                    'message' => 'User successfully logged in',
+                    'taxNumber' => $jwtDecoded->taxNumber,
+                    'expires' => $jwtDecoded->exp,
                 );
+                if ($credentials -> noBrowser) {
+                    $authResponse['token'] = $jwt;
+                }
+                echo json_encode($authResponse);
             }
         } else {
             http_response_code(403);
