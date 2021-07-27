@@ -4,7 +4,7 @@ use Firebase\JWT\JWT;
 
 require_once dirname(__FILE__) . '/getSecretKey.php';
 
-function jwtEncode($taxNumber, $emailStatus)
+function jwtEncode($taxNumber, $userPermissions, $emailStatus)
 {
     $issuedAt   = new DateTimeImmutable();
     $serverName = "localhost";
@@ -18,6 +18,7 @@ function jwtEncode($taxNumber, $emailStatus)
       'nbf'  => $issuedAt->getTimestamp(),         // Not before
       'exp'  => $expire,                           // Expire
       'taxNumber' => $taxNumber,                   // User name
+      'userPermissions' => $userPermissions,       // User permissions
       'emailStatus' => $emailStatus,               // Email status
     ];
 

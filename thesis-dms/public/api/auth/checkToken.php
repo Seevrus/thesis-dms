@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 array(
                     'outcome' => 'success',
                     'loginStatus' => LOGIN_STATUS::LOGGED_IN,
+                    'userPermissions' => $decodedNewToken->userPermissions,
                     'emailStatus' => $decodedNewToken->emailStatus,
                     'message' => 'New token created',
                     'taxNumber' => $decodedNewToken->taxNumber,

@@ -8,7 +8,7 @@ function issueNewToken($oldToken, $emailStatus = false)
     if (!$emailStatus) {
         $emailStatus = $decodedToken->emailStatus;
     }
-    $newToken = jwtEncode($decodedToken->taxNumber, $emailStatus);
+    $newToken = jwtEncode($decodedToken->taxNumber, $decodedToken->userPermissions, $emailStatus);
     $decodedNewToken = jwtDecode($newToken);
     // TODO: set $secure to true in production
     setcookie(

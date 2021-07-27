@@ -2,6 +2,14 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+const USER_PERMISSIONS = {
+  INACTIVE: 'INACTIVE',
+  USER: 'USER',
+  ACTIVITY_ADMINISTRATOR: 'ACTIVITY_ADMINISTRATOR',
+  USER_ADMINISTRATOR: 'USER_ADMINISTRATOR',
+  DOCUMENT_CREATOR: 'DOCUMENT_CREATOR',
+};
+
 export const EMAIL_STATUS = {
   NO_EMAIL: 'NO_EMAIL',
   NOT_VALIDATED: 'NOT_VALIDATED',
@@ -17,6 +25,7 @@ const initialState = {
   loginStatus: null,
   expires: null,
   taxNumber: null,
+  userPermissions: [],
   emailStatus: null,
   message: null,
 };
@@ -86,6 +95,7 @@ const usersSlice = createSlice({
   extraReducers: {
     [checkLoginStatus.fulfilled]: (state, action) => {
       const {
+        userPermissions,
         emailStatus,
         loginStatus,
         taxNumber,
@@ -95,6 +105,9 @@ const usersSlice = createSlice({
       if (loginStatus !== LOGIN_STATUS.NOT_LOGGED_IN) {
         state.emailStatus = EMAIL_STATUS[emailStatus];
         state.taxNumber = taxNumber;
+        state.userPermissions = Object.values(USER_PERMISSIONS).filter(
+          (permission) => userPermissions.includes(permission),
+        );
         state.expires = expires;
       }
     },
@@ -110,6 +123,7 @@ const usersSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       const {
+        userPermissions,
         loginStatus,
         taxNumber,
         emailStatus,
@@ -117,6 +131,9 @@ const usersSlice = createSlice({
       } = action.payload;
       state.loginStatus = LOGIN_STATUS[loginStatus];
       state.taxNumber = taxNumber;
+      state.userPermissions = Object.values(USER_PERMISSIONS).filter(
+        (permission) => userPermissions.includes(permission),
+      );
       state.emailStatus = EMAIL_STATUS[emailStatus];
       state.expires = expires;
     },
@@ -128,6 +145,7 @@ const usersSlice = createSlice({
       state.loginStatus = LOGIN_STATUS[loginStatus];
       state.expires = null;
       state.taxNumber = null;
+      state.userPermissions = [];
       state.emailStatus = null;
       state.message = message;
     },

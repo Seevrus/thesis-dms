@@ -76,11 +76,27 @@ function selectUser(PDO $pdo, string $taxNumber, string $password)
 
     // case 5: successful login
     $updateTrialsStmt->execute(array( ':proba' => 0, ':ad' => $taxNumber ));
+
+    // obtain user permissions
+    $checkUserPermissionsQuery = 'SELECT jogosultsag FROM dolgozo_jogosultsag WHERE dolgozo_azon = :ad';
+    $checkUserPermissionsStmt = $pdo->prepare($checkUserPermissionsQuery);
+    $checkUserPermissionsStmt->execute(
+        array(
+            ':ad' => $taxNumber,
+        )
+    );
+    $userPermissionRows = $checkUserPermissionsStmt->fetchAll(PDO::FETCH_ASSOC);
+    $userPermissions = array();
+    foreach ($userPermissionRows as $row) {
+        array_push($userPermissions, $row['jogosultsag']);
+    }
+
     return json_encode(
         array(
             'outcome' => 'success',
             'message' => 'User found',
             'taxNumber' => $userRow['adoazonosito'],
+            'userPermissions' => $userPermissions,
             'email' => $userRow['email'],
             'emailStatus' => $userRow['email_statusz'],
         )
