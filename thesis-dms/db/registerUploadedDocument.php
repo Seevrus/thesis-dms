@@ -42,7 +42,7 @@ function registerUploadedDocument(
         );
 
         // save path in database
-        $documentQuery = 'UPDATE dokumentum SET utvonal = :ut WHERE azon = :id';
+        $documentQuery = 'UPDATE dokumentum SET utvonal = :ut, lathato = 1 WHERE azon = :id';
         $docuemntStmt = $pdo->prepare($documentQuery);
         $docuemntStmt->execute(
             array(
