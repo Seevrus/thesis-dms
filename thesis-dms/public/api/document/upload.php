@@ -72,11 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
                     exit(1);
                 }
+                $fileType = mime_content_type($requestContent->url);
                 $document = file_get_contents($requestContent->url);
             // PDF upload
             } else if ($_SERVER['CONTENT_TYPE'] == 'application/pdf') {
+                $fileType = 'application/pdf';
                 $document = file_get_contents('php://input');
             } else {
+                $fileType = 'NOT_ALLOWED';
+            }
+            if ($fileType != 'application/pdf') {
                 http_response_code(403);
                     echo json_encode(
                         array(
