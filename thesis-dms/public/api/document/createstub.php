@@ -1,5 +1,6 @@
 <?php
 error_reporting(0);
+date_default_timezone_set('Europe/Budapest');
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/createDocumentStub.php';
@@ -76,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $createDocument = json_decode($createDocumentJSON);
 
-            if ($createDocument->outcome === 'failure') {
+            if ($createDocument->outcome == 'failure') {
                 http_response_code(401);
             }
             echo $createDocumentJSON;
