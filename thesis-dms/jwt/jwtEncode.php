@@ -8,7 +8,7 @@ function jwtEncode($taxNumber, $userPermissions, $emailStatus)
 {
     $issuedAt   = new DateTimeImmutable();
     $serverName = "localhost";
-    $expire     = $issuedAt->modify('+15 minutes')->getTimestamp();
+    $expire     = $issuedAt->modify('+1500 minutes')->getTimestamp();
 
     $key = getSecretKey();
     $alg = 'HS512';
