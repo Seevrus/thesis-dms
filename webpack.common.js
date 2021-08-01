@@ -9,6 +9,7 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'public', 'fe_dist'),
+    assetModuleFilename: 'images/[hash][ext][query]',
     clean: true,
   },
   module: {
@@ -22,18 +23,11 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        use: {
-          loader: 'svg-url-loader',
-          options: {
-            limit: 10000,
-          },
-        },
+        type: 'asset/inline',
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
-        use: {
-          loader: 'file-loader',
-        },
+        type: 'asset/resource',
       },
     ],
   },

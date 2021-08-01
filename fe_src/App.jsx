@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { checkLoginStatus, LOGIN_STATUS, userLoginStatus } from './store/usersSlice';
-import Documents from './components/Documents';
+import Documents from './components/documents/Documents';
 import EmailValidationForm from './components/authenticate/EmailValidationForm';
 import Header from './components/header/Header';
 import LoginForm from './components/authenticate/LoginForm';
