@@ -5,21 +5,22 @@ function createDocumentStub(
     PDO $pdo,
     string $taxNumber,
     string $documentName,
+    int $category,
     string $validUntil = null
-)
-{
+) {
     try {
         // do some clean-up
         $taxNumber = htmlentities($taxNumber);
         $documentName = htmlentities($documentName);
         $validUntil = htmlentities($validUntil);
 
-        $documentQuery = 'INSERT INTO dokumentum (dolgozo_adoazonosito, dokumentum_nev, ervenyes) VALUES (:azon, :nev, :erv)';
+        $documentQuery = 'INSERT INTO dokumentum (dolgozo_adoazonosito, dokumentum_nev, kategoria, ervenyes) VALUES (:azon, :nev, :kateg, :erv)';
         $docuemntStmt = $pdo->prepare($documentQuery);
         $docuemntStmt->execute(
             array(
                 ':azon' => $taxNumber,
                 ':nev' => $documentName,
+                ':kateg' => $category,
                 ':erv' => empty($validUntil) ? null : $validUntil,
             )
         );

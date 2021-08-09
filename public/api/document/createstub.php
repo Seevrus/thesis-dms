@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!isset($documentIdentifiers->taxNumber)
                 || !isset($documentIdentifiers->documentName)
+                || !isset($documentIdentifiers->category)
             ) {
                 http_response_code(403);
                 echo json_encode(
@@ -65,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $pdo,
                     $documentIdentifiers->taxNumber,
                     $documentIdentifiers->documentName,
+                    $documentIdentifiers->category,
                     $documentIdentifiers->validUntil,
                 );
             } else {
@@ -72,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $pdo,
                     $documentIdentifiers->taxNumber,
                     $documentIdentifiers->documentName,
+                    $documentIdentifiers->category
                 );
             }
 

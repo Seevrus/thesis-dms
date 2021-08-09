@@ -5,6 +5,7 @@ function createDocument(
     PDO $pdo,
     string $taxNumber,
     string $documentName,
+    int $category,
     string $targetLocation,
     string $validUntil = null
 )
@@ -16,12 +17,13 @@ function createDocument(
         $targetLocation = htmlentities($targetLocation);
         $validUntil = htmlentities($validUntil);
 
-        $documentQuery = 'INSERT INTO dokumentum (dolgozo_adoazonosito, dokumentum_nev, ervenyes, utvonal) VALUES (:azon, :nev, :erv, :ut)';
+        $documentQuery = 'INSERT INTO dokumentum (dolgozo_adoazonosito, dokumentum_nev, kategoria, ervenyes, utvonal) VALUES (:azon, :nev, :kateg, :erv, :ut)';
         $docuemntStmt = $pdo->prepare($documentQuery);
         $docuemntStmt->execute(
             array(
                 ':azon' => $taxNumber,
                 ':nev' => $documentName,
+                ':kateg' => $category,
                 ':erv' => empty($validUntil) ? null : $validUntil,
                 ':ut' => $targetLocation,
             )

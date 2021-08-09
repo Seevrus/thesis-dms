@@ -81,11 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($documents as $document) {
                 if (!isset($document->taxNumber)
                     || !isset($document->documentName)
+                    || !isset($document->category)
                     || !isset($document->url)
                 ) {
                     $fileResponse = array(
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
+                        'category' => $document->category,
                         'url' => $document->url,
                         'outcome' => 'failure',
                         'message' => 'Missing data from request',
@@ -103,6 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $fileResponse = array(
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
+                        'category' => $document->category,
                         'url' => $document->url,
                         'outcome' => 'failure',
                         'message' => 'File type not allowed',
@@ -116,6 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $pdo,
                         $document->taxNumber,
                         $document->documentName,
+                        $document->category,
                         $targetLocation,
                         $document->validUntil,
                     );
@@ -124,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $pdo,
                         $document->taxNumber,
                         $document->documentName,
+                        $document->category,
                         $targetLocation,
                     );
                 }
@@ -134,6 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $fileResponse = array(
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
+                        'category' => $document->category,
                         'url' => $document->url,
                         'outcome' => 'failure',
                         'message' => 'Unexpected database error',
@@ -145,6 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $fileResponse = array(
                     'taxNumber' => $document->taxNumber,
                     'documentName' => $document->documentName,
+                    'category' => $document->category,
                     'url' => $document->url,
                     'outcome' => 'success',
                     'message' => 'File uploaded successfully',

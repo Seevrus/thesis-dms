@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'emailStatus' => EMAIL_STATUS::NO_EMAIL,
                         'message' => 'User should register an email address',
                         'taxNumber' => $jwtDecoded->taxNumber,
-                        'userPermissions' => $jwtDecoded->userPermissions,
+                        'userPermissions' => array(),
                         'expires' => $jwtDecoded->exp,
                     )
                 );
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'emailStatus' => EMAIL_STATUS::NOT_VALIDATED,
                         'message' => 'User should validate their email address',
                         'taxNumber' => $jwtDecoded->taxNumber,
-                        'userPermissions' => $jwtDecoded->userPermissions,
+                        'userPermissions' => array(),
                         'expires' => $jwtDecoded->exp,
                     )
                 );
