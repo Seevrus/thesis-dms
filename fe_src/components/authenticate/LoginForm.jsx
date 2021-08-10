@@ -20,6 +20,8 @@ const LoginForm = () => {
       history.push('/complete-registration');
     } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
       history.push('/validate-email');
+    } else if (emailStatus === EMAIL_STATUS.VALID_EMAIL) {
+      history.push('/documents');
     }
   }, [emailStatus]);
   // End of redirections
