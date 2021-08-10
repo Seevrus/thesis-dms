@@ -4,6 +4,8 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/selectDocuments.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
 header('Content-Type: application/json');
 
@@ -39,13 +41,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             // end of checking user permission
 
-            $queryParams = json_decode(file_get_contents("php://input"));
-            $fetchFrom = property_exists($queryParams, 'fetchFrom')
-                ? $queryParams->fetchFrom
-                : null;
-            $category = property_exists($queryParams, 'category')
-                ? $queryParams->category
-                : null;
+            $pdo = connectToDb();
+            $requestBody = file_get_contents("php://input");
+            if ($requestBody) {
+                $queryParams = json_decode(file_get_contents("php://input"));
+                $fetchFrom = property_exists($queryParams, 'fetchFrom')
+                    ? $queryParams->fetchFrom
+                    : 0;
+                $category = property_exists($queryParams, 'category')
+                    ? $queryParams->category
+                    : null;
+            } else {
+                $fetchFrom = 0;
+                $category = null;
+            }
             
             $selectedDocumentsJSON = selectDocuments(
                 $pdo,
