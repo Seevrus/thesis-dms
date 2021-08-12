@@ -149,7 +149,7 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,composer,visualstudiocode
 
 ### MISC
-thesis-dms/public/fe_dist
+public/fe_dist
 db.ini
 email.ini
 key.ini

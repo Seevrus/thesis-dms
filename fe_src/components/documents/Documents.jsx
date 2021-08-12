@@ -11,7 +11,7 @@ import {
   userEmailStatus,
   userLoginStatus,
 } from '../../store/usersSlice';
-import { fetchDocuments } from '../../store/documentsSlice';
+import { fetchDocuments, selectDocumentIds } from '../../store/documentsSlice';
 
 const Documents = () => {
   const dispatch = useDispatch();
@@ -46,6 +46,9 @@ const Documents = () => {
     }
   }, [emailStatus]);
 
+  const documentIds = useSelector(selectDocumentIds);
+  const documents = documentIds.map((id) => <SingleDocument key={id} id={id} />);
+
   return (
     <Container className="mt-5 mb-5">
       {isComponentLoading ? (
@@ -58,9 +61,7 @@ const Documents = () => {
         : (
           <>
             <h3 className="text-center">Dokumentumaim</h3>
-            <SingleDocument />
-            <SingleDocument />
-            <SingleDocument />
+            {documents}
 
             <Container className="letoltes_blokk mt-3">
               <div className="d-flex justify-content-end">

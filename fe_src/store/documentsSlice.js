@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 
-const documentsAdapter = createEntityAdapter({
-  selectId: (document) => document.azon,
-});
+const documentsAdapter = createEntityAdapter();
 const initialState = documentsAdapter.getInitialState();
 
 export const fetchDocuments = createAsyncThunk(
@@ -26,5 +24,10 @@ const documentsSlice = createSlice({
     [fetchDocuments.fulfilled]: documentsAdapter.upsertMany,
   },
 });
+
+export const {
+  selectById: selectDocumentById,
+  selectIds: selectDocumentIds,
+} = documentsAdapter.getSelectors((state) => state.documents);
 
 export default documentsSlice.reducer;

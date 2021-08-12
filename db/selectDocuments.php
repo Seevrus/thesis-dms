@@ -16,7 +16,7 @@ function selectDocuments(
         $limit = htmlentities($limit);
 
         if (empty($category)) {
-            $fetchQuery = 'SELECT d.azon, d.dokumentum_nev, k.kategoria_nev, d.hozzaadva, d.ervenyes FROM dokumentum d JOIN dokumentum_kategoria k ON d.kategoria = k.azon WHERE d.dolgozo_adoazonosito = :ad AND lathato = :lt AND (ISNULL(d.ervenyes) OR d.ervenyes > NOW()) LIMIT :honnan, :hova';
+            $fetchQuery = 'SELECT d.azon AS id, d.dokumentum_nev AS documentName, k.kategoria_nev AS category, d.hozzaadva AS added, d.ervenyes AS validUntil FROM dokumentum d JOIN dokumentum_kategoria k ON d.kategoria = k.azon WHERE d.dolgozo_adoazonosito = :ad AND lathato = :lt AND (ISNULL(d.ervenyes) OR d.ervenyes > NOW()) LIMIT :honnan, :hova';
             $fetchQueryStmt = $pdo->prepare($fetchQuery);
             $fetchQueryStmt->execute(
                 array(
@@ -27,7 +27,7 @@ function selectDocuments(
                 )
             );
         } else {
-            $fetchQuery = 'SELECT d.azon, d.dokumentum_nev, k.kategoria_nev, d.hozzaadva, d.ervenyes FROM dokumentum d JOIN dokumentum_kategoria k ON d.kategoria = k.azon WHERE d.dolgozo_adoazonosito = :ad AND lathato = :lt AND (ISNULL(d.ervenyes) OR d.ervenyes > NOW()) AND d.kategoria = :kat LIMIT :honnan, :hova';
+            $fetchQuery = 'SELECT d.azon AS id, d.dokumentum_nev AS documentName, k.kategoria_nev AS category, d.hozzaadva AS added, d.ervenyes AS validUntil FROM dokumentum d JOIN dokumentum_kategoria k ON d.kategoria = k.azon WHERE d.dolgozo_adoazonosito = :ad AND lathato = :lt AND (ISNULL(d.ervenyes) OR d.ervenyes > NOW()) AND d.kategoria = :kat LIMIT :honnan, :hova';
             $fetchQueryStmt = $pdo->prepare($fetchQuery);
             $fetchQueryStmt->execute(
                 array(
