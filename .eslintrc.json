@@ -5,7 +5,8 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "plugin:import/typescript",
+        "airbnb-typescript"
     ],
     "parserOptions": {
         "ecmaFeatures": {

@@ -22,6 +22,13 @@ module.exports = {
         },
       },
       {
+        test: /\.tsx?$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'ts-loader',
+        },
+      },
+      {
         test: /\.svg$/,
         type: 'asset/inline',
       },
@@ -39,6 +46,6 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
 };
