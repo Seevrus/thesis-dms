@@ -22,6 +22,7 @@ interface Document {
   documentName: string,
   category: string,
   added: string,
+  downloadedAt: string,
   validUntil: string,
 };
 
@@ -45,6 +46,7 @@ const SingleDocument = ({ id } : Props) => {
     added,
     category,
     documentName,
+    downloadedAt,
     validUntil
   }: Document = useSelector((state) => selectDocumentById(state, id));
   const formattedCategory = decode(category);
@@ -83,7 +85,7 @@ const SingleDocument = ({ id } : Props) => {
       <div className="d-flex justify-content-end mt-1">
         <div className="letolt">
           <Button variant="primary" onClick={handleDownload}>Letöltés</Button>
-          <Button variant="secondary" disabled>Törlés</Button>
+          {downloadedAt && <Button variant="primary">Törlés</Button>}
         </div>
       </div>
       <hr />

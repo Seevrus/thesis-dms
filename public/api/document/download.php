@@ -6,8 +6,8 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/getDocumentPath.php';
-// require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/saveFile.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/registerDocumentDownload.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF Protection
@@ -63,9 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'message' => 'Document cannot be found',
                     )
                 );
-            } else {
-                echo file_get_contents($documentPath->documentPath);
+                exit(1);
             }
+
+            $registerDocumentAnswerJSON = registerDocumentDownload($pdo, $decodedToken->taxNumber, $documentIdentifiers->documentId);
+            $registerDocumentAnswer = json_decode($registerDocumentAnswerJSON);
+
+            if ($registerDocumentAnswer->outcome == 'failure') {
+                http_response_code(401);
+                echo json_encode(
+                    array(
+                        'outcome' => 'failure',
+                        'message' => 'Unexpected database issue',
+                    )
+                );
+                exit(1);
+            }
+
+            echo file_get_contents($documentPath->documentPath);
+            
         } catch (Exception $e) {
             http_response_code(403);
             echo json_encode(
