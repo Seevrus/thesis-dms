@@ -4,6 +4,17 @@ import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/too
 const documentsAdapter = createEntityAdapter();
 const initialState = documentsAdapter.getInitialState();
 
+export const downloadDocument = async (id) => {
+  try {
+    const response = await axios.post('/api/document/download.php', { documentId: id }, { responseType: 'blob' });
+    return response.data;
+  } catch (e) {
+    const response = await e.response.data.text();
+    const responseJSON = JSON.parse(response);
+    throw new Error(responseJSON.message);
+  }
+};
+
 export const fetchDocuments = createAsyncThunk(
   'documents/fetchDocuments',
   async (requestData, { rejectWithValue }) => {
