@@ -4,9 +4,14 @@ import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/too
 const documentsAdapter = createEntityAdapter();
 const initialState = documentsAdapter.getInitialState();
 
+export const deleteDocument = async (id) => {
+  const response = await axios.post('/api/document/delete.php', { documentId: id });
+  return response.data;
+};
+
 export const downloadDocument = async (id) => {
   try {
-    const response = await axios.post('/api/document/download.php', { documentId: id }, { responseType: 'blob' });
+    const response = axios.post('/api/document/download.php', { documentId: id }, { responseType: 'blob' });
     return response.data;
   } catch (e) {
     const response = await e.response.data.text();
@@ -30,7 +35,9 @@ export const fetchDocuments = createAsyncThunk(
 const documentsSlice = createSlice({
   name: 'documents',
   initialState,
-  reducers: {},
+  reducers: {
+    removeDeletedDocument: documentsAdapter.removeOne,
+  },
   extraReducers: {
     [fetchDocuments.fulfilled]: documentsAdapter.upsertMany,
   },
@@ -40,5 +47,7 @@ export const {
   selectById: selectDocumentById,
   selectIds: selectDocumentIds,
 } = documentsAdapter.getSelectors((state) => state.documents);
+
+export const { removeDeletedDocument } = documentsSlice.actions;
 
 export default documentsSlice.reducer;

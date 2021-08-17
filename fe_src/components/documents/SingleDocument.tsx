@@ -10,12 +10,12 @@ import {
   ListGroup,
   Row,
 } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import information from '../../img/information.svg';
 import paymentMethod from '../../img/payment-method.svg';
 
-import { downloadDocument, selectDocumentById } from '../../store/documentsSlice';
+import { deleteDocument, downloadDocument, removeDeletedDocument, selectDocumentById } from '../../store/documentsSlice';
 
 interface Document {
   id: number,
@@ -40,7 +40,10 @@ const DOCUMENT_CATEGORY: Map = {
 };
 
 const SingleDocument = ({ id } : Props) => {
-  const [downloadError, setDownloadError] = React.useState('');
+  const dispatch = useDispatch();
+
+  const [deleteSuccess, setDeleteSuccess] = React.useState('');
+  const [serverError, setServerError] = React.useState('');
 
   const {
     added,
@@ -52,14 +55,25 @@ const SingleDocument = ({ id } : Props) => {
   const formattedCategory = decode(category);
   const formattedDocumentName = decode(documentName);
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    deleteDocument(id)
+      .then(() => {
+        setServerError('');
+        setDeleteSuccess('Törlés sikeres.');
+        setTimeout(() => dispatch(removeDeletedDocument(id)), 1000);
+      })
+      .catch((e) => setServerError(e.message));
+  };
+
   const handleDownload = (e: React.MouseEvent) => {
     e.preventDefault();
     downloadDocument(id)
       .then((data) => {
-        setDownloadError('');
-        fileDownload(data, `${formattedDocumentName}.pdf`)
+        setServerError('');
+        fileDownload(data, `${formattedDocumentName}.pdf`);
       })
-      .catch((e) => setDownloadError(e.message));
+      .catch((e) => setServerError(e.message));
   };
 
   return (
@@ -74,9 +88,14 @@ const SingleDocument = ({ id } : Props) => {
             <ListGroup.Item>Kategória: {formattedCategory}</ListGroup.Item>
             <ListGroup.Item>Hozzáadva: {added}</ListGroup.Item>
             {validUntil && <ListGroup.Item>Érvényes: {validUntil}</ListGroup.Item>}
-            {downloadError && (
+            {deleteSuccess && (
               <ListGroup.Item>
-                <Alert variant="danger">Hiba: {downloadError}</Alert>
+                <Alert variant="success">{deleteSuccess}</Alert>
+              </ListGroup.Item>
+            )}
+            {serverError && (
+              <ListGroup.Item>
+                <Alert variant="danger">Hiba: {serverError}</Alert>
               </ListGroup.Item>
             )}
           </ListGroup>
@@ -85,7 +104,7 @@ const SingleDocument = ({ id } : Props) => {
       <div className="d-flex justify-content-end mt-1">
         <div className="letolt">
           <Button variant="primary" onClick={handleDownload}>Letöltés</Button>
-          {downloadedAt && <Button variant="primary">Törlés</Button>}
+          {downloadedAt && <Button variant="primary" onClick={handleDelete}>Törlés</Button>}
         </div>
       </div>
       <hr />
