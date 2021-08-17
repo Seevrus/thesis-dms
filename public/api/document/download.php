@@ -1,13 +1,13 @@
 <?php
-// error_reporting(0);
+error_reporting(0);
 date_default_timezone_set('Europe/Budapest');
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/getDocumentPath.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/registerDocumentDownload.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF Protection
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $documentPath = json_decode($documentPathJSON);
 
             if ($documentPath->outcome == 'failure') {
-                http_response_code(401);
+                http_response_code(404);
                 echo json_encode(
                     array(
                         'outcome' => 'failure',
@@ -80,7 +80,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit(1);
             }
 
-            echo file_get_contents($documentPath->documentPath);
+            $document = file_get_contents($documentPath->documentPath);
+            if (!$document) {
+                http_response_code(404);
+                echo json_encode(
+                    array(
+                        'outcome' => 'failure',
+                        'message' => 'Document cannot be found',
+                    )
+                );
+                exit(1);
+            }
+
+            echo($document);
             
         } catch (Exception $e) {
             http_response_code(403);
