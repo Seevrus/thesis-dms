@@ -1,7 +1,12 @@
 <?php
 require_once dirname(dirname(__FILE__)) . '/api_utils/statusEnums.php';
 
-function modifyEmail(PDO $pdo, string $taxNumber, string $email, string $passwordHash)
+function modifyEmail(
+    PDO $pdo,
+    string $taxNumber,
+    string $email,
+    string $passwordHash
+) : string
 {
     // do some clean-up
     $taxNumber = htmlentities($taxNumber);

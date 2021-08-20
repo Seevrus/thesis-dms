@@ -7,7 +7,8 @@ function createDocumentStub(
     string $documentName,
     int $category,
     string $validUntil = null
-) {
+) : string
+{
     try {
         // do some clean-up
         $taxNumber = htmlentities($taxNumber);

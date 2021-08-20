@@ -3,7 +3,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
-function emailer($recipient, $subject, $message)
+function emailer(string $recipient, string $subject, string $message) : string
 {
     $credentials = parse_ini_file('../../../email.ini');
 
