@@ -8,7 +8,7 @@ function createDocument(
     int $category,
     string $targetLocation,
     string $validUntil = null
-)
+) : string
 {
     try {
         // do some clean-up

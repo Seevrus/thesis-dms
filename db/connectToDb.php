@@ -5,7 +5,7 @@
  * 
  * @return PDO data object representing the connection
  */
-function connectToDb()
+function connectToDb(): PDO
 {
     $credentials = parse_ini_file('../../../db.ini');
     $options = [

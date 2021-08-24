@@ -4,7 +4,8 @@ function registerUploadedDocument(
     string $uploadToken,
     string $fileId,
     string $targetLocation
-) {
+) : string
+{
     try {
         // do some clean-up
         $uploadToken = htmlentities($uploadToken);

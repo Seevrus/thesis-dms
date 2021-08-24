@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Europe/Budapest');
 
-function selectUser(PDO $pdo, string $taxNumber, string $password)
+function selectUser(PDO $pdo, string $taxNumber, string $password) : string
 {
     $MAX_ATTEMPT_TIMESPAN_HOURS = 1;
     $MAX_ATTEMPTS_PER_TIMESPAN = 3;

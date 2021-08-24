@@ -1,5 +1,5 @@
 <?php
-function getDocumentPath(PDO $pdo, string $taxNumber, string $documentId)
+function getDocumentPath(PDO $pdo, string $taxNumber, string $documentId) : string
 {
     try {
         // do some clean-up

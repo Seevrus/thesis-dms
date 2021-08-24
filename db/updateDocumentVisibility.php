@@ -1,5 +1,5 @@
 <?php
-function updateDocumentVisibility(PDO $pdo, string $taxNumber, string $documentId)
+function updateDocumentVisibility(PDO $pdo, string $taxNumber, string $documentId) : string
 {
     try {
         // do some clean-up

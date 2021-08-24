@@ -7,7 +7,8 @@ function selectDocuments(
     int $category = null,
     int $fetchFrom = 0,
     int $limit = 10
-) {
+) : string
+{
     try {
         // do some clean-up
         $taxNumber = htmlentities($taxNumber);

@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Europe/Budapest');
 
-function registerDocumentDownload(PDO $pdo, string $taxNumber, string $documentId)
+function registerDocumentDownload(PDO $pdo, string $taxNumber, string $documentId) : string
 {
     try {
         // do some clean-up

@@ -1,7 +1,7 @@
 <?php
 require_once dirname(dirname(__FILE__)) . '/api_utils/statusEnums.php';
 
-function validateEmail(PDO $pdo, string $taxNumber, string $emailCode)
+function validateEmail(PDO $pdo, string $taxNumber, string $emailCode) : string
 {
     // do some clean-up
     $taxNumber = htmlentities($taxNumber);
