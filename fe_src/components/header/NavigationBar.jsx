@@ -9,10 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import { LoginStatusEnum } from '../../store/usersSliceTypes';
 import {
   checkLoginStatus,
   loginExpires,
-  LOGIN_STATUS,
   userLoginStatus,
 } from '../../store/usersSlice';
 
@@ -51,7 +51,7 @@ const NavigationBar = () => {
   />
   );
 
-  return loggedin === LOGIN_STATUS.LOGGED_IN && (
+  return loggedin === LoginStatusEnum.LOGGED_IN && (
     <Navbar collapseOnSelect bg="light" expand="lg" onClick={recordActivity}>
       <Container>
         <Nav className="home-page-link">

@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import {
   Alert,
   Button,
   Container,
   Form,
 } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { EMAIL_STATUS, login, userEmailStatus } from '../../store/usersSlice';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { EmailStatusEnum } from '../../store/usersSliceTypes';
+import { login, userEmailStatus } from '../../store/usersSlice';
+
+const { useEffect, useState } = React;
 
 const LoginForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
   // Redirect user is they are not supposed to be here
-  const emailStatus = useSelector(userEmailStatus);
+  const emailStatus = useAppSelector(userEmailStatus);
   useEffect(() => {
-    if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
+    if (emailStatus === EmailStatusEnum.NO_EMAIL) {
       history.push('/complete-registration');
-    } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
+    } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       history.push('/validate-email');
-    } else if (emailStatus === EMAIL_STATUS.VALID_EMAIL) {
+    } else if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
       history.push('/documents');
     }
   }, [emailStatus]);
@@ -32,17 +36,17 @@ const LoginForm = () => {
   const [taxNumberError, setTaxNumberError] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  const onTaxNumberChange = (e) => {
+  const onTaxNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const taxNumberInput = e.target.value;
     // Only numbers:
     const re = /^[0-9\b]+$/;
 
-    if (taxNumberInput === '' || (re.test(taxNumberInput) && taxNumberInput < 1e10)) {
+    if (taxNumberInput === '' || (re.test(taxNumberInput) && Number(taxNumberInput) < 1e10)) {
       setTaxNumber(taxNumberInput);
     }
   };
 
-  const onLoginPasswordChange = (e) => {
+  const onLoginPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const loginPwdInput = e.target.value;
     // Only letters and numbers:
     const re = /^[A-Za-z0-9áéíóőúűÁÉÍÓŐŰ]*$/;
@@ -52,27 +56,22 @@ const LoginForm = () => {
     }
   };
 
-  const onLoginAttempt = async (e) => {
+  const onLoginAttempt = async (e: React.MouseEvent) => {
     e.preventDefault();
     setIsFormValidated(false);
     setLoginError('');
 
-    if (taxNumber < 1e9 || taxNumber > 1e10) {
+    if (Number(taxNumber) < 1e9 || Number(taxNumber) > 1e10) {
       setTaxNumberError('Hiba: Az adóazonosító jel 10 számjegyből állhat!');
       return false;
     }
 
     setTaxNumberError('');
     setIsFormValidated(true);
-    dispatch(login({ taxNumber, loginPwd: loginPassword }))
-      // eslint-disable-next-line no-shadow
-      .then(({ payload: { emailStatus, message, outcome } }) => {
-        if (outcome === 'failure') {
-          setIsFormValidated(false);
-          setLoginError(message);
-        } else if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
-          history.push('/complete-registration');
-        }
+    dispatch(login({ taxNumber, password: loginPassword }))
+      .catch((err) => {
+        setIsFormValidated(false);
+        setLoginError(`Hiba: ${err.message}`);
       });
 
     return true;

@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import { decode } from 'html-entities';
 import fileDownload from 'js-file-download';
 import * as React from 'react';
@@ -10,33 +11,28 @@ import {
   ListGroup,
   Row,
 } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+
+import { useAppSelector } from '../../store/hooks';
+import { DocumentT } from '../../store/documentsSliceTypes';
+import {
+  deleteDocument, downloadDocument, removeDeletedDocument, selectDocumentById,
+} from '../../store/documentsSlice';
 
 import information from '../../img/information.svg';
 import paymentMethod from '../../img/payment-method.svg';
 
-import { deleteDocument, downloadDocument, removeDeletedDocument, selectDocumentById } from '../../store/documentsSlice';
-
-interface Document {
-  id: number,
-  documentName: string,
-  category: string,
-  added: string,
-  downloadedAt: string,
-  validUntil: string,
-};
-
 interface Map {
   [key: string]: string | undefined
-};
+}
 
 interface Props {
   id: number;
 }
 
 const DOCUMENT_CATEGORY: Map = {
-  "Bérjegyzék": paymentMethod,
-  "Tájékoztató": information,
+  'Bérjegyzék': paymentMethod,
+  'Tájékoztató': information,
 };
 
 const SingleDocument = ({ id } : Props) => {
@@ -50,8 +46,8 @@ const SingleDocument = ({ id } : Props) => {
     category,
     documentName,
     downloadedAt,
-    validUntil
-  }: Document = useSelector((state) => selectDocumentById(state, id));
+    validUntil,
+  }: DocumentT = useAppSelector((state) => selectDocumentById(state, id));
   const formattedCategory = decode(category);
   const formattedDocumentName = decode(documentName);
 
@@ -63,7 +59,7 @@ const SingleDocument = ({ id } : Props) => {
         setDeleteSuccess('Törlés sikeres.');
         setTimeout(() => dispatch(removeDeletedDocument(id)), 1000);
       })
-      .catch((e) => setServerError(e.message));
+      .catch((err) => setServerError(err.message));
   };
 
   const handleDownload = (e: React.MouseEvent) => {
@@ -73,7 +69,7 @@ const SingleDocument = ({ id } : Props) => {
         setServerError('');
         fileDownload(data, `${formattedDocumentName}.pdf`);
       })
-      .catch((e) => setServerError(e.message));
+      .catch((err) => setServerError(err.message));
   };
 
   return (
@@ -85,9 +81,23 @@ const SingleDocument = ({ id } : Props) => {
         <Col className="col-sm-12 col-md-10">
           <ListGroup>
             <ListGroup.Item><strong>{formattedDocumentName}</strong></ListGroup.Item>
-            <ListGroup.Item>Kategória: {formattedCategory}</ListGroup.Item>
-            <ListGroup.Item>Hozzáadva: {added}</ListGroup.Item>
-            {validUntil && <ListGroup.Item>Érvényes: {validUntil}</ListGroup.Item>}
+            <ListGroup.Item>
+              Kategória:
+              {' '}
+              {formattedCategory}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              Hozzáadva:
+              {' '}
+              {added}
+            </ListGroup.Item>
+            {validUntil && (
+            <ListGroup.Item>
+              Érvényes:
+              {' '}
+              {validUntil}
+            </ListGroup.Item>
+            )}
             {deleteSuccess && (
               <ListGroup.Item>
                 <Alert variant="success">{deleteSuccess}</Alert>
@@ -95,7 +105,11 @@ const SingleDocument = ({ id } : Props) => {
             )}
             {serverError && (
               <ListGroup.Item>
-                <Alert variant="danger">Hiba: {serverError}</Alert>
+                <Alert variant="danger">
+                  Hiba:
+                  {' '}
+                  {serverError}
+                </Alert>
               </ListGroup.Item>
             )}
           </ListGroup>

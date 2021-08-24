@@ -5,12 +5,8 @@ import { useHistory } from 'react-router';
 
 import SingleDocument from './SingleDocument';
 
-import {
-  EMAIL_STATUS,
-  LOGIN_STATUS,
-  userEmailStatus,
-  userLoginStatus,
-} from '../../store/usersSlice';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/usersSliceTypes';
+import { userEmailStatus, userLoginStatus } from '../../store/usersSlice';
 import { fetchDocuments, selectDocumentIds } from '../../store/documentsSlice';
 
 const Documents = () => {
@@ -30,18 +26,18 @@ const Documents = () => {
       setIsComponentLoading(false);
     }
 
-    if (loginStatus === LOGIN_STATUS.NOT_LOGGED_IN) {
+    if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
       history.push('/login');
-    } else if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
+    } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
       history.push('/complete-registration');
-    } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
+    } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       history.push('/validate-email');
     }
   }, [emailStatus, loginStatus]);
   // End of redirections
 
   useEffect(() => {
-    if (emailStatus === EMAIL_STATUS.VALID_EMAIL) {
+    if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
       dispatch(fetchDocuments());
     }
   }, [emailStatus]);

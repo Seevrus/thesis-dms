@@ -1,5 +1,5 @@
 <?php
-// error_reporting(0);
+error_reporting(0);
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { checkLoginStatus, LOGIN_STATUS, userLoginStatus } from './store/usersSlice';
+import { LoginStatusEnum } from './store/usersSliceTypes';
+import { checkLoginStatus, userLoginStatus } from './store/usersSlice';
 import Documents from './components/documents/Documents';
 import EmailValidationForm from './components/authenticate/EmailValidationForm';
 import Header from './components/header/Header';
@@ -31,7 +32,7 @@ const App = () => {
   let rootComponent;
   if (loginStatus === null) {
     rootComponent = null;
-  } else if (loginStatus === LOGIN_STATUS.NOT_LOGGED_IN) {
+  } else if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
     rootComponent = LoginForm;
   } else {
     rootComponent = Documents;
