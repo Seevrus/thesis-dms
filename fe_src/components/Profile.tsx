@@ -1,21 +1,24 @@
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { Container } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { EMAIL_STATUS, userEmailStatus } from '../store/usersSlice';
+import { useAppSelector } from '../store/hooks';
+import { EmailStatusEnum } from '../store/usersSliceTypes';
+import { userEmailStatus } from '../store/usersSlice';
+
+const { useEffect } = React;
 
 const Profile = () => {
   const history = useHistory();
 
   // Redirect user is they are not supposed to be here
-  const emailStatus = useSelector(userEmailStatus);
+  const emailStatus = useAppSelector(userEmailStatus);
   useEffect(() => {
     if (!emailStatus) {
       history.push('/login');
-    } else if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
+    } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
       history.push('/complete-registration');
-    } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
+    } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       history.push('/validate-email');
     }
   }, [emailStatus]);

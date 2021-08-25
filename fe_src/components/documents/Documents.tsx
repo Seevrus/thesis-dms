@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { Container, Spinner } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import SingleDocument from './SingleDocument';
-
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/usersSliceTypes';
 import { userEmailStatus, userLoginStatus } from '../../store/usersSlice';
 import { fetchDocuments, selectDocumentIds } from '../../store/documentsSlice';
 
+const { useEffect, useState } = React;
+
 const Documents = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
   // Redirect user is they are not supposed to be here
-  const emailStatus = useSelector(userEmailStatus);
-  const loginStatus = useSelector(userLoginStatus);
+  const emailStatus = useAppSelector(userEmailStatus);
+  const loginStatus = useAppSelector(userLoginStatus);
 
   useEffect(() => {
     if (!loginStatus) {
@@ -38,11 +39,11 @@ const Documents = () => {
 
   useEffect(() => {
     if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
-      dispatch(fetchDocuments());
+      dispatch(fetchDocuments({ }));
     }
   }, [emailStatus]);
 
-  const documentIds = useSelector(selectDocumentIds);
+  const documentIds = useAppSelector(selectDocumentIds) as number[];
   const documents = documentIds.map((id) => <SingleDocument key={id} id={id} />);
 
   return (

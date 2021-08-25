@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(
                 array(
                     'outcome' => 'failure',
-                    'message' => 'You do not have permission to access this page!'
+                    'message' => 'You do not have permission to access this page!',
                 )
             );
         }

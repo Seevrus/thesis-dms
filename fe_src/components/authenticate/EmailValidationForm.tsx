@@ -1,25 +1,28 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import {
   Alert,
   Button,
   Container,
   Form,
 } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { EMAIL_STATUS, userEmailStatus, validateEmailAddress } from '../../store/usersSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { EmailStatusEnum } from '../../store/usersSliceTypes';
+import { userEmailStatus, validateEmailAddress } from '../../store/usersSlice';
+
+const { useEffect, useState } = React;
 
 const EmailValidationForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
   // Redirect user is they are not supposed to be here
-  const emailStatus = useSelector(userEmailStatus);
+  const emailStatus = useAppSelector(userEmailStatus);
   useEffect(() => {
     if (!emailStatus) {
       history.push('/login');
-    } else if (emailStatus === EMAIL_STATUS.NO_EMAIL) {
+    } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
       history.push('/complete-registration');
     }
   }, [emailStatus]);
@@ -30,12 +33,12 @@ const EmailValidationForm = () => {
   const [emailCodeError, setEmailCodeError] = useState('');
   const [validationError, setValidationError] = useState('');
 
-  const testEmailCode = (code) => {
+  const testEmailCode = (code: string) => {
     const codeRegex = /^\d{6}$/;
     return codeRegex.test(code);
   };
 
-  const onEmailCodeChange = (e) => {
+  const onEmailCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailCode(e.target.value);
     if (!testEmailCode(e.target.value)) {
       setEmailCodeError('Hiba: A kód formátuma nem megfelelő!');
@@ -44,7 +47,7 @@ const EmailValidationForm = () => {
     }
   };
 
-  const onEmailValidationAttempt = (e) => {
+  const onEmailValidationAttempt = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsFormValidated(false);
     setEmailCodeError('');
@@ -62,14 +65,10 @@ const EmailValidationForm = () => {
     setEmailCodeError('');
     setIsFormValidated(true);
     dispatch(validateEmailAddress({ emailCode }))
-      // eslint-disable-next-line no-shadow
-      .then(({ payload: { emailStatus, outcome, message } }) => {
-        if (outcome === 'failure') {
-          setIsFormValidated(false);
-          setValidationError(message);
-        } else if (emailStatus === EMAIL_STATUS.VALID_EMAIL) {
-          // TODO
-        }
+      .then(() => history.push('/documents'))
+      .catch((err) => {
+        setIsFormValidated(false);
+        setValidationError(err.message);
       });
 
     return true;

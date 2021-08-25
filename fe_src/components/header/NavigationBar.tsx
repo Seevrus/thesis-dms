@@ -1,14 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 import {
   Container,
   Nav,
   Navbar,
 } from 'react-bootstrap';
 import Countdown from 'react-countdown';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { LoginStatusEnum } from '../../store/usersSliceTypes';
 import {
   checkLoginStatus,
@@ -17,11 +17,11 @@ import {
 } from '../../store/usersSlice';
 
 const NavigationBar = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const loggedin = useSelector(userLoginStatus);
-  const expires = useSelector(loginExpires);
+  const loggedin = useAppSelector(userLoginStatus);
+  const expires = useAppSelector(loginExpires);
 
   if (expires) {
     const idleCheck = setInterval(() => {
@@ -32,8 +32,9 @@ const NavigationBar = () => {
     }, 5000);
   }
 
-  const recordActivity = (e) => {
-    if (e.target.href && !e.target.href.includes('/logout')) {
+  const recordActivity = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const { href } = e.target as HTMLAnchorElement;
+    if (href && !href.includes('/logout')) {
       dispatch(checkLoginStatus());
     }
   };

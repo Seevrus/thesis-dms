@@ -1,26 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { Container } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+import { useAppDispatch } from '../../store/hooks';
 
 import { logout } from '../../store/usersSlice';
 
+const { useEffect } = React;
+
 const Logout = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
-  const [logoutMessage, setLogoutMessage] = useState('');
 
   useEffect(() => {
     dispatch(logout())
-      .then(({ payload: { message } }) => {
-        setLogoutMessage(message);
-        history.push('/');
-      });
+      .then(() => history.push('/'));
   }, [dispatch, history]);
 
   return (
     <Container>
-      {logoutMessage}
+      Successful logout.
     </Container>
   );
 };

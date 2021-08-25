@@ -1,25 +1,28 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import {
   Alert,
   Button,
   Container,
   Form,
 } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { EMAIL_STATUS, completeRegistration, userEmailStatus } from '../../store/usersSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { EmailStatusEnum } from '../../store/usersSliceTypes';
+import { completeRegistration, userEmailStatus } from '../../store/usersSlice';
+
+const { useEffect, useState } = React;
 
 const RegistrationCompletitionForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
   // Redirect user is they are not supposed to be here
-  const emailStatus = useSelector(userEmailStatus);
+  const emailStatus = useAppSelector(userEmailStatus);
   useEffect(() => {
     if (!emailStatus) {
       history.push('/login');
-    } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
+    } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       history.push('/validate-email');
     }
   }, [emailStatus]);
@@ -34,19 +37,19 @@ const RegistrationCompletitionForm = () => {
   const [newLoginPasswordError, setNewLoginPasswordError] = useState('');
   const [registrationError, setRegistrationError] = useState('');
 
-  const testEmailAddress = (address) => {
+  const testEmailAddress = (address: string) => {
     const emailRegex = /^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
     return emailRegex.test(address);
   };
 
-  const testNewLoginPassword = (password) => {
+  const testNewLoginPassword = (password: string) => {
     // Minimum eight characters, at least one uppercase letter,
     // one lowercase letter and one number:
     const passwordRegex = /^(?=.*[a-záéíóőúű])(?=.*[A-ZÁÉÍÓŐÚŰ])(?=.*\d)[a-záéíóőúűA-ZÁÉÍÓŐÚŰ\d]{8,}$/;
     return passwordRegex.test(password);
   };
 
-  const onEmailAddressChange = (e) => {
+  const onEmailAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailAddress(e.target.value);
     if (!testEmailAddress(e.target.value)) {
       setEmailAddressError('Hiba: Az email cím formátuma nem megfelelő!');
@@ -55,7 +58,7 @@ const RegistrationCompletitionForm = () => {
     }
   };
 
-  const onEmailAddressRepeatChange = (e) => {
+  const onEmailAddressRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailAddressRepeat(e.target.value);
     if (!testEmailAddress(e.target.value)) {
       setEmailAddressError('Hiba: Az email cím formátuma nem megfelelő!');
@@ -64,7 +67,7 @@ const RegistrationCompletitionForm = () => {
     }
   };
 
-  const onNewLoginPasswordChange = (e) => {
+  const onNewLoginPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewLoginPassword(e.target.value);
     if (!testNewLoginPassword(e.target.value)) {
       setNewLoginPasswordError('Hiba: A jelszó formátuma nem megfelelő!');
@@ -73,7 +76,7 @@ const RegistrationCompletitionForm = () => {
     }
   };
 
-  const onNewLoginPasswordRepeatChange = (e) => {
+  const onNewLoginPasswordRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewLoginPasswordRepeat(e.target.value);
     if (!testNewLoginPassword(e.target.value)) {
       setNewLoginPasswordError('Hiba: A jelszó formátuma nem megfelelő!');
@@ -82,7 +85,7 @@ const RegistrationCompletitionForm = () => {
     }
   };
 
-  const onRegistrationCompletitionAttempt = (e) => {
+  const onRegistrationCompletitionAttempt = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsFormValidated(false);
     setEmailAddressError('');
@@ -118,14 +121,10 @@ const RegistrationCompletitionForm = () => {
     setEmailAddressError('');
     setIsFormValidated(true);
     dispatch(completeRegistration({ email: emailAddress, password: newLoginPassword }))
-      // eslint-disable-next-line no-shadow
-      .then(({ payload: { emailStatus, outcome, message } }) => {
-        if (outcome === 'failure') {
-          setIsFormValidated(false);
-          setRegistrationError(message);
-        } else if (emailStatus === EMAIL_STATUS.NOT_VALIDATED) {
-          history.push('/validate-email');
-        }
+      .then(() => history.push('/validate-email'))
+      .catch((err) => {
+        setIsFormValidated(false);
+        setRegistrationError(err.message);
       });
 
     return true;

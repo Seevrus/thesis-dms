@@ -119,10 +119,9 @@ const usersSlice = createSlice({
       state.emailStatus = emailStatus;
     });
 
-    builder.addCase(completeRegistration.rejected, (state, { payload }) => {
-      const { outcome, message } = payload as CompleteRegistrationresponseT;
-      state.outcome = outcome;
-      state.message = message;
+    builder.addCase(completeRegistration.rejected, (_, { payload }) => {
+      const { message } = payload as CompleteRegistrationresponseT;
+      throw new Error(message || 'API returned an error');
     });
 
     builder.addCase(login.fulfilled, (state, { payload }) => {
@@ -142,9 +141,9 @@ const usersSlice = createSlice({
       state.expires = expires;
     });
 
-    builder.addCase(login.rejected, (state, { payload }) => {
+    builder.addCase(login.rejected, (_, { payload }) => {
       const { message } = payload as LoginResponseT;
-      throw new Error(message);
+      throw new Error(message || 'API returned an error');
     });
 
     builder.addCase(logout.fulfilled, (state, { payload }) => {
@@ -166,9 +165,9 @@ const usersSlice = createSlice({
       state.emailStatus = payload.emailStatus;
     });
 
-    builder.addCase(validateEmailAddress.rejected, (state, { payload }) => {
+    builder.addCase(validateEmailAddress.rejected, (_, { payload }) => {
       const { message } = payload as CompleteRegistrationresponseT;
-      state.message = message;
+      throw new Error(message || 'API returned an error');
     });
   },
 });

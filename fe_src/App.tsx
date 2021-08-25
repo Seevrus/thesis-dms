@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import { LoginStatusEnum } from './store/usersSliceTypes';
 import { checkLoginStatus, userLoginStatus } from './store/usersSlice';
 import Documents from './components/documents/Documents';
@@ -15,9 +15,11 @@ import setupCsrfToken from './services/csrfService';
 import UserActivity from './components/UserActivity';
 import UserHandling from './components/UserHandling';
 
+const { useEffect, useState } = React;
+
 const App = () => {
-  const dispatch = useDispatch();
-  const loginStatus = useSelector(userLoginStatus);
+  const dispatch = useAppDispatch();
+  const loginStatus = useAppSelector(userLoginStatus);
   const [loggedinState, setLoggedinState] = useState(loginStatus);
 
   useEffect(() => {

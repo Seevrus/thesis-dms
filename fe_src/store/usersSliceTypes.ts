@@ -46,7 +46,7 @@ export interface LogoutResponseT extends BaseResponseT {
 }
 
 export interface ValidateEmailAddressRequestT {
-  emailCode: number;
+  emailCode: string;
 }
 
 export interface UsersSliceT {
