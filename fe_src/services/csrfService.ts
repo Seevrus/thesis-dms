@@ -5,7 +5,7 @@ const fetchCsrfToken = async () => {
   return response.data.csrfToken;
 };
 
-const setCsrfToken = (token) => {
+const setCsrfToken = (token: string) => {
   if (token) {
     axios.defaults.headers.post['X-CSRF-Token'] = token;
   } else {

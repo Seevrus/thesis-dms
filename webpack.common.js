@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     polyfill: 'regenerator-runtime',
-    app: './fe_src/index.js',
+    app: './fe_src/index.tsx',
   },
   output: {
     filename: '[name].[contenthash].js',
