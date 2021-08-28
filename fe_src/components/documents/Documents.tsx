@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Spinner } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
 import SingleDocument from './SingleDocument';
@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/usersSliceTypes';
 import { userEmailStatus, userLoginStatus } from '../../store/usersSlice';
 import { fetchDocuments, selectDocumentIds } from '../../store/documentsSlice';
+import Loading from '../utils/Loading';
 
 const { useEffect, useState } = React;
 
@@ -15,6 +16,10 @@ const Documents = () => {
   const history = useHistory();
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
+
+  useEffect(() => {
+    document.title = 'Dokumentumaim';
+  }, []);
 
   // Redirect user is they are not supposed to be here
   const emailStatus = useAppSelector(userEmailStatus);
@@ -48,13 +53,7 @@ const Documents = () => {
 
   return (
     <Container className="mt-5 mb-5">
-      {isComponentLoading ? (
-        <Container className="spinner-container">
-          <Spinner animation="border" role="status" variant="secondary">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </Container>
-      )
+      {isComponentLoading ? <Loading />
         : (
           <>
             <h3 className="text-center">Dokumentumaim</h3>

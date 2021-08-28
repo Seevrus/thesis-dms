@@ -1,6 +1,5 @@
 /* eslint-disable quote-props */
 import { decode } from 'html-entities';
-import fileDownload from 'js-file-download';
 import * as React from 'react';
 import {
   Alert,
@@ -11,9 +10,8 @@ import {
   ListGroup,
   Row,
 } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 
-import { useAppSelector } from '../../store/hooks';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { DocumentT } from '../../store/documentsSliceTypes';
 import {
   deleteDocument, downloadDocument, removeDeletedDocument, selectDocumentById,
@@ -36,7 +34,7 @@ const DOCUMENT_CATEGORY: Map = {
 };
 
 const SingleDocument = ({ id } : Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [deleteSuccess, setDeleteSuccess] = React.useState('');
   const [serverError, setServerError] = React.useState('');
@@ -67,7 +65,12 @@ const SingleDocument = ({ id } : Props) => {
     downloadDocument(id)
       .then((data) => {
         setServerError('');
-        fileDownload(data, `${formattedDocumentName}.pdf`);
+        import('js-file-download')
+          .then(
+            ({ default: fileDownload }) => {
+              fileDownload(data, `${formattedDocumentName}.pdf`);
+            },
+          );
       })
       .catch((err) => setServerError(err.message));
   };

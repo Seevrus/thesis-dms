@@ -10,7 +10,7 @@ const Header = () => (
         <h3 className="text-center">Logó helye</h3>
       </Col>
       <Col className="col-8 align-self-center">
-        <h3 className="text-center">Szentistváni Mezőgazdasági Zrt.</h3>
+        <h3 className="text-center">Cégnév</h3>
       </Col>
     </Row>
     <NavigationBar />
