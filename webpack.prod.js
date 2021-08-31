@@ -24,7 +24,7 @@ module.exports = merge(common, {
     },
   },
   output: {
-    publicPath: '/thesis-dms/public',
+    publicPath: '/',
   },
   plugins: [
     new MiniCssExtractPlugin({

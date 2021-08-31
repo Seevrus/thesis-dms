@@ -2,10 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: {
-    polyfill: 'regenerator-runtime',
-    app: './fe_src/index.tsx',
-  },
+  entry: './fe_src/index.tsx',
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'public', 'fe_dist'),
