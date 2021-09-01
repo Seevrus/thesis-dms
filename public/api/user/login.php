@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($fetchUser->outcome == 'success') {
             // Issue Token
-            $userPermissions = array_map('mapDbUserPermission', $fetchUser->userPermissions);
+            $userPermissions = mapDbUserPermissions($fetchUser->userPermissions);
             $emailStatus = $fetchUser->emailStatus;
             $jwt = jwtEncode($fetchUser->taxNumber, $userPermissions, mapDbEmailStatus($emailStatus));
             $jwtDecoded = issueNewToken($jwt);

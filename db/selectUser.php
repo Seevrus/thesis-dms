@@ -78,7 +78,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string
     $updateTrialsStmt->execute(array( ':proba' => 0, ':ad' => $taxNumber ));
 
     // obtain user permissions
-    $checkUserPermissionsQuery = 'SELECT jogosultsag FROM dolgozo_jogosultsag WHERE dolgozo_azon = :ad';
+    $checkUserPermissionsQuery = 'SELECT ceg_cegkod, aktiv, akt_admin, user_admin, creator FROM cegnel_dolgozik WHERE dolgozo_adoazonosito = :ad';
     $checkUserPermissionsStmt = $pdo->prepare($checkUserPermissionsQuery);
     $checkUserPermissionsStmt->execute(
         array(
@@ -87,8 +87,14 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string
     );
     $userPermissionRows = $checkUserPermissionsStmt->fetchAll(PDO::FETCH_ASSOC);
     $userPermissions = array();
-    foreach ($userPermissionRows as $row) {
-        array_push($userPermissions, $row['jogosultsag']);
+    foreach ($userPermissionRows as $companyRow) {
+        $userPermissionsForCompany = array(
+            'active' => $companyRow['aktiv'],
+            'activityAdministrator' => $companyRow['akt_admin'],
+            'userAdministrator' => $companyRow['user_admin'],
+            'documentCreator' => $companyRow['creator'],
+        );
+        $userPermissions[$companyRow['ceg_cegkod']] = $userPermissionsForCompany;
     }
 
     return json_encode(

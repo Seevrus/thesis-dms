@@ -21,36 +21,31 @@ abstract class LOGIN_STATUS
     const LOGGED_IN = 'LOGGED_IN';
 };
 
-function mapDbUserPermission($dbUserPermission)
+function mapDbUserPermissions($dbUserPermissions)
 {
-    switch ($dbUserPermission) {
-    case 0:
-        return USER_PERMISSIONS::INACTIVE;
-    case 1:
-        return USER_PERMISSIONS::USER;
-    case 2:
-        return USER_PERMISSIONS::ACTIVITY_ADMINISTRATOR;
-    case 3:
-        return USER_PERMISSIONS::USER_ADMINISTRATOR;
-    case 4:
-        return USER_PERMISSIONS::DOCUMENT_CREATOR;
-    }
-}
+    $userPermissions = array();
+    foreach ($dbUserPermissions as $companyCode => $dbUserPermissionsForCompany) {
+        $userPermissionsForCompany = array();
+        if ($dbUserPermissionsForCompany->active == 0) {
+            array_push($userPermissionsForCompany, USER_PERMISSIONS::INACTIVE);
+            break;
+        }
+        array_push($userPermissionsForCompany, USER_PERMISSIONS::USER);
 
-function mapUserPermissionToDb($userPermission)
-{
-    switch ($userPermission) {
-    case USER_PERMISSIONS::INACTIVE:
-        return 0;
-    case USER_PERMISSIONS::USER:
-        return 1;
-    case USER_PERMISSIONS::ACTIVITY_ADMINISTRATOR:
-        return 2;
-    case USER_PERMISSIONS::USER_ADMINISTRATOR:
-        return 3;
-    case USER_PERMISSIONS::DOCUMENT_CREATOR:
-        return 4;
+        if ($dbUserPermissionsForCompany->activityAdministrator == 1) {
+            array_push($userPermissionsForCompany, USER_PERMISSIONS::ACTIVITY_ADMINISTRATOR);
+        }
+        if ($dbUserPermissionsForCompany->userAdministrator == 1) {
+            array_push($userPermissionsForCompany, USER_PERMISSIONS::USER_ADMINISTRATOR);
+        }
+        if ($dbUserPermissionsForCompany->documentCreator == 1) {
+            array_push($userPermissionsForCompany, USER_PERMISSIONS::DOCUMENT_CREATOR);
+        }
+
+        $userPermissions[$companyCode] = $userPermissionsForCompany;
     }
+
+    return $userPermissions;
 }
 
 function mapDbEmailStatus($dbEmailStatus)

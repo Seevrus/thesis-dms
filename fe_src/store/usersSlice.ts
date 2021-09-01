@@ -18,7 +18,7 @@ const initialState: UsersSliceT = {
   loginStatus: null,
   expires: null,
   taxNumber: null,
-  userPermissions: [],
+  userPermissions: {},
   emailStatus: null,
   outcome: null,
   message: null,
@@ -101,9 +101,7 @@ const usersSlice = createSlice({
       if (loginStatus !== LoginStatusEnum.NOT_LOGGED_IN) {
         state.emailStatus = emailStatus;
         state.taxNumber = taxNumber;
-        state.userPermissions = Object.values(userPermissions).filter(
-          (permission) => userPermissions.includes(permission),
-        );
+        state.userPermissions = userPermissions;
         state.expires = expires;
       }
     });
@@ -134,9 +132,7 @@ const usersSlice = createSlice({
       } = payload;
       state.loginStatus = loginStatus;
       state.taxNumber = taxNumber;
-      state.userPermissions = Object.values(userPermissions).filter(
-        (permission) => userPermissions.includes(permission),
-      );
+      state.userPermissions = userPermissions;
       state.emailStatus = emailStatus;
       state.expires = expires;
     });
