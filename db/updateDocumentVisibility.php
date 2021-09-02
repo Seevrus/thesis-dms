@@ -1,16 +1,30 @@
 <?php
-function updateDocumentVisibility(PDO $pdo, string $taxNumber, string $documentId) : string
+function updateDocumentVisibility(
+    PDO $pdo,
+    $validCompanyCodesForUser,
+    string $taxNumber,
+    string $documentId
+) : string
 {
     try {
         // do some clean-up
+        $validCompanyCodesForUser = implode(', ', $validCompanyCodesForUser);
         $taxNumber = htmlentities($taxNumber);
         $documentId = htmlentities($documentId);
 
         // get document path to be able to remove it from the server
-        $fetchQuery = 'SELECT utvonal FROM dokumentum WHERE azon = :az AND dolgozo_adoazonosito = :ad AND lathato = :lt';
+        $fetchQuery = 'SELECT
+                utvonal
+            FROM dokumentum
+            WHERE
+                azon = :az
+                AND ceg_cegkod IN(:ck)
+                AND dolgozo_adoazonosito = :ad
+                AND lathato = :lt';
         $fetchQueryStmt = $pdo->prepare($fetchQuery);
         $fetchQueryStmt->execute(
             array(
+                ':ck' => $validCompanyCodesForUser,
                 ':ad' => $taxNumber,
                 ':az' => $documentId,
                 ':lt' => 1,

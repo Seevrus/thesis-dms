@@ -6,6 +6,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/ch
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/selectDocuments.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/validCompanyCodesForPermission.php';
 
 header('Content-Type: application/json');
 
@@ -29,7 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // end of validation
 
             // check user permission
-            if (!in_array(USER_PERMISSIONS::USER, $decodedToken->userPermissions)) {
+            $validCompanyCodesForUser = validCompanyCodesForPermission($decodedToken->userPermissions, USER_PERMISSIONS::USER);
+            if (empty($validCompanyCodesForUser)) {
                 http_response_code(403);
                 echo json_encode(
                     array(
@@ -58,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $selectedDocumentsJSON = selectDocuments(
                 $pdo,
+                $validCompanyCodesForUser,
                 $decodedToken->taxNumber,
                 $category,
                 $fetchFrom,

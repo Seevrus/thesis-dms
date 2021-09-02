@@ -9,6 +9,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/ch
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/saveFile.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/validCompanyCodesForPermission.php';
 
 header('Content-Type: application/json');
 
@@ -37,19 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // end of token validation
 
             // check user permission
-            $validCompanyCodesForFileUpload = array();
-            foreach ($decodedToken->userPermissions as $companyCode => $userPermissionsForCompany) {
-                if (in_array(USER_PERMISSIONS::DOCUMENT_CREATOR, $userPermissionsForCompany)) {
-                    array_push($validCompanyCodesForFileUpload, $companyCode);
-                }
-            }
+            $validCompanyCodesForFileUpload = validCompanyCodesForPermission($decodedToken->userPermissions, USER_PERMISSIONS::DOCUMENT_CREATOR);
 
             if (empty($validCompanyCodesForFileUpload)) {
                 http_response_code(403);
                 echo json_encode(
                     array(
                         'outcome' => 'failure',
-                        'message' => 'You do not have permission to access this page!'
+                        'message' => 'You do not have permission to access this page!',
                     )
                 );
                 exit(1);

@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+// error_reporting(0);
 date_default_timezone_set('Europe/Budapest');
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
@@ -8,6 +8,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php'
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/getDocumentPath.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/registerDocumentDownload.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/validCompanyCodesForPermission.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF Protection
@@ -27,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // end of validation
 
             // check user permission
-            if (!in_array(USER_PERMISSIONS::USER, $decodedToken->userPermissions)) {
+            $validCompanyCodesForUser = validCompanyCodesForPermission($decodedToken->userPermissions, USER_PERMISSIONS::USER);
+            if (empty($validCompanyCodesForUser)) {
                 http_response_code(403);
                 echo json_encode(
                     array(
@@ -52,7 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $pdo = connectToDb();
-            $documentPathJSON = getDocumentPath($pdo, $decodedToken->taxNumber, $documentIdentifiers->documentId);
+            $documentPathJSON = getDocumentPath(
+                $pdo,
+                $validCompanyCodesForUser,
+                $decodedToken->taxNumber,
+                $documentIdentifiers->documentId
+            );
             $documentPath = json_decode($documentPathJSON);
 
             if ($documentPath->outcome == 'failure') {
