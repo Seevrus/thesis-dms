@@ -1,4 +1,6 @@
 <?php
+require_once dirname(__FILE__) . '/generateRandomString.php';
+
 function saveFile(string $url)
 {
     try {

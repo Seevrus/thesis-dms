@@ -28,9 +28,9 @@ function mapDbUserPermissions($dbUserPermissions)
         $userPermissionsForCompany = array();
         if ($dbUserPermissionsForCompany->active == 0) {
             array_push($userPermissionsForCompany, USER_PERMISSIONS::INACTIVE);
-            break;
+        } else {
+            array_push($userPermissionsForCompany, USER_PERMISSIONS::USER);
         }
-        array_push($userPermissionsForCompany, USER_PERMISSIONS::USER);
 
         if ($dbUserPermissionsForCompany->activityAdministrator == 1) {
             array_push($userPermissionsForCompany, USER_PERMISSIONS::ACTIVITY_ADMINISTRATOR);

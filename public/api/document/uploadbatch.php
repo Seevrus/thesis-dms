@@ -37,7 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // end of token validation
 
             // check user permission
-            if (!in_array(USER_PERMISSIONS::DOCUMENT_CREATOR, $decodedToken->userPermissions)) {
+            $validCompanyCodesForFileUpload = array();
+            foreach ($decodedToken->userPermissions as $companyCode => $userPermissionsForCompany) {
+                if (in_array(USER_PERMISSIONS::DOCUMENT_CREATOR, $userPermissionsForCompany)) {
+                    array_push($validCompanyCodesForFileUpload, $companyCode);
+                }
+            }
+
+            if (empty($validCompanyCodesForFileUpload)) {
                 http_response_code(403);
                 echo json_encode(
                     array(
@@ -47,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
                 exit(1);
             }
+            // end of user permissions check
 
             $documents = json_decode(file_get_contents("php://input"));
 
@@ -79,18 +87,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = array();
 
             foreach ($documents as $document) {
-                if (!isset($document->taxNumber)
+
+                // reject for incomplete request
+                if (!isset($document->companyCode)
+                    || !isset($document->taxNumber)
                     || !isset($document->documentName)
                     || !isset($document->category)
                     || !isset($document->url)
                 ) {
                     $fileResponse = array(
+                        'companyCode' => $document->companyCode,
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
                         'category' => $document->category,
                         'url' => $document->url,
                         'outcome' => 'failure',
                         'message' => 'Missing data from request',
+                    );
+                    array_push($response, $fileResponse);
+                    continue;
+                }
+
+                // if the user does not have permission to upload for the given company code, reject upload
+                if (!in_array($document->companyCode, $validCompanyCodesForFileUpload)) {
+                    $fileResponse = array(
+                        'companyCode' => $document->companyCode,
+                        'taxNumber' => $document->taxNumber,
+                        'documentName' => $document->documentName,
+                        'category' => $document->category,
+                        'url' => $document->url,
+                        'outcome' => 'failure',
+                        'message' => 'You do not have permission to create documents for company code ' . $document->companyCode,
                     );
                     array_push($response, $fileResponse);
                     continue;
@@ -103,6 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($fileType != 'application/pdf') {
                     unlink($targetLocation);
                     $fileResponse = array(
+                        'companyCode' => $document->companyCode,
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
                         'category' => $document->category,
@@ -114,47 +142,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     continue;
                 }
 
-                if (property_exists($document, 'validUntil')) {
-                    $createDocumentJSON = createDocument(
-                        $pdo,
-                        $document->taxNumber,
-                        $document->documentName,
-                        $document->category,
-                        $targetLocation,
-                        $document->validUntil,
-                    );
-                } else {
-                    $createDocumentJSON = createDocument(
-                        $pdo,
-                        $document->taxNumber,
-                        $document->documentName,
-                        $document->category,
-                        $targetLocation,
-                    );
-                }
+                $createDocumentJSON = createDocument(
+                    $pdo,
+                    $document->companyCode,
+                    $document->taxNumber,
+                    $document->documentName,
+                    $document->category,
+                    $document->visible || 1,
+                    $document->validUntil || null,
+                    $targetLocation,
+                );
                 $createDocument = json_decode($createDocumentJSON);
 
                 if ($createDocument->outcome == 'failure') {
                     unlink($targetLocation);
                     $fileResponse = array(
+                        'companyCode' => $document->companyCode,
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
                         'category' => $document->category,
                         'url' => $document->url,
                         'outcome' => 'failure',
-                        'message' => 'Unexpected database error',
+                        'message' => $createDocument->message,
                     );
                     array_push($response, $fileResponse);
                     continue;
                 }
 
                 $fileResponse = array(
+                    'companyCode' => $document->companyCode,
                     'taxNumber' => $document->taxNumber,
                     'documentName' => $document->documentName,
                     'category' => $document->category,
                     'url' => $document->url,
                     'outcome' => 'success',
-                    'message' => 'File uploaded successfully',
+                    'message' => $createDocument->message,
                 );
                 array_push($response, $fileResponse);
             }

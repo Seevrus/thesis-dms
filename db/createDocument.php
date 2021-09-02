@@ -1,29 +1,46 @@
 <?php
-require_once dirname(dirname(__FILE__)) . '/api_utils/generateRandomString.php';
+require_once dirname(__FILE__) . '/isUserWorksAtCompany.php';
 
 function createDocument(
     PDO $pdo,
+    string $companyCode,
     string $taxNumber,
     string $documentName,
     int $category,
-    string $targetLocation,
-    string $validUntil = null
+    int $visible,
+    string $validUntil,
+    string $targetLocation
 ) : string
 {
     try {
         // do some clean-up
+        $companyCode = htmlentities($companyCode);
         $taxNumber = htmlentities($taxNumber);
         $documentName = htmlentities($documentName);
+        $category = htmlentities($category);
+        $visible = htmlentities($visible);
         $targetLocation = htmlentities($targetLocation);
         $validUntil = htmlentities($validUntil);
 
-        $documentQuery = 'INSERT INTO dokumentum (dolgozo_adoazonosito, dokumentum_nev, kategoria, ervenyes, utvonal) VALUES (:azon, :nev, :kateg, :erv, :ut)';
+        $isUserEligible = isUserWorksAtCompany($pdo, $companyCode, $taxNumber);
+        if (!$isUserEligible) {
+            return json_encode(
+                array(
+                    'outcome' => 'failure',
+                    'message' => 'User does not work at company with code ' . $companyCode,
+                )
+            );
+        }
+
+        $documentQuery = 'INSERT INTO dokumentum (ceg_cegkod, dolgozo_adoazonosito, dokumentum_nev, kategoria, lathato, ervenyes, utvonal) VALUES (:ceg, :azon, :nev, :kateg, :lat, :erv, :ut)';
         $docuemntStmt = $pdo->prepare($documentQuery);
         $docuemntStmt->execute(
             array(
+                ':ceg' => $companyCode,
                 ':azon' => $taxNumber,
                 ':nev' => $documentName,
                 ':kateg' => $category,
+                ':lat' => $visible,
                 ':erv' => empty($validUntil) ? null : $validUntil,
                 ':ut' => $targetLocation,
             )
@@ -32,14 +49,14 @@ function createDocument(
         return json_encode(
             array(
                 'outcome' => 'success',
-                'message' => 'Document successfully created',
+                'message' => 'File uploaded successfully',
             )
         );
     } catch (PDOException $e) {
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => $e->getMessage(),
+                'message' => 'Unexpected database error',
             )
         );
     }
