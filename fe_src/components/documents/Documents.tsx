@@ -56,7 +56,7 @@ const Documents = () => {
       {isComponentLoading ? <Loading />
         : (
           <>
-            <h3 className="text-center">Dokumentumaim</h3>
+            <h3 className="page-title text-center">Dokumentumaim</h3>
             {documents}
 
             <Container className="letoltes_blokk mt-3">

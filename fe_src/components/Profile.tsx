@@ -26,7 +26,7 @@ const Profile = () => {
 
   return (
     <Container className="mt-5 mb-5">
-      <h3 className="text-center">Profilom</h3>
+      <h3 className="page-title text-center">Profilom</h3>
     </Container>
   );
 };

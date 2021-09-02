@@ -26,7 +26,7 @@ const UserHandling = () => {
 
   return (
     <Container className="mt-5 mb-5">
-      <h3 className="text-center">Felhasználók kezelése</h3>
+      <h3 className="page-title text-center">Felhasználók kezelése</h3>
     </Container>
   );
 };
