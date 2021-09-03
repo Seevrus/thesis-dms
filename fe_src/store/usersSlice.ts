@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { any, includes, values } from 'ramda';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import {
   CompleteRegistrationRequestT,
   CompleteRegistrationresponseT,
@@ -8,6 +9,7 @@ import {
   LoginResponseT,
   LoginStatusEnum,
   LogoutResponseT,
+  UserPermissionsEnum,
   UsersSliceT,
   ValidateEmailAddressRequestT,
 } from './usersSliceTypes';
@@ -168,8 +170,14 @@ const usersSlice = createSlice({
   },
 });
 
+export const canHandleUserActivity = createSelector(
+  (state: RootState) => state.users.userPermissions,
+  (userPermissions) => any(
+    includes(UserPermissionsEnum.ACTIVITY_ADMINISTRATOR), values(userPermissions),
+  ),
+);
+export const loginExpires = (state: RootState) => state.users.expires;
 export const userEmailStatus = (state: RootState) => state.users.emailStatus;
 export const userLoginStatus = (state: RootState) => state.users.loginStatus;
-export const loginExpires = (state: RootState) => state.users.expires;
 
 export default usersSlice.reducer;
