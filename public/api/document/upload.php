@@ -10,7 +10,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/registerUploade
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/saveFile.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF Protection
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit(1);
             }
 
-            if (!isset($_SERVER['HTTP_X_FILE_ID'])
+            if (!isset($_SERVER['HTTP_X_DOCUMENT_ID'])
                 || !isset($_SERVER['HTTP_X_UPLOAD_TOKEN'])
             ) {
                 http_response_code(403);
@@ -58,28 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
                 exit(1);
             }
-            $fileId = $_SERVER['HTTP_X_FILE_ID'];
+            $documentId = $_SERVER['HTTP_X_DOCUMENT_ID'];
             $uploadToken = $_SERVER['HTTP_X_UPLOAD_TOKEN'];
 
-            // JSON url upload
-            if ($_SERVER['CONTENT_TYPE'] == 'application/json') {
-                $requestContent = json_decode(file_get_contents("php://input"));
-                if (!isset($requestContent->url)) {
-                    http_response_code(403);
-                    echo json_encode(
-                        array(
-                            'outcome' => 'failure',
-                            'message' => 'Invalid request formation!',
-                        )
-                    );
-                    exit(1);
-                }
-
-                // We need to save file locally to get the filetype. If it is not a pdf, we should delete it. TODO: is it really the case?
-                $url = $requestContent->url;
-                $targetLocation = saveFile($url);
-                $fileType = mime_content_type($targetLocation);
-            } else if ($_SERVER['CONTENT_TYPE'] == 'application/pdf') {
+            if ($_SERVER['CONTENT_TYPE'] == 'application/pdf') {
                 $fileType = 'application/pdf';
                 $targetLocation = saveFile('php://input');
             } else {
@@ -93,15 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         array(
                             'outcome' => 'failure',
                             'message' => 'File type not allowed',
-                            'url' => $url,
-                            'fileType' => $fileType,
+                            'fileType' => $_SERVER['CONTENT_TYPE'],
                         )
                     );
                 exit(1);
             }
 
             $pdo = connectToDb();
-            $registerUploadedDocumentJSON = registerUploadedDocument($pdo, $uploadToken, $fileId, $targetLocation);
+            $registerUploadedDocumentJSON = registerUploadedDocument($pdo, $uploadToken, $documentId, $targetLocation);
             $registerUploadedDocument = json_decode($registerUploadedDocumentJSON);
 
             if ($registerUploadedDocument->outcome == 'failure') {

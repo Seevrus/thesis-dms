@@ -7,25 +7,41 @@ function createDocument(
     string $documentName,
     int $category,
     string $targetLocation,
-    string $validUntil = null
+    int $validUntil = 0
 ) : string
 {
     try {
         // do some clean-up
-        $taxNumber = htmlentities($taxNumber);
-        $documentName = htmlentities($documentName);
-        $targetLocation = htmlentities($targetLocation);
-        $validUntil = htmlentities($validUntil);
+        $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $documentName = htmlspecialchars($documentName, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $targetLocation = htmlspecialchars($targetLocation, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
-        $documentQuery = 'INSERT INTO dokumentum (dolgozo_adoazonosito, dokumentum_nev, kategoria, ervenyes, utvonal) VALUES (:azon, :nev, :kateg, :erv, :ut)';
+        $documentQuery = 'INSERT
+            INTO document (
+                user_tax_number,
+                document_name,
+                category_id,
+                document_visible,
+                document_valid,
+                document_path
+            )
+            VALUES (
+                :did,
+                :dname,
+                :dcateg,
+                :dvis,
+                :dvalid,
+                :dpath
+            )';
         $docuemntStmt = $pdo->prepare($documentQuery);
         $docuemntStmt->execute(
             array(
-                ':azon' => $taxNumber,
-                ':nev' => $documentName,
-                ':kateg' => $category,
-                ':erv' => empty($validUntil) ? null : $validUntil,
-                ':ut' => $targetLocation,
+                ':did' => $taxNumber,
+                ':dname' => $documentName,
+                ':dcateg' => $category,
+                ':dvis' => 1,
+                ':dvalid' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
+                ':dpath' => $targetLocation,
             )
         );
 

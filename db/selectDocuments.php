@@ -11,32 +11,61 @@ function selectDocuments(
 {
     try {
         // do some clean-up
-        $taxNumber = htmlentities($taxNumber);
-        $category = htmlentities($category);
-        $fetchFrom = htmlentities($fetchFrom);
-        $limit = htmlentities($limit);
+        $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $category = htmlspecialchars($category, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $fetchFrom = htmlspecialchars($fetchFrom, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $limit = htmlspecialchars($limit, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
         if (empty($category)) {
-            $fetchQuery = 'SELECT d.azon AS id, d.dokumentum_nev AS documentName, k.kategoria_nev AS category, d.hozzaadva AS added, d.letoltve AS downloadedAt, d.ervenyes AS validUntil FROM dokumentum d JOIN dokumentum_kategoria k ON d.kategoria = k.azon WHERE d.dolgozo_adoazonosito = :ad AND lathato = :lt AND (ISNULL(d.ervenyes) OR d.ervenyes > NOW()) LIMIT :honnan, :hova';
+            $fetchQuery = 'SELECT
+                    d.document_id AS id,
+                    d.document_name AS title,
+                    c.category_name AS category,
+                    d.document_added AS added,
+                    d.document_downloaded AS downloaded,
+                    d.document_valid AS validUntil
+                FROM document d
+                JOIN document_category c ON d.category_id = c.category_id
+                WHERE
+                    d.user_tax_number = :utn
+                    AND document_visible = :dvis
+                    AND (ISNULL(d.document_valid)
+                    OR d.document_valid > NOW())
+                LIMIT :dfrom, :dto';
             $fetchQueryStmt = $pdo->prepare($fetchQuery);
             $fetchQueryStmt->execute(
                 array(
-                    ':ad' => $taxNumber,
-                    ':lt' => 1,
-                    ':honnan' => $fetchFrom,
-                    ':hova' => $limit,
+                    ':utn' => $taxNumber,
+                    ':dvis' => 1,
+                    ':dfrom' => $fetchFrom,
+                    ':dto' => $limit,
                 )
             );
         } else {
-            $fetchQuery = 'SELECT d.azon AS id, d.dokumentum_nev AS documentName, k.kategoria_nev AS category, d.hozzaadva AS added, d.letoltve AS downloadedAt, d.ervenyes AS validUntil FROM dokumentum d JOIN dokumentum_kategoria k ON d.kategoria = k.azon WHERE d.dolgozo_adoazonosito = :ad AND lathato = :lt AND (ISNULL(d.ervenyes) OR d.ervenyes > NOW()) AND d.kategoria = :kat LIMIT :honnan, :hova';
+            $fetchQuery = 'SELECT
+                    d.document_id AS id,
+                    d.document_name AS title,
+                    c.category_name AS category,
+                    d.document_added AS added,
+                    d.document_downloaded AS downloaded,
+                    d.document_valid AS validUntil
+                FROM document d
+                JOIN document_category c ON d.category_id = c.category_id
+                WHERE
+                    d.user_tax_number = :utn
+                    AND d.category_id = cid
+                    AND document_visible = :dvis
+                    AND (ISNULL(d.document_valid)
+                    OR d.document_valid > NOW())
+                LIMIT :dfrom, :dto';
             $fetchQueryStmt = $pdo->prepare($fetchQuery);
             $fetchQueryStmt->execute(
                 array(
-                    ':ad' => $taxNumber,
-                    ':lt' => 1,
-                    ':kat' => $category,
-                    ':honnan' => $fetchFrom,
-                    ':hova' => $limit,
+                    ':utn' => $taxNumber,
+                    ':cid' => $category,
+                    ':dvis' => 1,
+                    ':dfrom' => $fetchFrom,
+                    ':dto' => $limit,
                 )
             );
         }

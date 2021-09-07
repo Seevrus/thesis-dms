@@ -10,7 +10,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php'
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/saveFile.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
-header('Content-Type: application/json');
+header('Content-Type: application/json;charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $MAX_ALLOWED_DOCUMENTS = 100;
@@ -79,18 +79,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = array();
 
             foreach ($documents as $document) {
+                $validUntil = $document->validUntil ?? 0;
+
                 if (!isset($document->taxNumber)
                     || !isset($document->documentName)
                     || !isset($document->category)
                     || !isset($document->url)
                 ) {
                     $fileResponse = array(
+                        'outcome' => 'failure',
+                        'message' => 'Missing data from request',
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
                         'category' => $document->category,
                         'url' => $document->url,
-                        'outcome' => 'failure',
-                        'message' => 'Missing data from request',
+                        'validUntil' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
                     );
                     array_push($response, $fileResponse);
                     continue;
@@ -103,58 +106,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($fileType != 'application/pdf') {
                     unlink($targetLocation);
                     $fileResponse = array(
+                        'outcome' => 'failure',
+                        'message' => 'File type not allowed',
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
                         'category' => $document->category,
                         'url' => $document->url,
-                        'outcome' => 'failure',
-                        'message' => 'File type not allowed',
+                        'validUntil' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
                     );
                     array_push($response, $fileResponse);
                     continue;
                 }
 
-                if (property_exists($document, 'validUntil')) {
-                    $createDocumentJSON = createDocument(
-                        $pdo,
-                        $document->taxNumber,
-                        $document->documentName,
-                        $document->category,
-                        $targetLocation,
-                        $document->validUntil,
-                    );
-                } else {
-                    $createDocumentJSON = createDocument(
-                        $pdo,
-                        $document->taxNumber,
-                        $document->documentName,
-                        $document->category,
-                        $targetLocation,
-                    );
-                }
+                $createDocumentJSON = createDocument(
+                    $pdo,
+                    $document->taxNumber,
+                    $document->documentName,
+                    $document->category,
+                    $targetLocation,
+                    $validUntil,
+                );
                 $createDocument = json_decode($createDocumentJSON);
 
                 if ($createDocument->outcome == 'failure') {
                     unlink($targetLocation);
                     $fileResponse = array(
+                        'outcome' => 'failure',
+                        'message' => 'Unexpected database error',
                         'taxNumber' => $document->taxNumber,
                         'documentName' => $document->documentName,
                         'category' => $document->category,
                         'url' => $document->url,
-                        'outcome' => 'failure',
-                        'message' => 'Unexpected database error',
+                        'validUntil' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
                     );
                     array_push($response, $fileResponse);
                     continue;
                 }
 
                 $fileResponse = array(
+                    'outcome' => 'success',
+                    'message' => 'File uploaded successfully',
                     'taxNumber' => $document->taxNumber,
                     'documentName' => $document->documentName,
                     'category' => $document->category,
                     'url' => $document->url,
-                    'outcome' => 'success',
-                    'message' => 'File uploaded successfully',
+                    'validUntil' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
                 );
                 array_push($response, $fileResponse);
             }

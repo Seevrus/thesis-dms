@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // end of validation
 
             // check user permission
-            if (!in_array(USER_PERMISSIONS::USER, $decodedToken->userPermissions)) {
+            if (!in_array(USER_PERMISSIONS::REGULAR, $decodedToken->userPermissions)) {
                 http_response_code(403);
                 echo json_encode(
                     array(

@@ -1,24 +1,27 @@
 <?php
-function getDocumentPath(PDO $pdo, string $taxNumber, string $documentId) : string
+function removeDocumentVisibility(PDO $pdo, string $taxNumber, string $documentId) : string
 {
     try {
         // do some clean-up
         $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
         $documentId = htmlspecialchars($documentId, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
+        // get document path to be able to remove it from the server
         $fetchQuery = 'SELECT
                 document_path
-            FROM document 
+            FROM document
             WHERE
                 document_id = :did
+                AND user_tax_number = :utn
                 AND document_visible = :dvis
-                AND user_tax_number = :utn';
+                AND document_deletable = ddel';
         $fetchQueryStmt = $pdo->prepare($fetchQuery);
         $fetchQueryStmt->execute(
             array(
+                ':did' => $documentId,
                 ':utn' => $taxNumber,
                 ':dvis' => 1,
-                ':did' => $documentId,
+                ':ddel' => 1,
             )
         );
         $documentRow = $fetchQueryStmt->fetch(PDO::FETCH_ASSOC);
@@ -32,10 +35,26 @@ function getDocumentPath(PDO $pdo, string $taxNumber, string $documentId) : stri
             );
         }
 
+        $updateQuery = 'UPDATE
+                document
+            SET
+                document_visible = :dvis,
+                document_path = :dpath
+            WHERE
+                document_id = :did';
+        $updateQueryStmt = $pdo->prepare($updateQuery);
+        $updateQueryStmt->execute(
+            array(
+                ':dvis' => 0,
+                ':dpath' => null,
+                ':did' => $documentId,
+            )
+        );
+
         return json_encode(
             array(
                 'outcome' => 'success',
-                'message' => 'Document path has been found',
+                'message' => 'Document removed from database',
                 'document_path' => $documentRow['document_path'],
             )
         );

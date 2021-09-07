@@ -8,7 +8,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/ch
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF Protection
@@ -61,29 +61,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $pdo = connectToDb();
-            if (property_exists($documentIdentifiers, 'validUntil')) {
-                $createDocumentJSON = createDocumentStub(
-                    $pdo,
-                    $documentIdentifiers->taxNumber,
-                    $documentIdentifiers->documentName,
-                    $documentIdentifiers->category,
-                    $documentIdentifiers->validUntil,
-                );
-            } else {
-                $createDocumentJSON = createDocumentStub(
-                    $pdo,
-                    $documentIdentifiers->taxNumber,
-                    $documentIdentifiers->documentName,
-                    $documentIdentifiers->category
-                );
-            }
+            $validUntil = $documentIdentifiers->validUntil ?? 0;
 
+            $createDocumentJSON = createDocumentStub(
+                $pdo,
+                $documentIdentifiers->taxNumber,
+                $documentIdentifiers->documentName,
+                $documentIdentifiers->category,
+                $validUntil,
+            );
             $createDocument = json_decode($createDocumentJSON);
 
             if ($createDocument->outcome == 'failure') {
                 http_response_code(401);
             }
-            echo $createDocumentJSON;
+            echo json_encode(
+                array(
+                    'outcome' => $createDocument->outcome,
+                    'message' => $createDocument->message,
+                    'id' => $createDocument->document_id,
+                    'token' => $createDocument->upload_code,
+                )
+            );
 
         } catch (Exception $e) {
             http_response_code(403);

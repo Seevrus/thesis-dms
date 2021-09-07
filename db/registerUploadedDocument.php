@@ -2,22 +2,27 @@
 function registerUploadedDocument(
     PDO $pdo,
     string $uploadToken,
-    string $fileId,
+    string $documentId,
     string $targetLocation
 ) : string
 {
     try {
         // do some clean-up
-        $uploadToken = htmlentities($uploadToken);
-        $fileId = htmlentities($fileId);
-        $targetLocation = htmlentities($targetLocation);
+        $uploadToken = htmlspecialchars($uploadToken, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $documentId = htmlspecialchars($documentId, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $targetLocation = htmlspecialchars($targetLocation, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
-        $documentCheckerQuery = 'SELECT * FROM dokumentum_feltoltokod WHERE dokumentum_azon = :azon AND feltoltokod = :kod';
+        $documentCheckerQuery = 'SELECT
+            *
+            FROM document_code
+            WHERE
+                document_id = :did
+                AND upload_code = :dcode';
         $documentCheckerStmt = $pdo->prepare($documentCheckerQuery);
         $documentCheckerStmt->execute(
             array(
-                ':azon' => $fileId,
-                ':kod' => $uploadToken,
+                ':did' => $documentId,
+                ':dcode' => $uploadToken,
             )
         );
         $documentCheckerRow = $documentCheckerStmt->fetch(PDO::FETCH_ASSOC);
@@ -33,22 +38,31 @@ function registerUploadedDocument(
         }
 
         // delete upload token from database
-        $documentCheckerCleanUpQuery = 'DELETE FROM dokumentum_feltoltokod WHERE dokumentum_azon = :azon AND feltoltokod = :kod';
+        $documentCheckerCleanUpQuery = 'DELETE
+            FROM document_code
+            WHERE
+                document_id = :did
+                AND upload_code = :dcode';
         $documentCheckerCleanUpStmt = $pdo->prepare($documentCheckerCleanUpQuery);
         $documentCheckerCleanUpStmt->execute(
             array(
-                ':azon' => $fileId,
-                ':kod' => $uploadToken,
+                ':did' => $documentId,
+                ':dcode' => $uploadToken,
             )
         );
 
         // save path in database
-        $documentQuery = 'UPDATE dokumentum SET utvonal = :ut, lathato = 1 WHERE azon = :id';
+        $documentQuery = 'UPDATE
+                document
+            SET
+                document_path = :dpath,
+                document_visible = 1
+            WHERE document_id = :did';
         $docuemntStmt = $pdo->prepare($documentQuery);
         $docuemntStmt->execute(
             array(
-                ':id' => $fileId,
-                ':ut' => $targetLocation,
+                ':did' => $documentId,
+                ':dpath' => $targetLocation,
             )
         );
 

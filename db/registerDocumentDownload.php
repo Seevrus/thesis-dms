@@ -5,27 +5,37 @@ function registerDocumentDownload(PDO $pdo, string $taxNumber, string $documentI
 {
     try {
         // do some clean-up
-        $taxNumber = htmlentities($taxNumber);
-        $documentId = htmlentities($documentId);
+        $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $documentId = htmlspecialchars($documentId, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
-        $fetchQuery = 'SELECT letoltve FROM dokumentum WHERE dolgozo_adoazonosito = :ad AND azon = :az';
+        $fetchQuery = 'SELECT
+                document_downloaded
+            FROM document
+            WHERE
+                user_tax_number = :utn
+                AND document_id = :did';
         $fetchQueryStmt = $pdo->prepare($fetchQuery);
         $fetchQueryStmt->execute(
             array(
-                ':ad' => $taxNumber,
-                ':az' => $documentId,
+                ':utn' => $taxNumber,
+                ':did' => $documentId,
             )
         );
         $documentRow = $fetchQueryStmt->fetch(PDO::FETCH_ASSOC);
 
         // If not already registered, the register it
-        if (is_null($documentRow['letoltve'])) {
-            $registerQuery = 'UPDATE dokumentum SET letoltve = :most WHERE azon = :az';
+        if (is_null($documentRow['document_downloaded'])) {
+            $registerQuery = 'UPDATE
+                    document
+                SET
+                    document_downloaded = :dnow
+                WHERE
+                    document_id = :did';
             $registerQueryStmt = $pdo->prepare($registerQuery);
             $registerQueryStmt->execute(
                 array(
-                    ':most' => date("Y-m-d H:i:s"),
-                    ':az' => $documentId,
+                    ':dnow' => date("Y-m-d H:i:s"),
+                    ':did' => $documentId,
                 )
             );
         }

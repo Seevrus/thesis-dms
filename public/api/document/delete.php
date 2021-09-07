@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // end of validation
 
             // check user permission
-            if (!in_array(USER_PERMISSIONS::USER, $decodedToken->userPermissions)) {
+            if (!in_array(USER_PERMISSIONS::REGULAR, $decodedToken->userPermissions)) {
                 http_response_code(403);
                 echo json_encode(
                     array(
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $pdo = connectToDb();
-            $documentPathJSON = updateDocumentVisibility($pdo, $decodedToken->taxNumber, $documentIdentifiers->documentId);
+            $documentPathJSON = removeDocumentVisibility($pdo, $decodedToken->taxNumber, $documentIdentifiers->documentId);
             $documentPath = json_decode($documentPathJSON);
 
             if ($documentPath->outcome == 'failure') {

@@ -6,36 +6,59 @@ function createDocumentStub(
     string $taxNumber,
     string $documentName,
     int $category,
-    string $validUntil = null
+    int $validUntil = 0
 ) : string
 {
     try {
         // do some clean-up
-        $taxNumber = htmlentities($taxNumber);
-        $documentName = htmlentities($documentName);
-        $validUntil = htmlentities($validUntil);
+        $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $documentName = htmlspecialchars($documentName, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $validUntil = htmlspecialchars($validUntil, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
-        $documentQuery = 'INSERT INTO dokumentum (dolgozo_adoazonosito, dokumentum_nev, kategoria, ervenyes) VALUES (:azon, :nev, :kateg, :erv)';
+        $documentQuery = 'INSERT
+            INTO document (
+                user_tax_number,
+                document_name,
+                category_id,
+                document_visible,
+                document_valid
+            )
+            VALUES (
+                :did,
+                :dname,
+                :dcateg,
+                :dvis,
+                :dvalid
+            )';
         $docuemntStmt = $pdo->prepare($documentQuery);
         $docuemntStmt->execute(
             array(
-                ':azon' => $taxNumber,
-                ':nev' => $documentName,
-                ':kateg' => $category,
-                ':erv' => empty($validUntil) ? null : $validUntil,
+                ':did' => $taxNumber,
+                ':dname' => $documentName,
+                ':dcateg' => $category,
+                ':dvis' => 0,
+                ':dvalid' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
             )
         );
 
         $documentId = $pdo->lastInsertId();
 
         // enable file upload to this record via a token
-        $token = generateRandomString();
-        $codeQuery = 'INSERT INTO dokumentum_feltoltokod (dokumentum_azon, feltoltokod) VALUES (:azon, :kod)';
+        $documentUploadCode = generateRandomString();
+        $codeQuery = 'INSERT
+            INTO document_code (
+                document_id,
+                upload_code
+            )
+            VALUES (
+                :did,
+                :dcode
+            )';
         $codeStmt = $pdo->prepare($codeQuery);
         $codeStmt->execute(
             array(
-                ':azon' => $documentId,
-                ':kod' => $token,
+                ':did' => $documentId,
+                ':dcode' => $documentUploadCode,
             )
         );
 
@@ -43,15 +66,15 @@ function createDocumentStub(
             array(
                 'outcome' => 'success',
                 'message' => 'Document successfully created',
-                'documentId' => $documentId,
-                'token' => $token,
+                'document_id' => $documentId,
+                'upload_code' => $documentUploadCode,
             )
         );
     } catch (PDOException $e) {
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => $e->getMessage(),
+                'message' => 'Unexpected database error',
             )
         );
     }

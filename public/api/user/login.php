@@ -83,9 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($fetchUser->outcome == 'success') {
             // Issue Token
-            $userPermissions = array_map('mapDbUserPermission', $fetchUser->userPermissions);
-            $emailStatus = $fetchUser->emailStatus;
-            $jwt = jwtEncode($fetchUser->taxNumber, $userPermissions, mapDbEmailStatus($emailStatus));
+            $userPermissions = array_map('mapDbUserPermission', $fetchUser->user_permissions);
+            $emailStatus = $fetchUser->email_status;
+            $jwt = jwtEncode($fetchUser->user_tax_number, $userPermissions, mapDbEmailStatus($emailStatus));
             $jwtDecoded = issueNewToken($jwt);
 
             if ($emailStatus == 0) {
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     array(
                         'outcome' => 'pending',
                         'loginStatus' => LOGIN_STATUS::LOGGED_IN,
-                        'emailStatus' => EMAIL_STATUS::NO_EMAIL,
+                        'emailStatus' => $jwtDecoded->emailStatus,
                         'message' => 'User should register an email address',
                         'taxNumber' => $jwtDecoded->taxNumber,
                         'userPermissions' => array(),
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     array(
                         'outcome' => 'pending',
                         'loginStatus' => LOGIN_STATUS::LOGGED_IN,
-                        'emailStatus' => EMAIL_STATUS::NOT_VALIDATED,
+                        'emailStatus' => $jwtDecoded->emailStatus,
                         'message' => 'User should validate their email address',
                         'taxNumber' => $jwtDecoded->taxNumber,
                         'userPermissions' => array(),
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $authResponse = array(
                     'outcome' => 'success',
                     'loginStatus' => LOGIN_STATUS::LOGGED_IN,
-                    'emailStatus' => EMAIL_STATUS::VALID_EMAIL,
+                    'emailStatus' => $jwtDecoded->emailStatus,
                     'message' => 'User successfully logged in',
                     'taxNumber' => $jwtDecoded->taxNumber,
                     'userPermissions' => $jwtDecoded->userPermissions,
