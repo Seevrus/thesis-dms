@@ -20,6 +20,8 @@ import {
 import information from '../../img/information.svg';
 import paymentMethod from '../../img/payment-method.svg';
 
+const { useState } = React;
+
 interface Map {
   [key: string]: string | undefined
 }
@@ -36,17 +38,21 @@ const DOCUMENT_CATEGORY: Map = {
 const SingleDocument = ({ id } : Props) => {
   const dispatch = useAppDispatch();
 
-  const [deleteSuccess, setDeleteSuccess] = React.useState('');
-  const [serverError, setServerError] = React.useState('');
-
   const {
     added,
-    category,
+    companyName,
     documentName,
+    documentCategory,
     downloadedAt,
     validUntil,
   }: DocumentT = useAppSelector((state) => selectDocumentById(state, id));
-  const formattedCategory = decode(category);
+
+  const [deleteSuccess, setDeleteSuccess] = useState('');
+  const [deletable, setDeletable] = useState(!!downloadedAt);
+  const [serverError, setServerError] = useState('');
+
+  const formattedCompanyName = decode(companyName);
+  const formattedDocumentCategory = decode(documentCategory);
   const formattedDocumentName = decode(documentName);
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -69,6 +75,7 @@ const SingleDocument = ({ id } : Props) => {
           .then(
             ({ default: fileDownload }) => {
               fileDownload(data, `${formattedDocumentName}.pdf`);
+              setTimeout(() => setDeletable(true), 3000);
             },
           );
       })
@@ -79,15 +86,20 @@ const SingleDocument = ({ id } : Props) => {
     <Container className="letoltes_blokk mt-3">
       <Row>
         <Col className="col-md-2 align-self-center d-none d-md-block">
-          <Image src={DOCUMENT_CATEGORY[formattedCategory]} thumbnail alt="Bérjegyzék ikon" />
+          <Image src={DOCUMENT_CATEGORY[formattedDocumentCategory]} thumbnail alt="Bérjegyzék ikon" />
         </Col>
         <Col className="col-sm-12 col-md-10">
           <ListGroup>
             <ListGroup.Item><strong>{formattedDocumentName}</strong></ListGroup.Item>
             <ListGroup.Item>
+              Cég:
+              {' '}
+              {formattedCompanyName}
+            </ListGroup.Item>
+            <ListGroup.Item>
               Kategória:
               {' '}
-              {formattedCategory}
+              {formattedDocumentCategory}
             </ListGroup.Item>
             <ListGroup.Item>
               Hozzáadva:
@@ -121,7 +133,7 @@ const SingleDocument = ({ id } : Props) => {
       <div className="d-flex justify-content-end mt-1">
         <div className="letolt">
           <Button variant="primary" onClick={handleDownload}>Letöltés</Button>
-          {downloadedAt && <Button variant="primary" onClick={handleDelete}>Törlés</Button>}
+          {deletable && <Button variant="primary" onClick={handleDelete}>Törlés</Button>}
         </div>
       </div>
       <hr />
