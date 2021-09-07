@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { LoginStatusEnum } from '../../store/usersSliceTypes';
 import {
-  canHandleUserActivity,
   checkLoginStatus,
   loginExpires,
   userLoginStatus,
@@ -21,7 +20,6 @@ const NavigationBar = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const isUserActivityMenuVisible = useAppSelector(canHandleUserActivity);
   const loggedin = useAppSelector(userLoginStatus);
   const expires = useAppSelector(loginExpires);
 
@@ -66,7 +64,7 @@ const NavigationBar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Link to="/documents" className="nav-link">Dokumentumaim</Link>
-            {isUserActivityMenuVisible && <Link to="/user-activity" className="nav-link">Felhasználói aktivitás</Link>}
+            <Link to="/user-activity" className="nav-link">Felhasználói aktivitás</Link>
             <Link to="/user-handling" className="nav-link">Felhasználók kezelése</Link>
           </Nav>
           <Nav>

@@ -14,9 +14,8 @@ export interface FetchDocumentsRequestT {
 
 export interface DocumentT {
   id: number;
-  companyName: string;
   documentName: string;
-  documentCategory: string;
+  category: string;
   added: Date;
   downloadedAt: Date;
   validUntil: Date;

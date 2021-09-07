@@ -8,10 +8,6 @@ export enum UserPermissionsEnum {
   DOCUMENT_CREATOR = 'DOCUMENT_CREATOR',
 }
 
-interface UserPermissionsType {
-  [key: number]: `${UserPermissionsEnum}`[];
-}
-
 export enum EmailStatusEnum {
   NO_EMAIL = 'NO_EMAIL',
   NOT_VALIDATED = 'NOT_VALIDATED',
@@ -42,7 +38,7 @@ export interface LoginResponseT extends BaseResponseT {
   expires?: number;
   loginStatus?: `${LoginStatusEnum}`;
   taxNumber?: number;
-  userPermissions?: UserPermissionsType;
+  userPermissions?: `${UserPermissionsEnum}`[];
 }
 
 export interface LogoutResponseT extends BaseResponseT {
@@ -57,7 +53,7 @@ export interface UsersSliceT {
   loginStatus: `${LoginStatusEnum}`;
   expires: number;
   taxNumber: number;
-  userPermissions: UserPermissionsType;
+  userPermissions: `${UserPermissionsEnum}`[];
   emailStatus: `${EmailStatusEnum}`;
   outcome: OutcomeT;
   message: string;
