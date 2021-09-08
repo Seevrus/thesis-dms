@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit(1);
             }
 
-            $document = file_get_contents($documentPath->documentPath);
+            $document = file_get_contents($documentPath->document_path);
             if (!$document) {
                 http_response_code(404);
                 echo json_encode(
@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit(1);
             }
 
+            header('Content-Type: application/pdf');
             echo($document);
             
         } catch (Exception $e) {

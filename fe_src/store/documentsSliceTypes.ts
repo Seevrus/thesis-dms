@@ -14,7 +14,7 @@ export interface FetchDocumentsRequestT {
 
 export interface DocumentT {
   id: number;
-  documentName: string;
+  title: string;
   category: string;
   added: Date;
   downloadedAt: Date;

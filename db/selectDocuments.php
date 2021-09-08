@@ -22,7 +22,7 @@ function selectDocuments(
                     d.document_name AS title,
                     c.category_name AS category,
                     d.document_added AS added,
-                    d.document_downloaded AS downloaded,
+                    d.document_downloaded AS downloadedAt,
                     d.document_valid AS validUntil
                 FROM document d
                 JOIN document_category c ON d.category_id = c.category_id
@@ -47,7 +47,7 @@ function selectDocuments(
                     d.document_name AS title,
                     c.category_name AS category,
                     d.document_added AS added,
-                    d.document_downloaded AS downloaded,
+                    d.document_downloaded AS downloadedAt,
                     d.document_valid AS validUntil
                 FROM document d
                 JOIN document_category c ON d.category_id = c.category_id

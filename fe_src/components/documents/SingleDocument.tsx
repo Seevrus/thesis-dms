@@ -42,12 +42,12 @@ const SingleDocument = ({ id } : Props) => {
   const {
     added,
     category,
-    documentName,
+    title,
     downloadedAt,
     validUntil,
   }: DocumentT = useAppSelector((state) => selectDocumentById(state, id));
   const formattedCategory = decode(category);
-  const formattedDocumentName = decode(documentName);
+  const formattedTitle = decode(title);
 
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -68,7 +68,7 @@ const SingleDocument = ({ id } : Props) => {
         import('js-file-download')
           .then(
             ({ default: fileDownload }) => {
-              fileDownload(data, `${formattedDocumentName}.pdf`);
+              fileDownload(data, `${formattedTitle}.pdf`);
             },
           );
       })
@@ -83,7 +83,7 @@ const SingleDocument = ({ id } : Props) => {
         </Col>
         <Col className="col-sm-12 col-md-10">
           <ListGroup>
-            <ListGroup.Item><strong>{formattedDocumentName}</strong></ListGroup.Item>
+            <ListGroup.Item><strong>{formattedTitle}</strong></ListGroup.Item>
             <ListGroup.Item>
               Kategória:
               {' '}
@@ -121,7 +121,7 @@ const SingleDocument = ({ id } : Props) => {
       <div className="d-flex justify-content-end mt-1">
         <div className="letolt">
           <Button variant="primary" onClick={handleDownload}>Letöltés</Button>
-          {downloadedAt && <Button variant="primary" onClick={handleDelete}>Törlés</Button>}
+          {downloadedAt && <Button variant="danger" onClick={handleDelete}>Törlés</Button>}
         </div>
       </div>
       <hr />
