@@ -4,12 +4,27 @@
   margin-top: 5px;
 }
 
-.btn-primary {
+.btn-primary, .btn-outline-primary {
   margin-inline-end: 10px;
 }
 
 button.navbar-toggler {
   margin-right: 20px;
+}
+
+.filter-btn-container {
+  margin-top: 10px;
+}
+
+.filter-list {
+  background-color: white;
+  border: 1px solid teal;
+  font-weight: 400;
+  min-width: 300px;
+  max-height: 400px;
+  overflow: auto;
+  padding: 5px 10px 5px 10px;
+  position: absolute;
 }
 
 .form-container {

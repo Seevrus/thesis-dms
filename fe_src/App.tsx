@@ -12,7 +12,7 @@ import LoadableLogout from './components/authenticate/LoadableLogout';
 import Profile from './components/Profile';
 import LoadableRegistrationCompletitionForm from './components/authenticate/LoadableRegistrationCompletitionForm';
 import setupCsrfToken from './services/csrfService';
-import UserActivity from './components/UserActivity';
+import LoadableUserActivity from './components/useractivity/LoadableUserActivity';
 import UserHandling from './components/UserHandling';
 
 const { useEffect, useState } = React;
@@ -51,7 +51,7 @@ const App = () => {
           <Route exact path="/login" component={LoadableLoginForm} />
           <Route exact path="/logout" component={LoadableLogout} />
           <Route exact path="/profile" component={Profile} />
-          <Route exact path="/user-activity" component={UserActivity} />
+          <Route exact path="/user-activity" component={LoadableUserActivity} />
           <Route exact path="/user-handling" component={UserHandling} />
           <Route exact path="/validate-email" component={LoadableEmailValidationForm} />
         </Switch>

@@ -1,13 +1,14 @@
+/* eslint-disable import/no-cycle */
 import { configureStore } from '@reduxjs/toolkit';
 
-// eslint-disable-next-line import/no-cycle
 import documentsSlice from './documentsSlice';
-// eslint-disable-next-line import/no-cycle
+import userActivityScile from './userActivitySlice';
 import usersSlice from './usersSlice';
 
 const store = configureStore({
   reducer: {
     documents: documentsSlice,
+    userActivity: userActivityScile,
     users: usersSlice,
   },
 });

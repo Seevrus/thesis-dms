@@ -7,7 +7,7 @@
  */
 function connectToDb(): PDO
 {
-    $credentials = parse_ini_file('../../../db.ini');
+    $credentials = parse_ini_file(dirname(dirname(__FILE__)) . '/db.ini');
     $options = [
       \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
       \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
