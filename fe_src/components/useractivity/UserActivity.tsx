@@ -1,3 +1,10 @@
+import {
+  __,
+  isEmpty,
+  pipe,
+  prop,
+// @ts-ignore
+} from 'ramda';
 import * as React from 'react';
 import {
   Container,
@@ -5,19 +12,20 @@ import {
 } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
+import debounce from '../utils/debounce';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { UserActivityRequestT } from '../../store/userActivitySliceTypes';
 import { listUserActivity, selectActivities } from '../../store/userActivitySlice';
 import { EmailStatusEnum } from '../../store/usersSliceTypes';
 import { userEmailStatus } from '../../store/usersSlice';
-import FilterList, { FilterType } from './FilterList';
+
+import FilterList from './FilterList';
 
 const { useEffect, useState } = React;
 
 const UserActivity = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
-
-  const [companyFilterVisibility, setCompanyFilterVisibility] = useState('none');
 
   // Redirect user is they are not supposed to be here
   const emailStatus = useAppSelector(userEmailStatus);
@@ -32,48 +40,115 @@ const UserActivity = () => {
   }, [emailStatus]);
   // End of redirections
 
+  // state of all search keys coming from filters
+  const [activityRequest, setActivityRequest] = useState<UserActivityRequestT>({
+    companyName: [],
+    userRealName: [],
+    categoryName: [],
+    documentName: [],
+  });
+
+  const canHideFilter: (column: string) => boolean = pipe(prop(__, activityRequest), isEmpty);
+
   useEffect(() => {
     if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
-      dispatch(listUserActivity({ }));
+      debounce(dispatch(listUserActivity(activityRequest)));
     }
-  }, [emailStatus]);
+  }, [activityRequest, emailStatus]);
 
-  const companyFilters: FilterType = [
-    {
-      checked: true,
-      id: 'balazs',
-      label: 'Balázs és Tsa Bt.',
-    },
-    {
-      checked: true,
-      id: 'jonas',
-      label: 'Jónás Nyrt.',
-    },
-  ];
+  // filter visibilities
+  const [companyFilterVisibility, setCompanyFilterVisibility] = useState('none');
+  const [userFilterVisibility, setUserFilterVisibility] = useState('none');
+  const [categoryFilterVisibility, setCategoryFilterVisibility] = useState('none');
+  const [documentFilterVisibility, setDocumentFilterVisibility] = useState('none');
 
   const activities = useAppSelector(selectActivities);
 
+  // Limit 50
+  // endless scrolling (nice to have, majd ha még később lesz rá időnk)
+
   return (
-    <Container className="mt-5 mb-5" onClick={() => setCompanyFilterVisibility('none')}>
+    <Container className="mt-5 mb-5">
       <h3 className="page-title text-center">Felhasználói aktivitás</h3>
+      <FilterList
+        canHide={canHideFilter('companyName')}
+        columnName="companyName"
+        filterState={activityRequest}
+        setFilterState={setActivityRequest}
+        setVisibility={setCompanyFilterVisibility}
+        style={{ display: companyFilterVisibility }}
+      />
+      <FilterList
+        canHide={canHideFilter('userRealName')}
+        columnName="userRealName"
+        filterState={activityRequest}
+        setFilterState={setActivityRequest}
+        setVisibility={setUserFilterVisibility}
+        style={{ display: userFilterVisibility }}
+      />
+      <FilterList
+        canHide={canHideFilter('categoryName')}
+        columnName="categoryName"
+        filterState={activityRequest}
+        setFilterState={setActivityRequest}
+        setVisibility={setCategoryFilterVisibility}
+        style={{ display: categoryFilterVisibility }}
+      />
+      <FilterList
+        canHide={canHideFilter('documentName')}
+        columnName="documentName"
+        filterState={activityRequest}
+        setFilterState={setActivityRequest}
+        setVisibility={setDocumentFilterVisibility}
+        style={{ display: documentFilterVisibility }}
+      />
       <Table striped bordered hover responsive="md" size="sm">
         <thead>
           <tr>
             <th onClick={(e: React.MouseEvent) => {
               e.stopPropagation();
-              setCompanyFilterVisibility('block');
+              if (!(e.target instanceof HTMLTableCellElement)) return;
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              companyFilterVisibility === 'none'
+                ? setCompanyFilterVisibility('flex')
+                : canHideFilter('companyName') && setCompanyFilterVisibility('none');
             }}
             >
               Cég
-              <FilterList
-                options={companyFilters}
-                setVisibility={setCompanyFilterVisibility}
-                style={{ display: companyFilterVisibility }}
-              />
             </th>
-            <th>Munkavállaló</th>
-            <th>Kategória</th>
-            <th>Dokumentum</th>
+            <th onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              if (!(e.target instanceof HTMLTableCellElement)) return;
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              companyFilterVisibility === 'none'
+                ? setUserFilterVisibility('flex')
+                : canHideFilter('userRealName') && setUserFilterVisibility('none');
+            }}
+            >
+              Munkavállaló
+            </th>
+            <th onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              if (!(e.target instanceof HTMLTableCellElement)) return;
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              companyFilterVisibility === 'none'
+                ? setCategoryFilterVisibility('flex')
+                : canHideFilter('categoryName') && setCategoryFilterVisibility('none');
+            }}
+            >
+              Kategória
+            </th>
+            <th onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              if (!(e.target instanceof HTMLTableCellElement)) return;
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              companyFilterVisibility === 'none'
+                ? setDocumentFilterVisibility('flex')
+                : canHideFilter('documentName') && setDocumentFilterVisibility('none');
+            }}
+            >
+              Dokumentum
+            </th>
             <th>Hozzáadva</th>
             <th>Érvényes</th>
             <th>Letöltve</th>

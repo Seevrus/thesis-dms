@@ -1,11 +1,11 @@
 <?php
-error_reporting(0);
+// error_reporting(0);
 date_default_timezone_set('Europe/Budapest');
 
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/jwt/jwtDecode.php';
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/db/activity/listUserActivity.php';
+require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/db/activity/selectColumnOptions.php';
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/api_utils/statusEnums.php';
 
 header('Content-Type: application/json');
@@ -40,32 +40,29 @@ if (!checkCsrfToken()) {
   }
   // end of checking user permission
 
-  $requestBody = json_decode(file_get_contents("php://input"));
-  $companyName = $requestBody->companyName ?? array();
-  $userRealName = $requestBody->userRealName ?? array();
-  $categoryName = $requestBody->categoryName ?? array();
-  $documentName = $requestBody->documentName ?? array();
-  $added = $requestBody->added ?? null;
-  $validUntil = $requestBody->validUntil ?? null;
-  $downloaded = $requestBody->downloaded ?? null;
+  $requestData = json_decode(file_get_contents("php://input"));
+
+  // request body validation
+  if (empty($requestData->columnName)) {
+    http_response_code(403);
+    echo json_encode(
+      array(
+        'outcome' => 'failure',
+        'message' => 'Invalid request formation!',
+        'columnName' => $requestData->columnName,
+      )
+    );
+    exit(1);
+}
 
   $pdo = connectToDb();
-  $userActivityJSON = listUserActivity(
-    $pdo,
-    $companyName,
-    $userRealName,
-    $categoryName,
-    $documentName,
-    $added,
-    $validUntil,
-    $downloaded,
-  );
+  $columnOptionsJSON = selectColumnOptions($pdo, $requestData->columnName);
 
-  $userActivity = json_decode($userActivityJSON);
-  if ($userActivity->outcome == 'failure') {
+  $columnOptions = json_decode($columnOptionsJSON);
+  if ($columnOptions->outcome == 'failure') {
       http_response_code(401);
   }
-  echo $userActivityJSON;
+  echo $columnOptionsJSON;
 
   } catch (Exception $e) {
     http_response_code(403);

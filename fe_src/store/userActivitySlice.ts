@@ -8,6 +8,15 @@ import { UserActivityRequestT, UserActivityT } from './userActivitySliceTypes';
 const userActivityAdapter = createEntityAdapter<UserActivityT>();
 const initialState = userActivityAdapter.getInitialState();
 
+export const fetchColumnOptions = async (columnName: keyof UserActivityRequestT) => {
+  try {
+    const response = await axios.post('/api/user/activity/options.php', { columnName });
+    return response.data.options as string[];
+  } catch (e) {
+    throw new Error(e.data.message);
+  }
+};
+
 export const listUserActivity = createAsyncThunk(
   'userActivity/listUserActivity',
   async (requestData: UserActivityRequestT, { rejectWithValue }) => {
@@ -25,7 +34,7 @@ const userActivitySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(listUserActivity.fulfilled, userActivityAdapter.upsertMany);
+    builder.addCase(listUserActivity.fulfilled, userActivityAdapter.setAll);
   },
 });
 

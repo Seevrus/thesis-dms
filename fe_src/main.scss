@@ -12,19 +12,27 @@ button.navbar-toggler {
   margin-right: 20px;
 }
 
-.filter-btn-container {
-  margin-top: 10px;
-}
-
 .filter-list {
+  align-items: center;
+  display: flex;
   background-color: white;
   border: 1px solid teal;
-  font-weight: 400;
-  min-width: 300px;
-  max-height: 400px;
-  overflow: auto;
+  justify-content: space-between;
+  margin: 5px 0px;
   padding: 5px 10px 5px 10px;
-  position: absolute;
+
+  span:first-of-type {
+    color: rgb(33,37,41);
+    font-weight: 700;
+  }
+
+  .filter-btn-container {
+    margin-left: 10px;
+  }
+
+  .filter-list-dropdown {
+    width: 75%;
+  }
 }
 
 .form-container {

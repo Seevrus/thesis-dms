@@ -11,21 +11,41 @@ function listUserActivity(
 ): string {
   try {
     $conditionStrings = array();
-    if (!is_null($companyName)) {
-      $companyName = htmlspecialchars($companyName, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-      array_push($conditionStrings, 'c.company_name' . ' LIKE ' . $companyName);
+    if (!empty($companyName)) {
+      array_push(
+        $conditionStrings,
+        htmlspecialchars(
+          'c.company_name LIKE \'' . implode('\' OR c.company_name LIKE \'', $companyName) . '\'',
+          ENT_COMPAT | ENT_HTML401, 'UTF-8'
+        )
+      );
     }
-    if (!is_null($userRealName)) {
-      $userRealName = htmlspecialchars($userRealName, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-      array_push($conditionStrings, 'u.user_real_name' . ' LIKE ' . $userRealName);
+    if (!empty($userRealName)) {
+      array_push(
+        $conditionStrings,
+        htmlspecialchars(
+          'u.user_real_name LIKE \'' . implode('\' OR u.user_real_name LIKE \'', $userRealName) . '\'',
+          ENT_COMPAT | ENT_HTML401, 'UTF-8'
+        )
+      );
     }
-    if (!is_null($categoryName)) {
-      $categoryName = htmlspecialchars($categoryName, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-      array_push($conditionStrings, 'dc.category_name' . ' LIKE ' . $categoryName);
+    if (!empty($categoryName)) {
+      array_push(
+        $conditionStrings,
+        htmlspecialchars(
+          'dc.category_name LIKE \'' . implode('\' OR dc.category_name LIKE \'', $categoryName) . '\'',
+          ENT_COMPAT | ENT_HTML401, 'UTF-8'
+        )
+      );
     }
-    if (!is_null($documentName)) {
-      $documentName = htmlspecialchars($documentName, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-      array_push($conditionStrings, 'd.document_name' . ' LIKE ' . $documentName);
+    if (!empty($documentName)) {
+      array_push(
+        $conditionStrings,
+        htmlspecialchars(
+          'd.document_name LIKE \'' . implode('\' OR d.document_name LIKE \'', $documentName) . '\'',
+          ENT_COMPAT | ENT_HTML401, 'UTF-8'
+        )
+      );
     }
     if (!is_null($added)) {
       $added = htmlspecialchars($added, ENT_COMPAT | ENT_HTML401, 'UTF-8');
@@ -58,7 +78,8 @@ function listUserActivity(
       JOIN user u ON d.user_tax_number = u.user_tax_number
       JOIN company c ON u.company_code = c.company_id
       JOIN document_category dc ON d.category_id = dc.category_id' 
-      . $conditionString;
+      . $conditionString . '
+      LIMIT 3';
     
     $activityQueryStmt = $pdo->query($activityQuery);
     $fetchedActivity = $activityQueryStmt->fetchAll(PDO::FETCH_OBJ);

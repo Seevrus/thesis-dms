@@ -1,68 +1,65 @@
+import { paramCase } from 'param-case';
 import * as React from 'react';
 import {
   Button,
-  Form,
 } from 'react-bootstrap';
+import { UserActivityColumnsEnum, UserActivityRequestT } from '../../store/userActivitySliceTypes';
+import { fetchColumnOptions } from '../../store/userActivitySlice';
 
-const { useState } = React;
+import FilterDropdown, { OptionsT } from '../utils/FilterDropdown';
 
-export type FilterType = {
-  checked: boolean;
-  id: string;
-  label: string;
-}[];
+const { useEffect, useState } = React;
 
 type FilterListProps = {
-  options: FilterType;
+  canHide: boolean;
+  columnName: keyof UserActivityRequestT;
+  filterState: UserActivityRequestT;
+  setFilterState: React.Dispatch<React.SetStateAction<UserActivityRequestT>>;
   setVisibility: React.Dispatch<React.SetStateAction<string>>;
   style: { [key: string]: string };
 };
 
-const FilterList = ({ options, setVisibility, style }: FilterListProps) => {
-  const [optionsState, setOptionsState] = useState(options);
+const FilterList = ({
+  canHide,
+  columnName,
+  filterState,
+  setFilterState,
+  setVisibility,
+  style,
+}: FilterListProps) => {
+  const [optionsState, setOptionsState] = useState<OptionsT[]>([]);
 
-  const handleChange = (id: string) => {
-    const newOptions = optionsState.map((option) => {
-      if (option.id === id) {
-        return {
-          ...option,
-          checked: !option.checked,
-        };
-      }
-      return option;
-    });
-    setOptionsState(newOptions);
-  };
-
-  const resetFilters = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const newOptions = optionsState.map((option) => ({
-      ...option,
-      checked: true,
-    }));
-    setOptionsState(newOptions);
-    setVisibility('none');
-  };
+  useEffect(() => {
+    fetchColumnOptions(columnName)
+      .then((options) => {
+        setOptionsState(
+          options.map((option) => ({
+            label: option,
+            value: paramCase(option),
+          })),
+        );
+      });
+  }, [columnName]);
 
   return (
     <div className="filter-list" style={style}>
-      {optionsState.map(({ checked, id, label }) => (
-        <Form.Check
-          type="checkbox"
-          checked={checked}
-          id={id}
-          key={id}
-          label={label}
-          onChange={() => handleChange(id)}
-        />
-      ))}
+      <span>
+        {UserActivityColumnsEnum[columnName]}
+        :
+      </span>
+      <FilterDropdown
+        className="filter-list-dropdown"
+        filterKey={columnName}
+        filterState={filterState}
+        options={optionsState}
+        setFilterState={setFilterState}
+      />
       <div className="filter-btn-container">
-        <Button variant="outline-primary" size="sm">
-          Alkalmaz
+        {canHide && (
+        <Button variant="outline-primary" onClick={() => setVisibility('none')} size="sm">
+          Elrejt
         </Button>
-        <Button variant="outline-primary" onClick={resetFilters} size="sm">
-          Visszaállít
-        </Button>
+        )}
       </div>
     </div>
   );
