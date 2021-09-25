@@ -3,7 +3,7 @@ error_reporting(0);
 date_default_timezone_set('Europe/Budapest');
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/createDocumentStub.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/createDocumentStub.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';

@@ -4,7 +4,7 @@ set_time_limit(1800);
 date_default_timezone_set('Europe/Budapest');
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/createDocument.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/createDocument.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/saveFile.php';

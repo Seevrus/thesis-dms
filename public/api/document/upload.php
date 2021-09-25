@@ -6,7 +6,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/generateRandomString.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/registerUploadedDocument.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/registerUploadedDocument.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/saveFile.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 

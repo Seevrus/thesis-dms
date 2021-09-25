@@ -4,7 +4,7 @@ error_reporting(0);
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/selectDocuments.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/selectDocuments.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
 header('Content-Type: application/json');

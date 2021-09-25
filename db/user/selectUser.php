@@ -1,8 +1,8 @@
 <?php
 date_default_timezone_set('Europe/Budapest');
 
-require_once dirname(dirname(__FILE__)) . '/api_utils/statusEnums.php';
-require_once dirname(dirname(__FILE__)) . '/api_utils/userPermissions.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/statusEnums.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/userPermissions.php';
 
 function selectUser(PDO $pdo, string $taxNumber, string $password) : string
 {

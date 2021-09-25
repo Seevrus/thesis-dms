@@ -5,7 +5,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/validateEmail.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/user/validateEmail.php';
 
 header('Content-Type: application/json');
 

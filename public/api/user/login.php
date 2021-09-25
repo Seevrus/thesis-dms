@@ -5,7 +5,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/ch
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtEncode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/selectUser.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/user/selectUser.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
 header('Content-Type: application/json');

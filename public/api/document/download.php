@@ -5,8 +5,8 @@ date_default_timezone_set('Europe/Budapest');
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/getDocumentPath.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/registerDocumentDownload.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/getDocumentPath.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/registerDocumentDownload.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
