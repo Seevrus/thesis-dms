@@ -27,6 +27,14 @@ module.exports = merge(common, {
           'sass-loader',
         ],
       },
+      {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+        ],
+      },
     ],
   },
   optimization: {

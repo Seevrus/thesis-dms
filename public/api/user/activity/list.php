@@ -45,9 +45,9 @@ if (!checkCsrfToken()) {
   $userRealName = $requestBody->userRealName ?? array();
   $categoryName = $requestBody->categoryName ?? array();
   $documentName = $requestBody->documentName ?? array();
-  $added = $requestBody->added ?? null;
-  $validUntil = $requestBody->validUntil ?? null;
-  $downloaded = $requestBody->downloaded ?? null;
+  $added = $requestBody->added ?? array();
+  $validUntil = $requestBody->validUntil ?? array();
+  $downloaded = $requestBody->downloaded ?? array();
 
   $pdo = connectToDb();
   $userActivityJSON = listUserActivity(

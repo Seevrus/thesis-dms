@@ -19,6 +19,7 @@ import { listUserActivity, selectActivities } from '../../store/userActivitySlic
 import { EmailStatusEnum } from '../../store/usersSliceTypes';
 import { userEmailStatus } from '../../store/usersSlice';
 
+import DateFilter from './DateFilter';
 import FilterList from './FilterList';
 
 const { useEffect, useState } = React;
@@ -46,6 +47,9 @@ const UserActivity = () => {
     userRealName: [],
     categoryName: [],
     documentName: [],
+    added: {},
+    validUntil: {},
+    downloaded: {},
   });
 
   const canHideFilter: (column: string) => boolean = pipe(prop(__, activityRequest), isEmpty);
@@ -61,6 +65,7 @@ const UserActivity = () => {
   const [userFilterVisibility, setUserFilterVisibility] = useState('none');
   const [categoryFilterVisibility, setCategoryFilterVisibility] = useState('none');
   const [documentFilterVisibility, setDocumentFilterVisibility] = useState('none');
+  const [addedVisibility, setAddedVisibility] = useState('none');
 
   const activities = useAppSelector(selectActivities);
 
@@ -101,6 +106,14 @@ const UserActivity = () => {
         setFilterState={setActivityRequest}
         setVisibility={setDocumentFilterVisibility}
         style={{ display: documentFilterVisibility }}
+      />
+      <DateFilter
+        canHide={canHideFilter('documentName')}
+        columnName="added"
+        filterState={activityRequest}
+        setFilterState={setActivityRequest}
+        setVisibility={setAddedVisibility}
+        style={{ display: addedVisibility }}
       />
       <Table striped bordered hover responsive="md" size="sm">
         <thead>
@@ -149,7 +162,17 @@ const UserActivity = () => {
             >
               Dokumentum
             </th>
-            <th>Hozzáadva</th>
+            <th onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              if (!(e.target instanceof HTMLTableCellElement)) return;
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              addedVisibility === 'none'
+                ? setAddedVisibility('flex')
+                : canHideFilter('added') && setAddedVisibility('none');
+            }}
+            >
+              Hozzáadva
+            </th>
             <th>Érvényes</th>
             <th>Letöltve</th>
           </tr>

@@ -47,18 +47,49 @@ function listUserActivity(
         )
       );
     }
-    if (!is_null($added)) {
-      $added = htmlspecialchars($added, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-      array_push($conditionStrings, 'd.document_added' . ' > ' . $added);
+    if (!empty($added)) {
+      if (isset($added->from) && !isset($added->to)) {
+        $from = htmlspecialchars($added->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_added' . ' >= \'' . $from . '\'');
+      } else if (!isset($added->from) && isset($added->to)) {
+        $to = htmlspecialchars($added->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_added' . ' <= \'' . $to . '\'');
+      } else if (isset($added->from) && isset($added->to)) {
+        $from = htmlspecialchars($added->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $to = htmlspecialchars($added->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_added' . ' >= \'' . $from . '\' AND d.document_added' . ' <= \'' . $to . '\'');
+      }
     }
-    if (!is_null($validUntil)) {
-      $validUntil = htmlspecialchars($validUntil, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-      array_push($conditionStrings, '(ISNULL(d.document_valid) OR d.document_valid' . ' < ' . $validUntil);
+    if (!empty($validUntil)) {
+      if (isset($validUntil->from) && !isset($validUntil->to)) {
+        $from = htmlspecialchars($validUntil->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_valid' . ' >= \'' . $from . '\'');
+      } else if (!isset($validUntil->from) && isset($validUntil->to)) {
+        $to = htmlspecialchars($validUntil->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_valid' . ' <= \'' . $to . '\'');
+      } else if (isset($validUntil->from) && isset($validUntil->to)) {
+        $from = htmlspecialchars($validUntil->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $to = htmlspecialchars($validUntil->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_valid' . ' >= \'' . $from . '\' AND d.document_valid' . ' <= \'' . $to . '\'');
+      }
     }
-    if (!is_null($downloaded)) {
-      $downloaded
+    if (!empty($downloaded)) {
+      if (isset($downloaded->yes)) {
+        $downloaded->yes
         ? array_push($conditionStrings, 'd.document_downloaded' . ' IS NOT NULL ')
         : array_push($conditionStrings, 'd.document_downloaded' . ' IS NULL ');
+      }
+      if (isset($downloaded->from) && !isset($downloaded->to)) {
+        $from = htmlspecialchars($downloaded->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_downloaded' . ' >= \'' . $from . '\'');
+      } else if (!isset($downloaded->from) && isset($downloaded->to)) {
+        $to = htmlspecialchars($downloaded->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_downloaded' . ' <= \'' . $to . '\'');
+      } else if (isset($downloaded->from) && isset($downloaded->to)) {
+        $from = htmlspecialchars($downloaded->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        $to = htmlspecialchars($downloaded->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
+        array_push($conditionStrings, 'd.document_downloaded' . ' >= \'' . $from . '\' AND d.document_downloaded' . ' <= \'' . $to . '\'');
+      }
     }
 
     !empty($conditionStrings)

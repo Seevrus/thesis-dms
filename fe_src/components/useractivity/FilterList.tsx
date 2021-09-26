@@ -1,16 +1,14 @@
 import { paramCase } from 'param-case';
 import * as React from 'react';
-import {
-  Button,
-} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { UserActivityColumnsEnum, UserActivityRequestT } from '../../store/userActivitySliceTypes';
 import { fetchColumnOptions } from '../../store/userActivitySlice';
 
-import FilterDropdown, { OptionsT } from '../utils/FilterDropdown';
+import FilterDropdown, { OptionsT } from './FilterDropdown';
 
 const { useEffect, useState } = React;
 
-type FilterListProps = {
+export type FilterListProps = {
   canHide: boolean;
   columnName: keyof UserActivityRequestT;
   filterState: UserActivityRequestT;

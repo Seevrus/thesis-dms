@@ -13,9 +13,19 @@ export interface UserActivityRequestT {
   userRealName: string[];
   categoryName: string[];
   documentName: string[];
-  added?: string;
-  validUntil?: string;
-  downloaded?: string;
+  added: {
+    from?: string;
+    to?: string;
+  };
+  validUntil: {
+    from?: string;
+    to?: string;
+  };
+  downloaded: {
+    yes?: boolean;
+    from?: string;
+    to?: string;
+  };
 }
 
 interface UAKeys {
