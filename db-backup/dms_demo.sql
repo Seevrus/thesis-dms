@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2021. Sze 07. 21:23
+-- Létrehozás ideje: 2021. Sze 28. 22:11
 -- Kiszolgáló verziója: 10.4.20-MariaDB
 -- PHP verzió: 7.3.29
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `dms_demo`
 --
+CREATE DATABASE IF NOT EXISTS `dms_demo` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
+USE `dms_demo`;
 
 -- --------------------------------------------------------
 
@@ -71,9 +73,9 @@ INSERT INTO `document` (`document_id`, `user_tax_number`, `document_name`, `cate
 (421, 1234567890, 'Teszt 01', 1, '2021-09-07 21:08:53', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210853_Az6kFBsB.pdf'),
 (422, 1234567890, 'Teszt 02', 2, '2021-09-07 21:08:53', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210853_BfHPtDPn.pdf'),
 (423, 1234567890, 'Teszt 03', 1, '2021-09-07 21:08:53', 1, '2022-12-31 23:59:59', NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210853_ro1VJtQP.pdf'),
-(424, 1315760217, 'Teszt 01', 1, '2021-09-07 21:09:11', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_7GvDSHtV.pdf'),
+(424, 1315760217, 'Teszt 01', 1, '2021-09-07 21:09:11', 1, NULL, '2021-09-07 22:13:39', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_7GvDSHtV.pdf'),
 (425, 1315760217, 'Teszt 02', 2, '2021-09-07 21:09:11', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_Fd6hthPQ.pdf'),
-(426, 1315760217, 'Teszt 03', 1, '2021-09-07 21:09:11', 1, '2022-12-31 23:59:59', NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_V7fMU5eR.pdf'),
+(426, 1315760217, 'Teszt 03', 1, '2021-09-07 21:09:11', 1, '2022-12-31 23:59:59', '2021-09-14 13:14:05', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_V7fMU5eR.pdf'),
 (427, 1443062569, 'Teszt 01', 1, '2021-09-07 21:09:24', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210924_L9UvKftT.pdf'),
 (428, 1443062569, 'Teszt 02', 2, '2021-09-07 21:09:24', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210924_ZOdyKTnw.pdf'),
 (429, 1443062569, 'Teszt 03', 1, '2021-09-07 21:09:24', 1, '2022-12-31 23:59:59', NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210924_HZCHxMXD.pdf'),
@@ -170,6 +172,18 @@ INSERT INTO `user` (`user_tax_number`, `company_code`, `user_status`, `user_real
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `user_activity_filter`
+--
+
+DROP TABLE IF EXISTS `user_activity_filter`;
+CREATE TABLE `user_activity_filter` (
+  `user_tax_number` int(10) UNSIGNED NOT NULL,
+  `filter` varchar(2000) COLLATE latin2_hungarian_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `user_email_code`
 --
 
@@ -239,6 +253,13 @@ ALTER TABLE `user`
   ADD KEY `user_ibfk_1` (`company_code`);
 
 --
+-- A tábla indexei `user_activity_filter`
+--
+ALTER TABLE `user_activity_filter`
+  ADD PRIMARY KEY (`user_tax_number`,`filter`),
+  ADD KEY `user_id` (`user_tax_number`);
+
+--
 -- A tábla indexei `user_email_code`
 --
 ALTER TABLE `user_email_code`
@@ -258,7 +279,7 @@ ALTER TABLE `user_permissions`
 -- AUTO_INCREMENT a táblához `document`
 --
 ALTER TABLE `document`
-  MODIFY `document_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=451;
+  MODIFY `document_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=452;
 
 --
 -- AUTO_INCREMENT a táblához `document_category`
@@ -288,6 +309,12 @@ ALTER TABLE `document_code`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company_code`) REFERENCES `company` (`company_id`);
+
+--
+-- Megkötések a táblához `user_activity_filter`
+--
+ALTER TABLE `user_activity_filter`
+  ADD CONSTRAINT `user_activity_filter_ibfk_1` FOREIGN KEY (`user_tax_number`) REFERENCES `user` (`user_tax_number`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `user_email_code`
