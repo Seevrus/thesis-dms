@@ -1,6 +1,8 @@
 import {
   __,
+  equals,
   isEmpty,
+  omit,
   pipe,
   prop,
 // @ts-ignore
@@ -21,6 +23,7 @@ import { userEmailStatus } from '../../store/usersSlice';
 
 import DateFilter from './DateFilter';
 import FilterList from './FilterList';
+import SaveLayout from './SaveLayout';
 
 const { useEffect, useState } = React;
 
@@ -42,17 +45,30 @@ const UserActivity = () => {
   // End of redirections
 
   // state of all search keys coming from filters
-  const [activityRequest, setActivityRequest] = useState<UserActivityRequestT>({
+  const emptyActivityRequest: UserActivityRequestT = {
     companyName: [],
     userRealName: [],
     categoryName: [],
     documentName: [],
     added: {},
-    validUntil: {},
-    downloaded: {},
-  });
+    validUntil: {
+      checked: true,
+    },
+    downloaded: {
+      checked: false,
+    },
+  };
+  const [activityRequest, setActivityRequest] = useState<UserActivityRequestT>(
+    emptyActivityRequest,
+  );
 
-  const canHideFilter: (column: string) => boolean = pipe(prop(__, activityRequest), isEmpty);
+  const canHideFilter: (column: string) => boolean = pipe(
+    prop(__, activityRequest),
+    omit(['checked']),
+    isEmpty,
+  );
+
+  const showSaveLayout = !equals(emptyActivityRequest, activityRequest);
 
   useEffect(() => {
     if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
@@ -65,16 +81,18 @@ const UserActivity = () => {
   const [userFilterVisibility, setUserFilterVisibility] = useState('none');
   const [categoryFilterVisibility, setCategoryFilterVisibility] = useState('none');
   const [documentFilterVisibility, setDocumentFilterVisibility] = useState('none');
-  const [addedVisibility, setAddedVisibility] = useState('none');
+  const [addedFilterVisibility, setAddedFilterVisibility] = useState('none');
+  const [validUntilFilterVisibility, setValidUntilFilterVisibility] = useState('none');
+  const [downloadedFilterVisibility, setDownloadedFilterVisibility] = useState('none');
 
   const activities = useAppSelector(selectActivities);
 
-  // Limit 50
   // endless scrolling (nice to have, majd ha még később lesz rá időnk)
 
   return (
     <Container className="mt-5 mb-5">
       <h3 className="page-title text-center">Felhasználói aktivitás</h3>
+      {showSaveLayout && <SaveLayout />}
       <FilterList
         canHide={canHideFilter('companyName')}
         columnName="companyName"
@@ -108,12 +126,28 @@ const UserActivity = () => {
         style={{ display: documentFilterVisibility }}
       />
       <DateFilter
-        canHide={canHideFilter('documentName')}
+        canHide={canHideFilter('added')}
         columnName="added"
         filterState={activityRequest}
         setFilterState={setActivityRequest}
-        setVisibility={setAddedVisibility}
-        style={{ display: addedVisibility }}
+        setVisibility={setAddedFilterVisibility}
+        style={{ display: addedFilterVisibility }}
+      />
+      <DateFilter
+        canHide={canHideFilter('validUntil')}
+        columnName="validUntil"
+        filterState={activityRequest}
+        setFilterState={setActivityRequest}
+        setVisibility={setValidUntilFilterVisibility}
+        style={{ display: validUntilFilterVisibility }}
+      />
+      <DateFilter
+        canHide={canHideFilter('downloaded')}
+        columnName="downloaded"
+        filterState={activityRequest}
+        setFilterState={setActivityRequest}
+        setVisibility={setDownloadedFilterVisibility}
+        style={{ display: downloadedFilterVisibility }}
       />
       <Table striped bordered hover responsive="md" size="sm">
         <thead>
@@ -123,7 +157,7 @@ const UserActivity = () => {
               if (!(e.target instanceof HTMLTableCellElement)) return;
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               companyFilterVisibility === 'none'
-                ? setCompanyFilterVisibility('flex')
+                ? setCompanyFilterVisibility('block')
                 : canHideFilter('companyName') && setCompanyFilterVisibility('none');
             }}
             >
@@ -133,8 +167,8 @@ const UserActivity = () => {
               e.stopPropagation();
               if (!(e.target instanceof HTMLTableCellElement)) return;
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              companyFilterVisibility === 'none'
-                ? setUserFilterVisibility('flex')
+              userFilterVisibility === 'none'
+                ? setUserFilterVisibility('block')
                 : canHideFilter('userRealName') && setUserFilterVisibility('none');
             }}
             >
@@ -144,8 +178,8 @@ const UserActivity = () => {
               e.stopPropagation();
               if (!(e.target instanceof HTMLTableCellElement)) return;
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              companyFilterVisibility === 'none'
-                ? setCategoryFilterVisibility('flex')
+              categoryFilterVisibility === 'none'
+                ? setCategoryFilterVisibility('block')
                 : canHideFilter('categoryName') && setCategoryFilterVisibility('none');
             }}
             >
@@ -155,8 +189,8 @@ const UserActivity = () => {
               e.stopPropagation();
               if (!(e.target instanceof HTMLTableCellElement)) return;
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              companyFilterVisibility === 'none'
-                ? setDocumentFilterVisibility('flex')
+              documentFilterVisibility === 'none'
+                ? setDocumentFilterVisibility('block')
                 : canHideFilter('documentName') && setDocumentFilterVisibility('none');
             }}
             >
@@ -166,15 +200,35 @@ const UserActivity = () => {
               e.stopPropagation();
               if (!(e.target instanceof HTMLTableCellElement)) return;
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              addedVisibility === 'none'
-                ? setAddedVisibility('flex')
-                : canHideFilter('added') && setAddedVisibility('none');
+              addedFilterVisibility === 'none'
+                ? setAddedFilterVisibility('block')
+                : canHideFilter('added') && setAddedFilterVisibility('none');
             }}
             >
               Hozzáadva
             </th>
-            <th>Érvényes</th>
-            <th>Letöltve</th>
+            <th onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              if (!(e.target instanceof HTMLTableCellElement)) return;
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              validUntilFilterVisibility === 'none'
+                ? setValidUntilFilterVisibility('block')
+                : canHideFilter('validUntil') && setValidUntilFilterVisibility('none');
+            }}
+            >
+              Érvényes
+            </th>
+            <th onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              if (!(e.target instanceof HTMLTableCellElement)) return;
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              downloadedFilterVisibility === 'none'
+                ? setDownloadedFilterVisibility('block')
+                : canHideFilter('downloaded') && setDownloadedFilterVisibility('none');
+            }}
+            >
+              Letöltve
+            </th>
           </tr>
         </thead>
         <tbody>

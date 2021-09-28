@@ -18,11 +18,12 @@ export interface UserActivityRequestT {
     to?: string;
   };
   validUntil: {
+    checked: boolean;
     from?: string;
     to?: string;
   };
   downloaded: {
-    yes?: boolean;
+    checked: boolean;
     from?: string;
     to?: string;
   };

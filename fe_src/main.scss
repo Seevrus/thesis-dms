@@ -12,26 +12,17 @@ button.navbar-toggler {
   margin-right: 20px;
 }
 
+.date-picker-container > * {
+  margin: 0px 10px;
+}
+
 .filter-list {
-  align-items: center;
-  display: flex;
-  background-color: white;
-  border: 1px solid teal;
-  justify-content: space-between;
+  border: 1px solid #0d6efd;
   margin: 5px 0px;
   padding: 5px 10px 5px 10px;
 
-  span:first-of-type {
-    color: rgb(33,37,41);
+  .filter-list-label {
     font-weight: 700;
-  }
-
-  .filter-btn-container {
-    margin-left: 10px;
-  }
-
-  .filter-list-dropdown {
-    width: 75%;
   }
 }
 

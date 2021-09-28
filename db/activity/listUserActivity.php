@@ -61,6 +61,10 @@ function listUserActivity(
       }
     }
     if (!empty($validUntil)) {
+      $validUntil->checked
+      ? null
+      : array_push($conditionStrings, 'd.document_valid' . ' IS NOT NULL ');
+
       if (isset($validUntil->from) && !isset($validUntil->to)) {
         $from = htmlspecialchars($validUntil->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
         array_push($conditionStrings, 'd.document_valid' . ' >= \'' . $from . '\'');
@@ -74,11 +78,10 @@ function listUserActivity(
       }
     }
     if (!empty($downloaded)) {
-      if (isset($downloaded->yes)) {
-        $downloaded->yes
-        ? array_push($conditionStrings, 'd.document_downloaded' . ' IS NOT NULL ')
-        : array_push($conditionStrings, 'd.document_downloaded' . ' IS NULL ');
-      }
+      $downloaded->checked
+      ? array_push($conditionStrings, 'd.document_downloaded' . ' IS NULL ')
+      : null;
+
       if (isset($downloaded->from) && !isset($downloaded->to)) {
         $from = htmlspecialchars($downloaded->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
         array_push($conditionStrings, 'd.document_downloaded' . ' >= \'' . $from . '\'');

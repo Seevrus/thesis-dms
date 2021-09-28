@@ -1,6 +1,11 @@
 import { paramCase } from 'param-case';
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Container,
+  Row,
+} from 'react-bootstrap';
 import { UserActivityColumnsEnum, UserActivityRequestT } from '../../store/userActivitySliceTypes';
 import { fetchColumnOptions } from '../../store/userActivitySlice';
 
@@ -40,26 +45,30 @@ const FilterList = ({
   }, [columnName]);
 
   return (
-    <div className="filter-list" style={style}>
-      <span>
-        {UserActivityColumnsEnum[columnName]}
-        :
-      </span>
-      <FilterDropdown
-        className="filter-list-dropdown"
-        filterKey={columnName}
-        filterState={filterState}
-        options={optionsState}
-        setFilterState={setFilterState}
-      />
-      <div className="filter-btn-container">
-        {canHide && (
-        <Button variant="outline-primary" onClick={() => setVisibility('none')} size="sm">
-          Elrejt
-        </Button>
-        )}
-      </div>
-    </div>
+    <Container className="filter-list" style={style}>
+      <Row>
+        <Col className="filter-list-label" md={2}>
+          {UserActivityColumnsEnum[columnName]}
+          :
+        </Col>
+        <Col md={9}>
+          <FilterDropdown
+            className="filter-list-dropdown"
+            filterKey={columnName}
+            filterState={filterState}
+            options={optionsState}
+            setFilterState={setFilterState}
+          />
+        </Col>
+        <Col md={1}>
+          {canHide && (
+            <Button variant="outline-primary" onClick={() => setVisibility('none')} size="sm">
+              Elrejt
+            </Button>
+          )}
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
