@@ -9,7 +9,10 @@ import {
 import * as React from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import { UserActivityRequestT } from '../../store/userActivitySliceTypes';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { filterModified, selectActiveFilter } from '../../store/activityFilterSlice';
+import { ActivityFilterT } from '../../store/activityFilterSliceTypes';
 
 const animatedComponents = makeAnimated();
 
@@ -20,27 +23,26 @@ export interface OptionsT {
 
 type FilterDropdownPropsT = {
   className: string;
-  filterKey: keyof UserActivityRequestT;
-  filterState: UserActivityRequestT;
+  filterKey: keyof ActivityFilterT;
   options: OptionsT[];
-  setFilterState: React.Dispatch<React.SetStateAction<UserActivityRequestT>>;
 };
 
 const FilterDropdown = ({
   className,
   filterKey,
-  filterState,
   options,
-  setFilterState,
 }: FilterDropdownPropsT) => {
+  const dispatch = useAppDispatch();
+  const activeFilter = useAppSelector(selectActiveFilter);
+
   const handleChange = (selectedOptions: OptionsT[]) => {
     const selectedOptionsArray: string[] = map(prop('label'), selectedOptions);
-    setFilterState(
+    dispatch(filterModified(
       pipe(
         clone,
         assoc(filterKey, selectedOptionsArray),
-      )(filterState),
-    );
+      )(activeFilter),
+    ));
   };
 
   return (

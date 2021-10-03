@@ -1,12 +1,3 @@
-import {
-  __,
-  equals,
-  isEmpty,
-  omit,
-  pipe,
-  prop,
-// @ts-ignore
-} from 'ramda';
 import * as React from 'react';
 import {
   Container,
@@ -16,11 +7,23 @@ import { useHistory } from 'react-router';
 
 import debounce from '../utils/debounce';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { UserActivityRequestT } from '../../store/userActivitySliceTypes';
+import {
+  fetchFilters,
+  isAddedModified,
+  isCategoryNameModified,
+  isCompanyNameModified,
+  isDocumentNameModified,
+  isDownloadedModified,
+  isFilterModified,
+  isUserRealNameModified,
+  isValidUntilModified,
+  selectActiveFilter,
+} from '../../store/activityFilterSlice';
 import { listUserActivity, selectActivities } from '../../store/userActivitySlice';
 import { EmailStatusEnum } from '../../store/usersSliceTypes';
 import { userEmailStatus } from '../../store/usersSlice';
 
+import BrowseFilters from './BrowseFilters';
 import DateFilter from './DateFilter';
 import FilterList from './FilterList';
 import SaveLayout from './SaveLayout';
@@ -44,37 +47,30 @@ const UserActivity = () => {
   }, [emailStatus]);
   // End of redirections
 
-  // state of all search keys coming from filters
-  const emptyActivityRequest: UserActivityRequestT = {
-    companyName: [],
-    userRealName: [],
-    categoryName: [],
-    documentName: [],
-    added: {},
-    validUntil: {
-      checked: true,
-    },
-    downloaded: {
-      checked: false,
-    },
-  };
-  const [activityRequest, setActivityRequest] = useState<UserActivityRequestT>(
-    emptyActivityRequest,
-  );
-
-  const canHideFilter: (column: string) => boolean = pipe(
-    prop(__, activityRequest),
-    omit(['checked']),
-    isEmpty,
-  );
-
-  const showSaveLayout = !equals(emptyActivityRequest, activityRequest);
+  // store integration
+  const activeFilter = useAppSelector(selectActiveFilter);
+  const canHideAdded = !useAppSelector(isAddedModified);
+  const canHideCategoryName = !useAppSelector(isCategoryNameModified);
+  const canHideCompanyName = !useAppSelector(isCompanyNameModified);
+  const canHideDocumentName = !useAppSelector(isDocumentNameModified);
+  const canHideDownloaded = !useAppSelector(isDownloadedModified);
+  const canHideUserRealName = !useAppSelector(isUserRealNameModified);
+  const canHideValidUntil = !useAppSelector(isValidUntilModified);
+  const showSaveLayout = useAppSelector(isFilterModified);
 
   useEffect(() => {
     if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
-      debounce(dispatch(listUserActivity(activityRequest)));
+      debounce(dispatch(listUserActivity(activeFilter)));
     }
-  }, [activityRequest, emailStatus]);
+  }, [activeFilter, emailStatus]);
+
+  useEffect(() => {
+    if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
+      dispatch(fetchFilters());
+    }
+  }, []);
+
+  // end of store integration
 
   // filter visibilities
   const [companyFilterVisibility, setCompanyFilterVisibility] = useState('none');
@@ -92,60 +88,47 @@ const UserActivity = () => {
   return (
     <Container className="mt-5 mb-5">
       <h3 className="page-title text-center">Felhasználói aktivitás</h3>
+      <BrowseFilters />
       {showSaveLayout && <SaveLayout />}
       <FilterList
-        canHide={canHideFilter('companyName')}
+        canHide={canHideCompanyName}
         columnName="companyName"
-        filterState={activityRequest}
-        setFilterState={setActivityRequest}
         setVisibility={setCompanyFilterVisibility}
         style={{ display: companyFilterVisibility }}
       />
       <FilterList
-        canHide={canHideFilter('userRealName')}
+        canHide={canHideUserRealName}
         columnName="userRealName"
-        filterState={activityRequest}
-        setFilterState={setActivityRequest}
         setVisibility={setUserFilterVisibility}
         style={{ display: userFilterVisibility }}
       />
       <FilterList
-        canHide={canHideFilter('categoryName')}
+        canHide={canHideCategoryName}
         columnName="categoryName"
-        filterState={activityRequest}
-        setFilterState={setActivityRequest}
         setVisibility={setCategoryFilterVisibility}
         style={{ display: categoryFilterVisibility }}
       />
       <FilterList
-        canHide={canHideFilter('documentName')}
+        canHide={canHideDocumentName}
         columnName="documentName"
-        filterState={activityRequest}
-        setFilterState={setActivityRequest}
         setVisibility={setDocumentFilterVisibility}
         style={{ display: documentFilterVisibility }}
       />
       <DateFilter
-        canHide={canHideFilter('added')}
+        canHide={canHideAdded}
         columnName="added"
-        filterState={activityRequest}
-        setFilterState={setActivityRequest}
         setVisibility={setAddedFilterVisibility}
         style={{ display: addedFilterVisibility }}
       />
       <DateFilter
-        canHide={canHideFilter('validUntil')}
+        canHide={canHideValidUntil}
         columnName="validUntil"
-        filterState={activityRequest}
-        setFilterState={setActivityRequest}
         setVisibility={setValidUntilFilterVisibility}
         style={{ display: validUntilFilterVisibility }}
       />
       <DateFilter
-        canHide={canHideFilter('downloaded')}
+        canHide={canHideDownloaded}
         columnName="downloaded"
-        filterState={activityRequest}
-        setFilterState={setActivityRequest}
         setVisibility={setDownloadedFilterVisibility}
         style={{ display: downloadedFilterVisibility }}
       />
@@ -158,7 +141,7 @@ const UserActivity = () => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               companyFilterVisibility === 'none'
                 ? setCompanyFilterVisibility('block')
-                : canHideFilter('companyName') && setCompanyFilterVisibility('none');
+                : canHideCompanyName && setCompanyFilterVisibility('none');
             }}
             >
               Cég
@@ -169,7 +152,7 @@ const UserActivity = () => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               userFilterVisibility === 'none'
                 ? setUserFilterVisibility('block')
-                : canHideFilter('userRealName') && setUserFilterVisibility('none');
+                : canHideUserRealName && setUserFilterVisibility('none');
             }}
             >
               Munkavállaló
@@ -180,7 +163,7 @@ const UserActivity = () => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               categoryFilterVisibility === 'none'
                 ? setCategoryFilterVisibility('block')
-                : canHideFilter('categoryName') && setCategoryFilterVisibility('none');
+                : canHideCategoryName && setCategoryFilterVisibility('none');
             }}
             >
               Kategória
@@ -191,7 +174,7 @@ const UserActivity = () => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               documentFilterVisibility === 'none'
                 ? setDocumentFilterVisibility('block')
-                : canHideFilter('documentName') && setDocumentFilterVisibility('none');
+                : canHideDocumentName && setDocumentFilterVisibility('none');
             }}
             >
               Dokumentum
@@ -202,7 +185,7 @@ const UserActivity = () => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               addedFilterVisibility === 'none'
                 ? setAddedFilterVisibility('block')
-                : canHideFilter('added') && setAddedFilterVisibility('none');
+                : canHideAdded && setAddedFilterVisibility('none');
             }}
             >
               Hozzáadva
@@ -213,7 +196,7 @@ const UserActivity = () => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               validUntilFilterVisibility === 'none'
                 ? setValidUntilFilterVisibility('block')
-                : canHideFilter('validUntil') && setValidUntilFilterVisibility('none');
+                : canHideValidUntil && setValidUntilFilterVisibility('none');
             }}
             >
               Érvényes
@@ -224,7 +207,7 @@ const UserActivity = () => {
               // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               downloadedFilterVisibility === 'none'
                 ? setDownloadedFilterVisibility('block')
-                : canHideFilter('downloaded') && setDownloadedFilterVisibility('none');
+                : canHideDownloaded && setDownloadedFilterVisibility('none');
             }}
             >
               Letöltve

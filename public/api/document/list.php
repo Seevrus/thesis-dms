@@ -7,7 +7,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php'
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/selectDocuments.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $DOCUMENTS_TO_FETCH = 10;

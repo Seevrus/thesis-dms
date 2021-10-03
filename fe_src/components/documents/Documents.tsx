@@ -2,12 +2,13 @@ import * as React from 'react';
 import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
-import SingleDocument from './SingleDocument';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/usersSliceTypes';
 import { userEmailStatus, userLoginStatus } from '../../store/usersSlice';
 import { fetchDocuments, selectDocumentIds } from '../../store/documentsSlice';
+
 import Loading from '../utils/Loading';
+import SingleDocument from './SingleDocument';
 
 const { useEffect, useState } = React;
 
@@ -42,13 +43,14 @@ const Documents = () => {
   }, [emailStatus, loginStatus]);
   // End of redirections
 
+  const documentIds = useAppSelector(selectDocumentIds) as number[];
+
   useEffect(() => {
-    if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
+    if (emailStatus === EmailStatusEnum.VALID_EMAIL && !documentIds.length) {
       dispatch(fetchDocuments({ }));
     }
-  }, [emailStatus]);
+  }, [documentIds, emailStatus]);
 
-  const documentIds = useAppSelector(selectDocumentIds) as number[];
   const documents = documentIds.map((id) => <SingleDocument key={id} id={id} />);
 
   return (

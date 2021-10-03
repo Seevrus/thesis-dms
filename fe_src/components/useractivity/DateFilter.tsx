@@ -17,7 +17,11 @@ import {
   Row,
 } from 'react-bootstrap';
 import DatePicker from 'react-date-picker';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { filterModified, selectActiveFilter } from '../../store/activityFilterSlice';
 import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
+
 import { FilterListProps } from './FilterList';
 
 const { useState } = React;
@@ -30,21 +34,22 @@ const CheckboxLabelE = {
 const DateFilter = ({
   canHide,
   columnName,
-  filterState,
-  setFilterState,
   setVisibility,
   style,
 }: FilterListProps) => {
+  const dispatch = useAppDispatch();
+  const activeFilter = useAppSelector(selectActiveFilter);
+
   const [valueFrom, setValueFrom] = useState<Date>(null);
   const [valueTo, setValueTo] = useState<Date>(null);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterState(
+    dispatch(filterModified(
       pipe(
         clone,
         assocPath([e.target.id, 'checked'], e.target.checked),
-      ),
-    );
+      )(activeFilter),
+    ));
   };
 
   const handleDateChange = (newDate: Date, side: 'from' | 'to') => {
@@ -52,19 +57,19 @@ const DateFilter = ({
     side === 'from' ? setValueFrom(newDate) : setValueTo(newDate);
     if (newDate) {
       const formattedDate = newDate && format(newDate, 'yyyy-MM-dd');
-      setFilterState(
+      dispatch(filterModified(
         pipe(
           clone,
           assocPath([columnName, side], formattedDate),
-        )(filterState),
-      );
+        )(activeFilter),
+      ));
     } else {
-      setFilterState(
+      dispatch(filterModified(
         pipe(
           clone,
           dissocPath([columnName, side]),
-        )(filterState),
-      );
+        )(activeFilter),
+      ));
     }
   };
 
@@ -92,7 +97,7 @@ const DateFilter = ({
           <Form.Check
             inline
             id={columnName}
-            checked={path([columnName, 'checked'], filterState)}
+            checked={path([columnName, 'checked'], activeFilter)}
             // @ts-ignore
             label={CheckboxLabelE[columnName]}
             name="group1"

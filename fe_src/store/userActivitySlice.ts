@@ -1,25 +1,17 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+
 import { BaseResponseT } from './commonTypes';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
-import { UserActivityRequestT, UserActivityT } from './userActivitySliceTypes';
+import { ActivityRequestT, UserActivityT } from './userActivitySliceTypes';
 
 const userActivityAdapter = createEntityAdapter<UserActivityT>();
 const initialState = userActivityAdapter.getInitialState();
 
-export const fetchColumnOptions = async (columnName: keyof UserActivityRequestT) => {
-  try {
-    const response = await axios.post('/api/user/activity/options.php', { columnName });
-    return response.data.options as string[];
-  } catch (e) {
-    throw new Error(e.data.message);
-  }
-};
-
 export const listUserActivity = createAsyncThunk(
   'userActivity/listUserActivity',
-  async (requestData: UserActivityRequestT, { rejectWithValue }) => {
+  async (requestData: ActivityRequestT, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/activity/list.php', requestData);
       return response.data.activities as UserActivityT[];

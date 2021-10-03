@@ -6,8 +6,10 @@ import {
   Container,
   Row,
 } from 'react-bootstrap';
-import { UserActivityColumnsEnum, UserActivityRequestT } from '../../store/userActivitySliceTypes';
-import { fetchColumnOptions } from '../../store/userActivitySlice';
+
+import { fetchColumnOptions } from '../../store/activityFilterSlice';
+import { ActivityFilterT } from '../../store/activityFilterSliceTypes';
+import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
 
 import FilterDropdown, { OptionsT } from './FilterDropdown';
 
@@ -15,9 +17,7 @@ const { useEffect, useState } = React;
 
 export type FilterListProps = {
   canHide: boolean;
-  columnName: keyof UserActivityRequestT;
-  filterState: UserActivityRequestT;
-  setFilterState: React.Dispatch<React.SetStateAction<UserActivityRequestT>>;
+  columnName: keyof ActivityFilterT;
   setVisibility: React.Dispatch<React.SetStateAction<string>>;
   style: { [key: string]: string };
 };
@@ -25,8 +25,6 @@ export type FilterListProps = {
 const FilterList = ({
   canHide,
   columnName,
-  filterState,
-  setFilterState,
   setVisibility,
   style,
 }: FilterListProps) => {
@@ -55,9 +53,7 @@ const FilterList = ({
           <FilterDropdown
             className="filter-list-dropdown"
             filterKey={columnName}
-            filterState={filterState}
             options={optionsState}
-            setFilterState={setFilterState}
           />
         </Col>
         <Col md={1}>

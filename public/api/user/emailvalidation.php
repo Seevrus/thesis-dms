@@ -7,7 +7,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/user/validateEmail.php';
 
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF Protection

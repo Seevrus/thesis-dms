@@ -61,37 +61,54 @@ function listUserActivity(
       }
     }
     if (!empty($validUntil)) {
-      $validUntil->checked
-      ? null
-      : array_push($conditionStrings, 'd.document_valid' . ' IS NOT NULL ');
-
       if (isset($validUntil->from) && !isset($validUntil->to)) {
         $from = htmlspecialchars($validUntil->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_valid' . ' >= \'' . $from . '\'');
+        $validUntilCondition = ' d.document_valid' . ' >= \'' . $from . '\' ';
       } else if (!isset($validUntil->from) && isset($validUntil->to)) {
         $to = htmlspecialchars($validUntil->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_valid' . ' <= \'' . $to . '\'');
+        $validUntilCondition = ' d.document_valid' . ' <= \'' . $to . '\' ';
       } else if (isset($validUntil->from) && isset($validUntil->to)) {
         $from = htmlspecialchars($validUntil->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
         $to = htmlspecialchars($validUntil->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_valid' . ' >= \'' . $from . '\' AND d.document_valid' . ' <= \'' . $to . '\'');
+        $validUntilCondition = ' d.document_valid' . ' >= \'' . $from . '\' AND d.document_valid' . ' <= \'' . $to . '\' ';
+      }
+
+      if (isset($validUntilCondition) && $validUntil->checked) {
+        $finalCondition = $validUntilCondition . ' OR d.document_valid IS NULL ';
+      } else if (isset($validUntilCondition) && !$validUntil->checked) {
+        $finalCondition = $validUntilCondition . ' AND d.document_valid IS NOT NULL ';
+      } else if (!isset($validUntilCondition) && !$validUntil->checked) {
+        $finalCondition = ' d.document_valid IS NOT NULL ';
+      }
+
+      if (isset($finalCondition)) {
+        array_push($conditionStrings, $finalCondition);
+        unset($finalCondition);
       }
     }
     if (!empty($downloaded)) {
-      $downloaded->checked
-      ? array_push($conditionStrings, 'd.document_downloaded' . ' IS NULL ')
-      : null;
-
       if (isset($downloaded->from) && !isset($downloaded->to)) {
         $from = htmlspecialchars($downloaded->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_downloaded' . ' >= \'' . $from . '\'');
+        $downloadedCondition = ' d.document_downloaded' . ' >= \'' . $from . '\' ';
       } else if (!isset($downloaded->from) && isset($downloaded->to)) {
         $to = htmlspecialchars($downloaded->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_downloaded' . ' <= \'' . $to . '\'');
+        $downloadedCondition = ' d.document_downloaded' . ' <= \'' . $to . '\' ';
       } else if (isset($downloaded->from) && isset($downloaded->to)) {
         $from = htmlspecialchars($downloaded->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
         $to = htmlspecialchars($downloaded->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_downloaded' . ' >= \'' . $from . '\' AND d.document_downloaded' . ' <= \'' . $to . '\'');
+        $downloadedCondition = ' d.document_downloaded' . ' >= \'' . $from . '\' AND d.document_downloaded' . ' <= \'' . $to . '\' ';
+      }
+
+      if (isset($downloadedCondition) && $downloaded->checked) {
+        $finalCondition = $downloadedCondition . ' OR d.document_downloaded IS NULL ';
+      } else if (isset($downloadedCondition) && !$downloaded->checked) {
+        $finalCondition = $downloadedCondition . ' AND d.document_downloaded IS NOT NULL ';
+      } else if (!isset($downloadedCondition) && $downloaded->checked) {
+        $finalCondition = ' d.document_downloaded IS NULL ';
+      }
+
+      if (isset($finalCondition)) {
+        array_push($conditionStrings, $finalCondition);
       }
     }
 
@@ -113,7 +130,7 @@ function listUserActivity(
       JOIN company c ON u.company_code = c.company_id
       JOIN document_category dc ON d.category_id = dc.category_id' 
       . $conditionString . '
-      LIMIT 3';
+      LIMIT 50';
     
     $activityQueryStmt = $pdo->query($activityQuery);
     $fetchedActivity = $activityQueryStmt->fetchAll(PDO::FETCH_OBJ);

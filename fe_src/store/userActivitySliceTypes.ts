@@ -8,7 +8,7 @@ export enum UserActivityColumnsEnum {
   downloaded = 'Letöltve',
 }
 
-export interface UserActivityRequestT {
+export interface ActivityRequestT {
   companyName: string[];
   userRealName: string[];
   categoryName: string[];
