@@ -45,7 +45,7 @@ const RegistrationCompletitionForm = () => {
   const testNewLoginPassword = (password: string) => {
     // Minimum eight characters, at least one uppercase letter,
     // one lowercase letter and one number:
-    const passwordRegex = /^(?=.*[a-záéíóőúű])(?=.*[A-ZÁÉÍÓŐÚŰ])(?=.*\d)[a-záéíóőúűA-ZÁÉÍÓŐÚŰ\d]{8,}$/;
+    const passwordRegex = /^(?=.*[a-záéíóőúű])(?=.*[A-ZÁÉÍÓŐÚŰ])(?=.*\d)[_a-záéíóőúűA-ZÁÉÍÓŐÚŰ\d]{8,}$/;
     return passwordRegex.test(password);
   };
 

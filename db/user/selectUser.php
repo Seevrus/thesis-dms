@@ -27,7 +27,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => 'User cannot be found',
+                'message' => 'Failed login attempt',
             )
         );
     }
@@ -46,7 +46,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => 'User is inactive',
+                'message' => 'Failed login attempt',
             )
         );
     }
@@ -73,7 +73,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => 'Too many failed login attempts',
+                'message' => 'Failed login attempt',
             )
         );
     }
@@ -87,7 +87,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string
         return json_encode(
             array(
                 'outcome' => 'failure',
-                'message' => 'Invalid password',
+                'message' => 'Failed login attempt',
             )
         );
     }

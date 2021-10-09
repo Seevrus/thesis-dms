@@ -14,7 +14,7 @@ import {
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { DocumentT } from '../../store/documentsSliceTypes';
 import {
-  deleteDocument, downloadDocument, removeDeletedDocument, selectDocumentById,
+  deleteDocument, removeDeletedDocument, selectDocumentById,
 } from '../../store/documentsSlice';
 
 import information from '../../img/information.svg';
@@ -56,21 +56,6 @@ const SingleDocument = ({ id } : Props) => {
         setServerError('');
         setDeleteSuccess('Törlés sikeres.');
         setTimeout(() => dispatch(removeDeletedDocument(id)), 1000);
-      })
-      .catch((err) => setServerError(err.message));
-  };
-
-  const handleDownload = (e: React.MouseEvent) => {
-    e.preventDefault();
-    downloadDocument(id)
-      .then((data) => {
-        setServerError('');
-        import('js-file-download')
-          .then(
-            ({ default: fileDownload }) => {
-              fileDownload(data, `${formattedTitle}.pdf`);
-            },
-          );
       })
       .catch((err) => setServerError(err.message));
   };
@@ -120,7 +105,13 @@ const SingleDocument = ({ id } : Props) => {
       </Row>
       <div className="d-flex justify-content-end mt-1">
         <div className="letolt">
-          <Button variant="primary" onClick={handleDownload}>Letöltés</Button>
+          <Button
+            variant="primary"
+            href={`/api/document/view.php?documentId=${id}`}
+            target="_blank"
+          >
+            Letöltés
+          </Button>
           {downloadedAt && <Button variant="danger" onClick={handleDelete}>Törlés</Button>}
         </div>
       </div>

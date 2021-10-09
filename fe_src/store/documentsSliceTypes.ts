@@ -3,10 +3,6 @@ export enum DocumentCategory {
   INFORMATION_LETTER = 2,
 }
 
-export interface DocumentRequestT {
-  documentId: number;
-}
-
 export interface FetchDocumentsRequestT {
   fetchFrom?: number;
   category?: DocumentCategory;
