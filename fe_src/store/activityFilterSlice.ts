@@ -50,24 +50,24 @@ export const fetchColumnOptions = async (columnName: keyof ActivityFilterT) => {
   }
 };
 
-export const fetchFilters = createAsyncThunk(
+export const fetchFilters = createAsyncThunk<ActivityFilterResponseT, void>(
   'activityFilter/fetchFilters',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get('/api/user/activity/filters/list.php');
-      return response.data as ActivityFilterResponseT;
+      return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data as BaseResponseT);
     }
   },
 );
 
-export const saveFilter = createAsyncThunk(
+export const saveFilter = createAsyncThunk<BaseResponseT, SaveFilterRequestT>(
   'activityFilter/saveFilter',
-  async (request: SaveFilterRequestT, { rejectWithValue }) => {
+  async (request, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/activity/filters/save.php', request);
-      return response.data as BaseResponseT;
+      return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data as BaseResponseT);
     }

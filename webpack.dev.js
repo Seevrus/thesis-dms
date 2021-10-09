@@ -6,11 +6,12 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'public', 'fe_dist'),
+    static: {
+      directory: path.join(__dirname, 'public', 'fe_dist'),
+    },
     compress: false,
     historyApiFallback: true,
     hot: true,
-    inline: true,
     port: 3000,
     proxy: {
       '/api': 'http://localhost/thesis-dms/public',

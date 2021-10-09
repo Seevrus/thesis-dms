@@ -9,12 +9,12 @@ import { ActivityRequestT, UserActivityT } from './userActivitySliceTypes';
 const userActivityAdapter = createEntityAdapter<UserActivityT>();
 const initialState = userActivityAdapter.getInitialState();
 
-export const listUserActivity = createAsyncThunk(
+export const listUserActivity = createAsyncThunk<UserActivityT[], ActivityRequestT>(
   'userActivity/listUserActivity',
-  async (requestData: ActivityRequestT, { rejectWithValue }) => {
+  async (requestData, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/activity/list.php', requestData);
-      return response.data.activities as UserActivityT[];
+      return response.data.activities;
     } catch (e) {
       return rejectWithValue(e.response.data as BaseResponseT);
     }

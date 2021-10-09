@@ -24,56 +24,60 @@ const initialState: UsersSliceT = {
   message: null,
 };
 
-export const checkLoginStatus = createAsyncThunk(
+export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
   'users/checkLoginStatus',
   async () => {
     const response = await axios.get('/api/auth/checkToken.php');
-    return response.data as LoginResponseT;
+    return response.data;
   },
 );
 
-export const completeRegistration = createAsyncThunk(
+export const completeRegistration = createAsyncThunk<
+CompleteRegistrationresponseT, CompleteRegistrationRequestT
+>(
   'users/registerEmailAddress',
-  async (requestData: CompleteRegistrationRequestT, { rejectWithValue }) => {
+  async (requestData, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/completeregistration.php', requestData);
-      return response.data as CompleteRegistrationresponseT;
+      return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data as CompleteRegistrationresponseT);
     }
   },
 );
 
-export const login = createAsyncThunk(
+export const login = createAsyncThunk<LoginResponseT, LoginRequestT>(
   'users/login',
-  async (credentials: LoginRequestT, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/login.php', credentials);
-      return response.data as LoginResponseT;
+      return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data as LoginResponseT);
     }
   },
 );
 
-export const logout = createAsyncThunk(
+export const logout = createAsyncThunk<LogoutResponseT, void>(
   'users/logout',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/logout.php');
-      return response.data as LogoutResponseT;
+      return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data as LogoutResponseT);
     }
   },
 );
 
-export const validateEmailAddress = createAsyncThunk(
+export const validateEmailAddress = createAsyncThunk<
+CompleteRegistrationresponseT, ValidateEmailAddressRequestT
+>(
   'users/validateEmailAddress',
-  async (requestData: ValidateEmailAddressRequestT, { rejectWithValue }) => {
+  async (requestData, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/emailvalidation.php', requestData);
-      return response.data as CompleteRegistrationresponseT;
+      return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
     }
