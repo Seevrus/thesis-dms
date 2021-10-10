@@ -1,110 +1,122 @@
 <?php
-error_reporting(0);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 date_default_timezone_set('Europe/Budapest');
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/csrf_protection/checkCsrfToken.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/jwtDecode.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/getDocumentPath.php';
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/auth_utils/checkCsrfToken.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/auth_utils/isLoggedin.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/getDocumentPath.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/removeDocumentVisibility.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  try {
     // CSRF Protection
     if (!checkCsrfToken()) {
-        http_response_code(403);
-            echo json_encode(
-                array(
-                    'outcome' => 'failure',
-                    'message' => 'You do not have permission to access this page!'
-                )
-            );
-    } else {
-        try {
-            // check token validity
-            $token = $_COOKIE['token'];
-            $decodedToken = jwtDecode($token);
-            // end of validation
-
-            // check user permission
-            if (!in_array(USER_PERMISSIONS::REGULAR, $decodedToken->userPermissions)) {
-                http_response_code(403);
-                echo json_encode(
-                    array(
-                        'outcome' => 'failure',
-                        'message' => 'You do not have permission to access this page!'
-                    )
-                );
-                exit(1);
-            }
-
-            $documentIdentifiers = json_decode(file_get_contents("php://input"));
-
-            if (!isset($documentIdentifiers->documentId)) {
-                http_response_code(403);
-                echo json_encode(
-                    array(
-                        'outcome' => 'failure',
-                        'message' => 'Invalid request formation!'
-                    )
-                );
-                exit(1);
-            }
-
-            $pdo = connectToDb();
-            $documentPathJSON = removeDocumentVisibility($pdo, $decodedToken->taxNumber, $documentIdentifiers->documentId);
-            $documentPath = json_decode($documentPathJSON);
-
-            if ($documentPath->outcome == 'failure') {
-                http_response_code(401);
-                echo json_encode(
-                    array(
-                        'outcome' => 'failure',
-                        'message' => $documentPath->message,
-                    )
-                );
-                exit(1);
-            }
-
-            // remove file from server
-            $isDeleteSuccessful = unlink($documentPath->documentPath);
-
-            if (!$isDeleteSuccessful) {
-                http_response_code(401);
-                echo json_encode(
-                    array(
-                        'outcome' => 'failure',
-                        'message' => 'Document could not be deleted',
-                    )
-                );
-            } else {
-                echo json_encode(
-                    array(
-                        'outcome' => 'success',
-                        'message' => 'Document has been deleted',
-                    )
-                );
-            }
-            
-        } catch (Exception $e) {
-            http_response_code(403);
-            echo json_encode(
-                array(
-                    'outcome' => 'failure',
-                    'message' => 'You do not have permission to access this page!'
-                )
-            );
-        }
+      http_response_code(403);
+      echo json_encode(
+        array(
+          'outcome' => 'failure',
+          'message' => 'You do not have permission to access this page!',
+        )
+      );
+      exit(1);
     }
+
+    // Verify login
+    if (!isLoggedin()) {
+      http_response_code(403);
+      echo json_encode(
+        array(
+          'outcome' => 'failure',
+          'message' => 'You do not have permission to access this page!',
+        )
+      );
+      exit(1);
+    }
+  
+    // check user permission
+    if (!in_array(USER_PERMISSIONS::REGULAR, $_SESSION['userPermissions'])) {
+      http_response_code(403);
+      echo json_encode(
+        array(
+          'outcome' => 'failure',
+          'message' => 'You do not have permission to access this page!'
+        )
+      );
+      exit(1);
+    }
+
+    $documentIdentifiers = json_decode(file_get_contents("php://input"));
+
+    if (!isset($documentIdentifiers->documentId)) {
+      http_response_code(403);
+      echo json_encode(
+        array(
+          'outcome' => 'failure',
+          'message' => 'Invalid request formation!'
+        )
+      );
+      exit(1);
+    }
+
+    $pdo = connectToDb();
+    $documentPathJSON = removeDocumentVisibility($pdo, $_SESSION['taxNumber'], $documentIdentifiers->documentId);
+    $documentPath = json_decode($documentPathJSON);
+
+    if ($documentPath->outcome == 'failure') {
+      http_response_code(401);
+      echo json_encode(
+        array(
+          'outcome' => 'failure',
+          'message' => $documentPath->message,
+        )
+      );
+      exit(1);
+    }
+
+    // remove file from server
+    $isDeleteSuccessful = unlink($documentPath->documentPath);
+
+    if (!$isDeleteSuccessful) {
+      http_response_code(401);
+      echo json_encode(
+        array(
+          'outcome' => 'failure',
+          'message' => 'Document could not be deleted',
+        )
+      );
+    } else {
+      echo json_encode(
+        array(
+          'outcome' => 'success',
+          'message' => 'Document has been deleted',
+        )
+      );
+    }
+      
+  } catch (Exception $e) {
+    http_response_code(403);
+    echo json_encode(
+      array(
+        'outcome' => 'failure',
+        'message' => 'Service temporary unavailable'
+      )
+    );
+  }
 } else {
-    http_response_code(405);
-        echo json_encode(
-            array(
-                'outcome' => 'error',
-                'message' => 'Method not allowed',
-            )
-        );
+  http_response_code(405);
+  echo json_encode(
+    array(
+      'outcome' => 'error',
+      'message' => 'Method not allowed',
+    )
+  );
 }
 ?>

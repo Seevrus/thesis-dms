@@ -1,44 +1,46 @@
 <?php
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/jwt/issueNewToken.php';
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/auth_utils/isLoggedin.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
 if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
-    if (!isset($_COOKIE['token'])) {
-        // JWT is not set
-        echo json_encode(
-            array(
-                'outcome' => 'success',
-                'loginStatus' => LOGIN_STATUS::NOT_LOGGED_IN,
-                'message' => 'User is currently not logged in'
-            )
-        );
-    } else {  // refresh token
-        $token = $_COOKIE['token'];
-        try {
-            $decodedNewToken = issueNewToken($token);
+  $loggedIn = isLoggedin();
 
-            echo json_encode(
-                array(
-                    'outcome' => 'success',
-                    'loginStatus' => LOGIN_STATUS::LOGGED_IN,
-                    'userPermissions' => $decodedNewToken->userPermissions,
-                    'emailStatus' => $decodedNewToken->emailStatus,
-                    'message' => 'New token created',
-                    'taxNumber' => $decodedNewToken->taxNumber,
-                    'expires' => $decodedNewToken->exp,
-                )
-            );
-        } catch (Exception $e) {
-            http_response_code(403);
-            echo json_encode(
-                array(
-                    'outcome' => 'failure',
-                    'message' => 'You do not have permission to access this page!'
-                )
-            );
-        }
-    }
+  if ($loggedIn) {
+    echo json_encode(
+      array(
+        'outcome' => 'success',
+        'loginStatus' => LOGIN_STATUS::LOGGED_IN,
+        'userPermissions' => $_SESSION['userPermissions'],
+        'emailStatus' => $_SESSION['emailStatus'],
+        'message' => 'User is currently logged in',
+        'taxNumber' => $_SESSION['taxNumber'],
+        'expires' => $_SESSION['expires'],
+      )
+    );
+  } else {
+    echo json_encode(
+      array(
+        'outcome' => 'success',
+        'loginStatus' => LOGIN_STATUS::NOT_LOGGED_IN,
+        'message' => 'User is currently not logged in'
+      )
+    );
+  }
+} else {
+  http_response_code(405);
+  echo json_encode(
+    array(
+      'outcome' => 'error',
+      'message' => 'Method not allowed',
+    )
+  );
 }
 ?>
