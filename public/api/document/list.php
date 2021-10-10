@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo = connectToDb();
             $requestBody = file_get_contents("php://input");
             if ($requestBody) {
-                $queryParams = json_decode(file_get_contents("php://input"));
+                $queryParams = json_decode($requestBody);
                 $fetchFrom = property_exists($queryParams, 'fetchFrom')
                     ? $queryParams->fetchFrom
                     : 0;
