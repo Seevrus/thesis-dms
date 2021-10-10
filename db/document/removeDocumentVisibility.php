@@ -8,20 +8,19 @@ function removeDocumentVisibility(PDO $pdo, string $taxNumber, string $documentI
 
         // get document path to be able to remove it from the server
         $fetchQuery = 'SELECT
+                document_downloaded,
                 document_path
             FROM document
             WHERE
                 document_id = :did
                 AND user_tax_number = :utn
-                AND document_visible = :dvis
-                AND document_deletable = ddel';
+                AND document_visible = :dvis';
         $fetchQueryStmt = $pdo->prepare($fetchQuery);
         $fetchQueryStmt->execute(
             array(
                 ':did' => $documentId,
                 ':utn' => $taxNumber,
                 ':dvis' => 1,
-                ':ddel' => 1,
             )
         );
         $documentRow = $fetchQueryStmt->fetch(PDO::FETCH_ASSOC);
@@ -31,6 +30,15 @@ function removeDocumentVisibility(PDO $pdo, string $taxNumber, string $documentI
                 array(
                     'outcome' => 'failure',
                     'message' => 'Document cannot be found',
+                )
+            );
+        }
+
+        if (is_null($documentRow['document_downloaded'])) {
+            return json_encode(
+                array(
+                    'outcome' => 'failure',
+                    'message' => 'Document not yet downloaded by user',
                 )
             );
         }
