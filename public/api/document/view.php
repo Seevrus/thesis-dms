@@ -58,18 +58,20 @@ if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
             exit(1);
         }
 
-        $registerDocumentAnswerJSON = registerDocumentDownload($pdo, $decodedToken->taxNumber, $documentId);
-        $registerDocumentAnswer = json_decode($registerDocumentAnswerJSON);
-
-        if ($registerDocumentAnswer->outcome == 'failure') {
-            http_response_code(401);
-            echo json_encode(
-                array(
-                    'outcome' => 'failure',
-                    'message' => 'Unexpected database issue',
-                )
-            );
-            exit(1);
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $registerDocumentAnswerJSON = registerDocumentDownload($pdo, $decodedToken->taxNumber, $documentId);
+            $registerDocumentAnswer = json_decode($registerDocumentAnswerJSON);
+    
+            if ($registerDocumentAnswer->outcome == 'failure') {
+                http_response_code(401);
+                echo json_encode(
+                    array(
+                        'outcome' => 'failure',
+                        'message' => 'Unexpected database issue',
+                    )
+                );
+                exit(1);
+            }
         }
 
         $document = file_get_contents($documentPath->document_path);
