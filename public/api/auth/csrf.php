@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
     if (empty($_SERVER['HTTP_X_CSRF_TOKEN'])) {
         if (empty($_SESSION['X_CSRF_TOKEN'])) {
             $token = bin2hex(random_bytes(32));

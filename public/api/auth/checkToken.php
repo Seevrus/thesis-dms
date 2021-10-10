@@ -4,7 +4,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEn
 
 header('Content-Type: application/json; charset=utf-8');
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
     if (!isset($_COOKIE['token'])) {
         // JWT is not set
         echo json_encode(

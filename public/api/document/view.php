@@ -9,7 +9,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/getDoc
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/registerDocumentDownload.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
     try {
         // check token validity
         $token = $_COOKIE['token'];
