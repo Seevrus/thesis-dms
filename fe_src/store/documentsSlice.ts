@@ -25,6 +25,11 @@ export const fetchDocuments = createAsyncThunk<DocumentT[], FetchDocumentsReques
   },
 );
 
+export const isDocumentAvailable = async (documentId: number) => {
+  const response = await axios.head(`/api/document/view.php?documentId=${documentId}`);
+  return response.headers['content-type'] === 'application/pdf';
+};
+
 const documentsSlice = createSlice({
   name: 'documents',
   initialState,

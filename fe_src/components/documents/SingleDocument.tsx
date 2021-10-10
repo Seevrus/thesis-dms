@@ -14,11 +14,13 @@ import {
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { DocumentT } from '../../store/documentsSliceTypes';
 import {
-  deleteDocument, removeDeletedDocument, selectDocumentById,
+  deleteDocument, isDocumentAvailable, removeDeletedDocument, selectDocumentById,
 } from '../../store/documentsSlice';
 
 import information from '../../img/information.svg';
 import paymentMethod from '../../img/payment-method.svg';
+
+const { useState, useEffect } = React;
 
 interface Map {
   [key: string]: string | undefined
@@ -36,8 +38,13 @@ const DOCUMENT_CATEGORY: Map = {
 const SingleDocument = ({ id } : Props) => {
   const dispatch = useAppDispatch();
 
-  const [deleteSuccess, setDeleteSuccess] = React.useState('');
-  const [serverError, setServerError] = React.useState('');
+  const [deleteSuccess, setDeleteSuccess] = useState('');
+  const [isDownloadable, setIsDownloadable] = useState(false);
+  const [serverError, setServerError] = useState('');
+
+  useEffect(() => {
+    isDocumentAvailable(id).then(setIsDownloadable);
+  }, []);
 
   const {
     added,
@@ -107,6 +114,7 @@ const SingleDocument = ({ id } : Props) => {
         <div className="letolt">
           <Button
             variant="primary"
+            disabled={!isDownloadable}
             href={`/api/document/view.php?documentId=${id}`}
             target="_blank"
           >
