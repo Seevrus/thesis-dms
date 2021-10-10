@@ -9,6 +9,8 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/getDoc
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/registerDocumentDownload.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
 
+header('Content-Type: application/json; charset=utf-8');
+
 if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
     try {
         // check token validity
