@@ -1,4 +1,12 @@
 import { paramCase } from 'param-case';
+import {
+  assoc,
+  clone,
+  map,
+  pipe,
+  prop,
+// @ts-ignore
+} from 'ramda';
 import * as React from 'react';
 import {
   Button,
@@ -6,14 +14,30 @@ import {
   Container,
   Row,
 } from 'react-bootstrap';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
-import { fetchColumnOptions } from '../../store/activityFilterSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  fetchColumnOptions,
+  filterModified,
+  selectActiveFilter,
+} from '../../store/activityFilterSlice';
 import { ActivityFilterT } from '../../store/activityFilterSliceTypes';
 import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
 
-import FilterDropdown, { OptionsT } from './FilterDropdown';
-
+const animatedComponents = makeAnimated();
 const { useEffect, useState } = React;
+
+export interface OptionsT {
+  readonly value: string;
+  readonly label: string;
+}
+
+const createOption = (label: string): OptionsT => ({
+  label,
+  value: paramCase(label),
+});
 
 export type FilterListProps = {
   canHide: boolean;
@@ -28,19 +52,31 @@ const FilterList = ({
   setVisibility,
   style,
 }: FilterListProps) => {
-  const [optionsState, setOptionsState] = useState<OptionsT[]>([]);
+  const dispatch = useAppDispatch();
+  const activeFilter = useAppSelector(selectActiveFilter);
+  const [activeOptions, setActiveOptions] = useState<OptionsT[]>([]);
+  const [options, setOptions] = useState<OptionsT[]>([]);
 
   useEffect(() => {
     fetchColumnOptions(columnName)
-      .then((options) => {
-        setOptionsState(
-          options.map((option) => ({
-            label: option,
-            value: paramCase(option),
-          })),
-        );
+      .then((fetchedOptions) => {
+        setOptions(map(createOption, fetchedOptions));
       });
   }, [columnName]);
+
+  useEffect(() => {
+    setActiveOptions(map(createOption, prop(columnName, activeFilter)));
+  }, [activeFilter]);
+
+  const handleChange = (selectedOptions: OptionsT[]) => {
+    const selectedOptionsArray: string[] = map(prop('label'), selectedOptions);
+    dispatch(filterModified(
+      pipe(
+        clone,
+        assoc(columnName, selectedOptionsArray),
+      )(activeFilter),
+    ));
+  };
 
   return (
     <Container className="filter-list" style={style}>
@@ -50,10 +86,16 @@ const FilterList = ({
           :
         </Col>
         <Col md={9}>
-          <FilterDropdown
+          <Select
             className="filter-list-dropdown"
-            filterKey={columnName}
-            options={optionsState}
+            closeMenuOnSelect={false}
+            components={animatedComponents}
+            isMulti
+            noOptionsMessage={() => 'Nincs több találat'}
+            onChange={handleChange}
+            options={options}
+            placeholder="Keresés..."
+            value={activeOptions}
           />
         </Col>
         <Col md={1}>

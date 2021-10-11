@@ -12,33 +12,56 @@ import makeAnimated from 'react-select/animated';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { SavedFilterT } from '../../store/activityFilterSliceTypes';
-import { filterModified, getSavedFilters } from '../../store/activityFilterSlice';
-
-import { OptionsT } from './FilterDropdown';
+import {
+  filterCleared,
+  filterModified,
+  getMatchingSavedFilter,
+  getSavedFilters,
+} from '../../store/activityFilterSlice';
+import { OptionsT } from './FilterList';
 
 const { useEffect, useState } = React;
 const animatedComponents = makeAnimated();
 
+const createFilterOption = (filter: SavedFilterT): OptionsT => {
+  if (filter) {
+    return {
+      label: filter.filterName,
+      value: paramCase(filter.filterName),
+    };
+  }
+  return null;
+};
+
 const BrowseFilters = () => {
   const dispatch = useAppDispatch();
-  const [optionsState, setOptionsState] = useState<OptionsT[]>([]);
+
+  const matchingSavedFilter = useAppSelector(getMatchingSavedFilter);
   const savedFilters = useAppSelector(getSavedFilters);
+
+  const [optionsState, setOptionsState] = useState<OptionsT[]>([]);
+  const [defaultOption, setDefaultOption] = useState<OptionsT>();
 
   useEffect(() => {
     setOptionsState(
-      savedFilters.map((savedFilter) => ({
-        label: savedFilter.filterName,
-        value: paramCase(savedFilter.filterName),
-      })),
+      savedFilters.map(createFilterOption),
     );
   }, [savedFilters]);
 
+  useEffect(() => {
+    setDefaultOption(createFilterOption(matchingSavedFilter));
+  }, [matchingSavedFilter]);
+
   const handleChange = (selectedOption: OptionsT) => {
-    const selectedSavedFilter: SavedFilterT = find(
-      propEq('filterName', selectedOption.label),
-      savedFilters,
-    );
-    dispatch(filterModified(selectedSavedFilter.activityFilter));
+    if (!selectedOption) {
+      dispatch(filterCleared());
+    } else {
+      const selectedSavedFilter: SavedFilterT = find(
+        propEq('filterName', selectedOption.label),
+        savedFilters,
+      );
+      dispatch(filterModified(selectedSavedFilter.activityFilter));
+    }
   };
 
   return (
@@ -52,10 +75,12 @@ const BrowseFilters = () => {
             closeMenuOnSelect={false}
             components={animatedComponents}
             className="filter-list-dropdown"
-            options={optionsState}
-            placeholder="Keresés..."
+            isClearable
             noOptionsMessage={() => 'Nincs több találat'}
             onChange={handleChange}
+            options={optionsState}
+            placeholder="Keresés..."
+            value={defaultOption}
           />
         </Col>
         <Col md={1} />

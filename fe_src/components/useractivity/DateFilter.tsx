@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { format } from 'date-fns';
 import {
   assocPath,
@@ -24,7 +25,7 @@ import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
 
 import { FilterListProps } from './FilterList';
 
-const { useState } = React;
+const { useEffect, useState } = React;
 
 const CheckboxLabelE = {
   validUntil: 'Korlátlan',
@@ -42,6 +43,15 @@ const DateFilter = ({
 
   const [valueFrom, setValueFrom] = useState<Date>(null);
   const [valueTo, setValueTo] = useState<Date>(null);
+  const [checked, setChecked] = useState<boolean>(path([columnName, 'checked'], activeFilter));
+
+  useEffect(() => {
+    const fromProp = path([columnName, 'from'], activeFilter);
+    const toProp = path([columnName, 'to'], activeFilter);
+    fromProp ? setValueFrom(new Date(fromProp)) : setValueFrom(null);
+    toProp ? setValueTo(new Date(toProp)) : setValueTo(null);
+    setChecked(path([columnName, 'checked'], activeFilter));
+  }, [activeFilter]);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(filterModified(
@@ -53,8 +63,6 @@ const DateFilter = ({
   };
 
   const handleDateChange = (newDate: Date, side: 'from' | 'to') => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    side === 'from' ? setValueFrom(newDate) : setValueTo(newDate);
     if (newDate) {
       const formattedDate = newDate && format(newDate, 'yyyy-MM-dd');
       dispatch(filterModified(
@@ -97,7 +105,7 @@ const DateFilter = ({
           <Form.Check
             inline
             id={columnName}
-            checked={path([columnName, 'checked'], activeFilter)}
+            checked={checked}
             // @ts-ignore
             label={CheckboxLabelE[columnName]}
             name="group1"

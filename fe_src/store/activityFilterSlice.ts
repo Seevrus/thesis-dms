@@ -78,6 +78,9 @@ const activityFilterSlice = createSlice({
   name: 'activityFilter',
   initialState,
   reducers: {
+    filterCleared: (state) => {
+      state.activeFilter = initialState.activeFilter;
+    },
     filterModified: (state, action: { payload: ActivityFilterT, type: string }) => {
       state.activeFilter = action.payload;
     },
@@ -141,6 +144,6 @@ export const isValidUntilModified = (state: RootState) => !equals(
 );
 export const selectActiveFilter = (state: RootState) => state.activityFilter.activeFilter;
 
-export const { filterModified } = activityFilterSlice.actions;
+export const { filterCleared, filterModified } = activityFilterSlice.actions;
 
 export default activityFilterSlice.reducer;
