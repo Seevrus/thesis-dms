@@ -9,8 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/saveFile.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/auth_utils/checkCsrfToken.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/auth_utils/isLoggedin.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/auth_utils/protections.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/createDocument.php';
 
@@ -20,39 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $MAX_ALLOWED_DOCUMENTS = 100;
 
     try {
-      // CSRF Protection
-      if (!checkCsrfToken()) {
+      $protectionProblem = protections(true, true, true, USER_PERMISSIONS::DOCUMENT_CREATOR);
+      if ($protectionProblem) {
         http_response_code(403);
-        echo json_encode(
-          array(
-            'outcome' => 'failure',
-            'message' => 'You do not have permission to access this page!',
-          )
-        );
-        exit(1);
-      }
-  
-      // Verify login
-      if (!isLoggedin()) {
-        http_response_code(403);
-        echo json_encode(
-          array(
-            'outcome' => 'failure',
-            'message' => 'You do not have permission to access this page!',
-          )
-        );
-        exit(1);
-      }
-    
-      // check user permission
-      if (!in_array(USER_PERMISSIONS::DOCUMENT_CREATOR, $_SESSION['userPermissions'])) {
-        http_response_code(403);
-        echo json_encode(
-          array(
-            'outcome' => 'failure',
-            'message' => 'You do not have permission to access this page!'
-          )
-        );
+        echo $protectionProblem;
         exit(1);
       }
 
