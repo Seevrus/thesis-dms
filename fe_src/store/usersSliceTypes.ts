@@ -38,6 +38,9 @@ export interface LoginResponseT extends BaseResponseT {
   expires?: number;
   loginStatus?: `${LoginStatusEnum}`;
   taxNumber?: number;
+  companyName?: string;
+  userRealName?: string;
+  userEmail?: string;
   userPermissions?: `${UserPermissionsEnum}`[];
 }
 
@@ -53,7 +56,10 @@ export interface UsersSliceT {
   loginStatus: `${LoginStatusEnum}`;
   expires: number;
   taxNumber: number;
+  companyName: string;
+  userRealName: string;
   userPermissions: `${UserPermissionsEnum}`[];
+  userEmail: string;
   emailStatus: `${EmailStatusEnum}`;
   outcome: OutcomeT;
   message: string;

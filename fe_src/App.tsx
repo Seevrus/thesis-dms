@@ -9,7 +9,7 @@ import LoadableEmailValidationForm from './components/authenticate/LoadableEmail
 import Header from './components/header/Header';
 import LoadableLoginForm from './components/authenticate/LoadableLoginForm';
 import LoadableLogout from './components/authenticate/LoadableLogout';
-import Profile from './components/Profile';
+import Profile from './components/profile/Profile';
 import LoadableRegistrationCompletitionForm from './components/authenticate/LoadableRegistrationCompletitionForm';
 import setupCsrfToken from './services/csrfService';
 import LoadableUserActivity from './components/useractivity/LoadableUserActivity';

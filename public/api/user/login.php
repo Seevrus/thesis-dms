@@ -43,16 +43,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($fetchUser->outcome == 'success') {
       // Write login to server storage
-      $taxNumber = $fetchUser->user_tax_number;
-      $_SESSION['taxNumber'] = $taxNumber;
-
+      $_SESSION['taxNumber'] = $fetchUser->user_tax_number;
+      $_SESSION['userRealName'] = $fetchUser->user_real_name;
       $userPermissions = array_map('mapDbUserPermission', $fetchUser->user_permissions);
       $_SESSION['userPermissions'] = $userPermissions;
-
       $dbEmailStatus = $fetchUser->email_status;
       $emailStatus = mapDbEmailStatus($dbEmailStatus);
+      $_SESSION['userEmail'] = $fetchUser->user_email;
       $_SESSION['emailStatus'] = $emailStatus;
-
+      $_SESSION['companyName'] = $fetchUser->company_name;
       $expires = time() + 3600;
       $_SESSION['expires'] = $expires;
 
@@ -65,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'loginStatus' => LOGIN_STATUS::LOGGED_IN,
             'emailStatus' => EMAIL_STATUS::NO_EMAIL,
             'message' => 'User should register an email address',
-            'taxNumber' => $taxNumber,
+            'taxNumber' => $fetchUser->user_tax_number,
             'userPermissions' => array(),
             'expires' => $expires,
           )
@@ -79,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'loginStatus' => LOGIN_STATUS::LOGGED_IN,
             'emailStatus' => EMAIL_STATUS::NOT_VALIDATED,
             'message' => 'User should validate their email address',
-            'taxNumber' => $taxNumber,
+            'taxNumber' => $fetchUser->user_tax_number,
             'userPermissions' => array(),
             'expires' => $expires,
           )
@@ -93,8 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'loginStatus' => LOGIN_STATUS::LOGGED_IN,
             'emailStatus' => EMAIL_STATUS::VALID_EMAIL,
             'message' => 'User successfully logged in',
-            'taxNumber' => $taxNumber,
+            'taxNumber' => $fetchUser->user_tax_number,
+            'userRealName' => $fetchUser->user_real_name,
+            'userEmail' => $fetchUser->user_email,
             'userPermissions' => $userPermissions,
+            'companyName' => $fetchUser->company_name,
             'expires' => $expires,
           )
         );
@@ -108,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Service temporary unavailable'
+        'message' => 'Service temporary unavailable',
       )
     );
   }

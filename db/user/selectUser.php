@@ -14,8 +14,15 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
 
   // try to fetch the user
   $selectUserQuery = 'SELECT
-      *
-    FROM user
+      u.user_tax_number,
+      u.user_real_name,
+      u.user_email,
+      u.email_status,
+      u.user_password,
+      u.user_last_login_attempt,
+      c.company_name
+    FROM user u
+    JOIN company c ON u.company_code = c.company_id
     WHERE user_tax_number = :utn';
   $selectUserStmt = $pdo->prepare($selectUserQuery);
   $selectUserStmt->execute(array( ':utn' => $taxNumber));
@@ -39,7 +46,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
   $userPermissionsStmt = $pdo->prepare($userPermissionsQuery);
   $userPermissionsStmt->execute(array( ':utn' => $taxNumber));
   $userPermissionRows = $userPermissionsStmt->fetchAll(PDO::FETCH_ASSOC);
-  $isUserActive = userHasPermission($userPermissionRows, USER_PERMISSIONS::REGULAR);
+  $isUserActive = !empty($userPermissionRows);
 
   if (!$isUserActive) {
     return json_encode(
@@ -105,9 +112,11 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
       'outcome' => 'success',
       'message' => 'User found',
       'user_tax_number' => $userRow['user_tax_number'],
+      'user_real_name' => $userRow['user_real_name'],
       'user_permissions' => $userPermissions,
-      'email' => $userRow['user_email'],
+      'user_email' => $userRow['user_email'],
       'email_status' => $userRow['email_status'],
+      'company_name' => $userRow['company_name'],
     )
   );
 }

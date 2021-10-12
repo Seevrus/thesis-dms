@@ -15,13 +15,16 @@ import {
 import { RootState } from './store';
 
 const initialState: UsersSliceT = {
-  loginStatus: null,
-  expires: null,
-  taxNumber: null,
-  userPermissions: [],
-  emailStatus: null,
-  outcome: null,
-  message: null,
+  loginStatus: undefined,
+  expires: undefined,
+  taxNumber: undefined,
+  companyName: undefined,
+  userRealName: undefined,
+  userPermissions: undefined,
+  userEmail: undefined,
+  emailStatus: undefined,
+  outcome: undefined,
+  message: undefined,
 };
 
 export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
@@ -92,9 +95,12 @@ const usersSlice = createSlice({
     builder.addCase(checkLoginStatus.fulfilled, (state, { payload }) => {
       const {
         userPermissions,
+        userEmail,
         emailStatus,
         loginStatus,
         taxNumber,
+        userRealName,
+        companyName,
         expires,
         outcome,
         message,
@@ -103,11 +109,14 @@ const usersSlice = createSlice({
       state.message = message;
       state.loginStatus = LoginStatusEnum[loginStatus];
       if (loginStatus !== LoginStatusEnum.NOT_LOGGED_IN) {
+        state.userEmail = userEmail;
         state.emailStatus = emailStatus;
         state.taxNumber = taxNumber;
+        state.userRealName = userRealName;
         state.userPermissions = Object.values(userPermissions).filter(
           (permission) => userPermissions.includes(permission),
         );
+        state.companyName = companyName;
         state.expires = expires;
       }
     });
@@ -133,15 +142,21 @@ const usersSlice = createSlice({
         userPermissions,
         loginStatus,
         taxNumber,
+        userRealName,
+        userEmail,
         emailStatus,
+        companyName,
         expires,
       } = payload;
       state.loginStatus = loginStatus;
       state.taxNumber = taxNumber;
+      state.userRealName = userRealName;
+      state.userEmail = userEmail;
       state.userPermissions = Object.values(userPermissions).filter(
         (permission) => userPermissions.includes(permission),
       );
       state.emailStatus = emailStatus;
+      state.companyName = companyName;
       state.expires = expires;
     });
 
@@ -176,8 +191,11 @@ const usersSlice = createSlice({
   },
 });
 
+export const companyName = (state: RootState) => state.users.companyName;
+export const loginExpires = (state: RootState) => state.users.expires;
 export const userEmailStatus = (state: RootState) => state.users.emailStatus;
 export const userLoginStatus = (state: RootState) => state.users.loginStatus;
-export const loginExpires = (state: RootState) => state.users.expires;
+export const userRealName = (state: RootState) => state.users.userRealName;
+export const userTaxNumber = (state: RootState) => state.users.taxNumber;
 
 export default usersSlice.reducer;

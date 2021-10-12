@@ -19,9 +19,12 @@ if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
         'outcome' => 'success',
         'loginStatus' => LOGIN_STATUS::LOGGED_IN,
         'userPermissions' => $_SESSION['userPermissions'],
+        'userEmail' => $_SESSION['userEmail'],
         'emailStatus' => $_SESSION['emailStatus'],
         'message' => 'User is currently logged in',
         'taxNumber' => $_SESSION['taxNumber'],
+        'userRealName' => $_SESSION['userRealName'],
+        'companyName' => $_SESSION['companyName'],
         'expires' => $_SESSION['expires'],
       )
     );
