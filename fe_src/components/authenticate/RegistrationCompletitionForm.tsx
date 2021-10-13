@@ -10,6 +10,7 @@ import { useHistory } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum } from '../../store/usersSliceTypes';
 import { completeRegistration, userEmailStatus } from '../../store/usersSlice';
+import { emailRegex, passwordRegex } from '../utils/helpers';
 
 const { useEffect, useState } = React;
 
@@ -37,17 +38,11 @@ const RegistrationCompletitionForm = () => {
   const [newLoginPasswordError, setNewLoginPasswordError] = useState('');
   const [registrationError, setRegistrationError] = useState('');
 
-  const testEmailAddress = (address: string) => {
-    const emailRegex = /^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
-    return emailRegex.test(address);
-  };
+  const testEmailAddress = (address: string) => emailRegex.test(address);
 
-  const testNewLoginPassword = (password: string) => {
-    // Minimum eight characters, at least one uppercase letter,
-    // one lowercase letter and one number:
-    const passwordRegex = /^(?=.*[a-záéíóőúű])(?=.*[A-ZÁÉÍÓŐÚŰ])(?=.*\d)[_a-záéíóőúűA-ZÁÉÍÓŐÚŰ\d]{8,}$/;
-    return passwordRegex.test(password);
-  };
+  // Minimum eight characters, at least one uppercase letter,
+  // one lowercase letter and one number:
+  const testNewLoginPassword = (password: string) => passwordRegex.test(password);
 
   const onEmailAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailAddress(e.target.value);

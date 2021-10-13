@@ -193,6 +193,7 @@ const usersSlice = createSlice({
 
 export const companyName = (state: RootState) => state.users.companyName;
 export const loginExpires = (state: RootState) => state.users.expires;
+export const userEmail = (state: RootState) => state.users.userEmail;
 export const userEmailStatus = (state: RootState) => state.users.emailStatus;
 export const userLoginStatus = (state: RootState) => state.users.loginStatus;
 export const userRealName = (state: RootState) => state.users.userRealName;

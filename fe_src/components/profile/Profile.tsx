@@ -11,10 +11,12 @@ import { useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum } from '../../store/usersSliceTypes';
 import {
   companyName,
+  userEmail,
   userEmailStatus,
   userRealName,
   userTaxNumber,
 } from '../../store/usersSlice';
+import { emailRegex, passwordRegex } from '../utils/helpers';
 
 const { useEffect, useState } = React;
 
@@ -34,12 +36,44 @@ const Profile = () => {
   }, [emailStatus]);
   // End of redirections
 
-  const [isFormValidated, setIsFormValidated] = useState(false);
+  const originalEmailAddress = useAppSelector(userEmail);
+  const [emailAddress, setEmailAddress] = useState(originalEmailAddress);
+  const [emailAddressError, setEmailAddressError] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordRepeat, setPasswordRepeat] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const emailInput = e.target.value;
+    setEmailAddress(emailInput);
+
+    if (!emailRegex.test(emailAddress)) {
+      setEmailAddressError('Hiba: Az email cím formátuma nem megfelelő!');
+    } else {
+      setEmailAddressError('');
+    }
+  };
+
+  const setNewEmailAddress = () => {
+    if (emailAddress === originalEmailAddress) {
+      setEmailAddressError('Hiba: Az új email cím nem egyezhet meg az előzővel!');
+    }
+  };
+
+  const setNewPassword = () => {
+    if (password !== passwordRepeat) {
+      setPasswordError('Hiba: A két jelszó mező értéke eltérő!');
+    } else if (!passwordRegex.test(password)) {
+      setPasswordError('Hiba: A jelszó formátuma nem megfelelő!');
+    } else {
+      setPasswordError('');
+    }
+  };
 
   return (
     <Container className="form-container">
       <h3 className="page-title text-center">Profilom</h3>
-      <Form noValidate validated={isFormValidated}>
+      <Form>
         <Form.Group className="mb-3" controlId="taxNumber">
           <Form.Label>Adóazonosító jel</Form.Label>
           <Form.Control disabled value={useAppSelector(userTaxNumber)} />
@@ -58,36 +92,63 @@ const Profile = () => {
             <Form.Control
               aria-label="Email cím"
               aria-describedby="userEmail"
+              isInvalid={!!emailAddressError}
+              onChange={onEmailChange}
+              value={emailAddress}
             />
-            <Button variant="primary" id="userEmail">
+            <Button
+              disabled={!!emailAddressError}
+              id="userEmail"
+              onClick={setNewEmailAddress}
+              variant="primary"
+            >
               Mentés
             </Button>
+            <Form.Control.Feedback type="invalid">{emailAddressError}</Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
-        <Form.Group>
-          <Form.Label>Jelszó</Form.Label>
-          <InputGroup className="mb-3">
-            <Form.Control
-              aria-label="Jelszó"
-              aria-describedby="userPassword"
-              type="password"
-            />
-            <Button variant="primary" id="userPassword">
-              Mentés
-            </Button>
-          </InputGroup>
+        <Form.Group className="mb-3" controlId="userPassword">
+          <Form.Label>
+            Új jelszó
+            <ul>
+              <li>Minimum 8 karakter</li>
+              <li>Minimum 1 kisbetű</li>
+              <li>Minimum 1 nagybetű</li>
+              <li>Minimum 1 számjegy</li>
+              <li>Nem egyezhet meg az előző jelszóval</li>
+            </ul>
+          </Form.Label>
+          <Form.Control
+            isInvalid={!!passwordError}
+            onChange={
+              (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
+            }
+            type="password"
+            value={password}
+          />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Jelszó újra</Form.Label>
+          <Form.Label>Új jelszó újra</Form.Label>
           <InputGroup className="mb-3">
             <Form.Control
               aria-label="Jelszó újra"
               aria-describedby="userPassword2"
+              isInvalid={!!passwordError}
+              onChange={
+                (e: React.ChangeEvent<HTMLInputElement>) => setPasswordRepeat(e.target.value)
+              }
               type="password"
+              value={passwordRepeat}
             />
-            <Button variant="primary" id="userPassword2">
+            <Button
+              disabled={!!passwordError}
+              id="userPassword2"
+              onClick={setNewPassword}
+              variant="primary"
+            >
               Mentés
             </Button>
+            <Form.Control.Feedback type="invalid">{passwordError}</Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
       </Form>
