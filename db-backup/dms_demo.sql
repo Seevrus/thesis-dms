@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2021. Sze 28. 22:11
+-- Létrehozás ideje: 2021. Okt 18. 22:54
 -- Kiszolgáló verziója: 10.4.20-MariaDB
 -- PHP verzió: 7.3.29
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `dms_demo`
 --
-CREATE DATABASE IF NOT EXISTS `dms_demo` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
-USE `dms_demo`;
 
 -- --------------------------------------------------------
 
@@ -32,8 +30,8 @@ USE `dms_demo`;
 DROP TABLE IF EXISTS `company`;
 CREATE TABLE `company` (
   `company_id` int(10) UNSIGNED NOT NULL,
-  `company_name` varchar(45) COLLATE latin2_hungarian_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
+  `company_name` varchar(45) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `company`
@@ -73,9 +71,9 @@ INSERT INTO `document` (`document_id`, `user_tax_number`, `document_name`, `cate
 (421, 1234567890, 'Teszt 01', 1, '2021-09-07 21:08:53', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210853_Az6kFBsB.pdf'),
 (422, 1234567890, 'Teszt 02', 2, '2021-09-07 21:08:53', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210853_BfHPtDPn.pdf'),
 (423, 1234567890, 'Teszt 03', 1, '2021-09-07 21:08:53', 1, '2022-12-31 23:59:59', NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210853_ro1VJtQP.pdf'),
-(424, 1315760217, 'Teszt 01', 1, '2021-09-07 21:09:11', 1, NULL, '2021-09-07 22:13:39', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_7GvDSHtV.pdf'),
+(424, 1315760217, 'Teszt 01', 1, '2021-09-07 21:09:11', 1, NULL, '2021-10-10 23:19:21', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_7GvDSHtV.pdf'),
 (425, 1315760217, 'Teszt 02', 2, '2021-09-07 21:09:11', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_Fd6hthPQ.pdf'),
-(426, 1315760217, 'Teszt 03', 1, '2021-09-07 21:09:11', 1, '2022-12-31 23:59:59', '2021-09-14 13:14:05', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_V7fMU5eR.pdf'),
+(426, 1315760217, 'Teszt 03', 1, '2021-09-07 21:09:11', 1, '2022-12-31 23:59:59', NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210911_V7fMU5eR.pdf'),
 (427, 1443062569, 'Teszt 01', 1, '2021-09-07 21:09:24', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210924_L9UvKftT.pdf'),
 (428, 1443062569, 'Teszt 02', 2, '2021-09-07 21:09:24', 1, NULL, NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210924_ZOdyKTnw.pdf'),
 (429, 1443062569, 'Teszt 03', 1, '2021-09-07 21:09:24', 1, '2022-12-31 23:59:59', NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20210907210924_HZCHxMXD.pdf'),
@@ -130,8 +128,8 @@ INSERT INTO `document_category` (`category_id`, `category_name`) VALUES
 DROP TABLE IF EXISTS `document_code`;
 CREATE TABLE `document_code` (
   `document_id` int(10) UNSIGNED NOT NULL,
-  `upload_code` char(60) COLLATE latin2_hungarian_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
+  `upload_code` char(60) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
 
@@ -144,13 +142,13 @@ CREATE TABLE `user` (
   `user_tax_number` int(10) UNSIGNED NOT NULL,
   `company_code` int(10) UNSIGNED NOT NULL,
   `user_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1,
-  `user_real_name` varchar(45) COLLATE latin2_hungarian_ci NOT NULL,
-  `user_email` varchar(45) COLLATE latin2_hungarian_ci DEFAULT NULL,
+  `user_real_name` varchar(45) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL,
+  `user_email` varchar(45) CHARACTER SET latin2 COLLATE latin2_hungarian_ci DEFAULT NULL,
   `email_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
-  `user_password` varchar(100) COLLATE latin2_hungarian_ci NOT NULL,
+  `user_password` varchar(100) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL,
   `user_login_attempt` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
   `user_last_login_attempt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `user`
@@ -167,7 +165,7 @@ INSERT INTO `user` (`user_tax_number`, `company_code`, `user_status`, `user_real
 (2909536725, 1, 1, 'Példa Dolgozó9', NULL, 0, '$2y$10$GYHmoLJ63yl6xamb/4REk.sKhB1Rg5QuK7vCSiQVVacD6X3QNW07m', 0, '2021-09-06 17:15:50'),
 (3635528484, 1, 1, 'Példa Dolgozó7', NULL, 0, '$2y$10$B0SesV.UTavivjkbi/ze6eY2ShbB31CZnZa25IDd043Kw31EbLMf.', 0, '2021-09-06 17:15:50'),
 (3672948044, 2, 1, 'Példa Dolgozó4', NULL, 0, '$2y$10$XB9Hm5PcK/YvxqYR8Ihf6esvam5RGuQ9RF4JfoM25sKISZFV6QZlO', 0, '2021-09-06 17:15:50'),
-(4283164402, 1, 1, 'Példa Dolgozó8', NULL, 0, '$2y$10$xkPgtlcN7FbVuxOQirLiUegAq7G3.Q4GOposoXVNQWWJ50nT0Z2UC', 0, '2021-09-06 17:15:50');
+(4283164402, 1, 1, 'Kiss Jenő', 'kiss.jeno@gmail2.hu', 2, '$2y$10$wsi0mVQA4DXkf3W5QWnvEOHytLdVAWzOU3BOts5eE6sYIPJ47Sn2G', 0, '2021-10-18 20:52:14');
 
 -- --------------------------------------------------------
 
@@ -177,9 +175,18 @@ INSERT INTO `user` (`user_tax_number`, `company_code`, `user_status`, `user_real
 
 DROP TABLE IF EXISTS `user_activity_filter`;
 CREATE TABLE `user_activity_filter` (
+  `filter_id` int(10) UNSIGNED NOT NULL,
   `user_tax_number` int(10) UNSIGNED NOT NULL,
-  `filter` varchar(2000) COLLATE latin2_hungarian_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
+  `filter_name` varchar(250) COLLATE utf8mb4_hungarian_ci NOT NULL,
+  `ufilter` varchar(2000) COLLATE utf8mb4_hungarian_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `user_activity_filter`
+--
+
+INSERT INTO `user_activity_filter` (`filter_id`, `user_tax_number`, `filter_name`, `ufilter`) VALUES
+(5, 1315760217, 'Jónás Nyrt. dolgozói', '{\"companyName\":[\"J\\u00f3n\\u00e1s Nyrt.\"],\"userRealName\":[],\"categoryName\":[],\"documentName\":[],\"added\":{},\"validUntil\":{\"checked\":true},\"downloaded\":{\"checked\":false}}');
 
 -- --------------------------------------------------------
 
@@ -190,8 +197,8 @@ CREATE TABLE `user_activity_filter` (
 DROP TABLE IF EXISTS `user_email_code`;
 CREATE TABLE `user_email_code` (
   `user_tax_number` int(10) UNSIGNED NOT NULL,
-  `email_code` varchar(100) COLLATE latin2_hungarian_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin2 COLLATE=latin2_hungarian_ci;
+  `email_code` varchar(100) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 -- --------------------------------------------------------
 
@@ -213,7 +220,8 @@ INSERT INTO `user_permissions` (`user_tax_number`, `user_permission`) VALUES
 (1315760217, 0),
 (1315760217, 1),
 (1315760217, 2),
-(1315760217, 3);
+(1315760217, 3),
+(4283164402, 0);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -223,7 +231,8 @@ INSERT INTO `user_permissions` (`user_tax_number`, `user_permission`) VALUES
 -- A tábla indexei `company`
 --
 ALTER TABLE `company`
-  ADD PRIMARY KEY (`company_id`);
+  ADD PRIMARY KEY (`company_id`),
+  ADD UNIQUE KEY `company_name` (`company_name`);
 
 --
 -- A tábla indexei `document`
@@ -256,7 +265,7 @@ ALTER TABLE `user`
 -- A tábla indexei `user_activity_filter`
 --
 ALTER TABLE `user_activity_filter`
-  ADD PRIMARY KEY (`user_tax_number`,`filter`),
+  ADD PRIMARY KEY (`filter_id`),
   ADD KEY `user_id` (`user_tax_number`);
 
 --
@@ -286,6 +295,12 @@ ALTER TABLE `document`
 --
 ALTER TABLE `document_category`
   MODIFY `category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT a táblához `user_activity_filter`
+--
+ALTER TABLE `user_activity_filter`
+  MODIFY `filter_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Megkötések a kiírt táblákhoz
