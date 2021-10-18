@@ -31,11 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         array(
           'outcome' => 'failure',
           'message' => 'Invalid request formation!',
-          'columnName' => $requestData->columnName,
         )
       );
       exit(1);
-  }
+    }
 
     $pdo = connectToDb();
     $columnOptionsJSON = selectColumnOptions($pdo, $requestData->columnName);

@@ -2,7 +2,6 @@
 date_default_timezone_set('Europe/Budapest');
 
 require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/statusEnums.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/userPermissions.php';
 
 function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
   $MAX_ATTEMPT_TIMESPAN_HOURS = 1;
@@ -33,7 +32,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
     return json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Failed login attempt',
+        'message' => 'Failed login attempt (404)',
       )
     );
   }
@@ -52,7 +51,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
     return json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Failed login attempt',
+        'message' => 'Failed login attempt (inactive)',
       )
     );
   }
@@ -74,12 +73,12 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
   }
 
   // case 3.5: too many login attempts
-  $currentNumberOfAttempts = $userRow['user_last_login_attempt'];
+  $currentNumberOfAttempts = $userRow['user_login_attempt'];
   if ($currentNumberOfAttempts > $MAX_ATTEMPTS_PER_TIMESPAN && $hoursSinceLastTrial < $MAX_ATTEMPT_TIMESPAN_HOURS) {
     return json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Failed login attempt',
+        'message' => 'Failed login attempt (ddos)',
       )
     );
   }
@@ -93,7 +92,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
     return json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Failed login attempt',
+        'message' => 'Failed login attempt (pwd)',
       )
     );
   }
