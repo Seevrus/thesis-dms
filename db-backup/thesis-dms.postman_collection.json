@@ -1,0 +1,460 @@
+{
+	"info": {
+		"_postman_id": "25d0f25f-8bbb-49af-8b4a-4d26b0af62db",
+		"name": "thesis-dms",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "csrf.php",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/auth/csrf.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"auth",
+						"csrf.php"
+					]
+				},
+				"description": "Get CSRF Token"
+			},
+			"response": []
+		},
+		{
+			"name": "login.php",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "04f68f925868920a825fe64736e7ade0917f8a184a3e3abbe4f768a067dfb479",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"taxNumber\": 4283164402,\r\n    \"password\": \"jelszo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/user/login.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"user",
+						"login.php"
+					]
+				},
+				"description": "Login"
+			},
+			"response": []
+		},
+		{
+			"name": "createstub.php",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "067b9166b30cc218df15385d193e818839aeaf2c56fec975c7f30e8599cf90b5",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MzA5NTg2ODUsImlzcyI6ImxvY2FsaG9zdCIsIm5iZiI6MTYzMDk1ODY4NSwiZXhwIjoxNjMxMDQ4Njg1LCJ0YXhOdW1iZXIiOjEzMTU3NjAyMTcsInVzZXJQZXJtaXNzaW9ucyI6WyJSRUdVTEFSIiwiQUNUSVZJVFlfQURNSU5JU1RSQVRPUiIsIlVTRVJfQURNSU5JU1RSQVRPUiIsIkRPQ1VNRU5UX0NSRUFUT1IiXSwiZW1haWxTdGF0dXMiOiJOT19FTUFJTCJ9.l--m3Lyi2jD9x66o4ITom1nzTTmsTeRpGXdCtBVtHXbAm3hV-Myk_Peish7wuoQROTHVyuKL07UVMK7xVNbyyw",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=utf-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"taxNumber\": \"1315760217\",\r\n    \"documentName\": \"Próba Dokumentum 1\",\r\n    \"category\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/document/createstub.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"document",
+						"createstub.php"
+					]
+				},
+				"description": "Upload single file, part 1"
+			},
+			"response": []
+		},
+		{
+			"name": "upload.php",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "067b9166b30cc218df15385d193e818839aeaf2c56fec975c7f30e8599cf90b5",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MzA5NTg2ODUsImlzcyI6ImxvY2FsaG9zdCIsIm5iZiI6MTYzMDk1ODY4NSwiZXhwIjoxNjMxMDQ4Njg1LCJ0YXhOdW1iZXIiOjEzMTU3NjAyMTcsInVzZXJQZXJtaXNzaW9ucyI6WyJSRUdVTEFSIiwiQUNUSVZJVFlfQURNSU5JU1RSQVRPUiIsIlVTRVJfQURNSU5JU1RSQVRPUiIsIkRPQ1VNRU5UX0NSRUFUT1IiXSwiZW1haWxTdGF0dXMiOiJOT19FTUFJTCJ9.l--m3Lyi2jD9x66o4ITom1nzTTmsTeRpGXdCtBVtHXbAm3hV-Myk_Peish7wuoQROTHVyuKL07UVMK7xVNbyyw",
+						"type": "text"
+					},
+					{
+						"key": "X-Document-Id",
+						"value": "321",
+						"type": "text"
+					},
+					{
+						"key": "X-Upload-Token",
+						"value": "ryJb7nGPjWZ20Tk5C4swWDsoYkW7k2U6VCHiomXQdIMBBFtiDKMB2cnBelXy",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/D:/OneDrive/web/empty_test_doc.pdf"
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/document/upload.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"document",
+						"upload.php"
+					]
+				},
+				"description": "Upload single file, part 2"
+			},
+			"response": []
+		},
+		{
+			"name": "uploadbatch.php",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "f8283de6f4abbaa8801b5f29499242ec6a11e7d4917015efdb693dcd3be34739",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MzEwNDE1ODcsImlzcyI6ImxvY2FsaG9zdCIsIm5iZiI6MTYzMTA0MTU4NywiZXhwIjoxNjMxMTMxNTg3LCJ0YXhOdW1iZXIiOjEzMTU3NjAyMTcsInVzZXJQZXJtaXNzaW9ucyI6WyJSRUdVTEFSIiwiQUNUSVZJVFlfQURNSU5JU1RSQVRPUiIsIlVTRVJfQURNSU5JU1RSQVRPUiIsIkRPQ1VNRU5UX0NSRUFUT1IiXSwiZW1haWxTdGF0dXMiOiJWQUxJRF9FTUFJTCJ9.eGR3rRkqUTb1-sZqx_0mLa7B44IT82kaTXutV79xBJI-xTEZWK_qCB-grq7QDlBH5pHMtyCMg-LUPD1QEkaesA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"taxNumber\": 4283164402,\r\n        \"documentName\": \"Teszt 01\",\r\n        \"category\": 1,\r\n        \"url\": \"http://localhost/empty_test_doc.pdf\"\r\n    },\r\n    {\r\n        \"taxNumber\": 4283164402,\r\n        \"documentName\": \"Teszt 02\",\r\n        \"category\": 2,\r\n        \"url\": \"http://localhost/empty_test_doc.pdf\"\r\n    },\r\n    {\r\n        \"taxNumber\": 4283164402,\r\n        \"documentName\": \"Teszt 03\",\r\n        \"category\": 1,\r\n        \"url\": \"http://localhost/empty_test_doc.pdf\",\r\n        \"validUntil\": 1672527599\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/document/uploadbatch.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"document",
+						"uploadbatch.php"
+					]
+				},
+				"description": "Batch file upload"
+			},
+			"response": []
+		},
+		{
+			"name": "uploadbatch - TESTS",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "b931c03812c36c95c1077a4de51bf4cbb16985196b99eec3099181ae154d869f",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MzE2MTc4ODIsImlzcyI6ImxvY2FsaG9zdCIsIm5iZiI6MTYzMTYxNzg4MiwiZXhwIjoxNjMxNzA3ODgyLCJ0YXhOdW1iZXIiOjEzMTU3NjAyMTcsInVzZXJQZXJtaXNzaW9ucyI6WyJSRUdVTEFSIiwiQUNUSVZJVFlfQURNSU5JU1RSQVRPUiIsIlVTRVJfQURNSU5JU1RSQVRPUiIsIkRPQ1VNRU5UX0NSRUFUT1IiXSwiZW1haWxTdGF0dXMiOiJWQUxJRF9FTUFJTCJ9.TWvZSIodDhVH_aYuupE2gzRaAdYjzUq7gGoMFbfieQ70ph6phKbgrTMTtuFquFm82pSqynDMCcy8D-nu_eHNlw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"documentName\": \"Adatszerkezetek 01\",\r\n        \"category\": 1,\r\n        \"url\": \"http://localhost/empty_test_doc.pdf\"\r\n    },\r\n    {\r\n        \"taxNumber\": 1315760217,\r\n        \"category\": 1,\r\n        \"url\": \"http://localhost/empty_test_doc.pdf\"\r\n    },\r\n    {\r\n        \"taxNumber\": 1315760217,\r\n        \"documentName\": \"Adatszerkezetek 01\",\r\n        \"url\": \"http://localhost/empty_test_doc.pdf\"\r\n    },\r\n    {\r\n        \"taxNumber\": 1315760217,\r\n        \"documentName\": \"Adatszerkezetek 01\",\r\n        \"category\": 1\r\n    },\r\n    {\r\n        \"taxNumber\": 144306256,\r\n        \"documentName\": \"Adatszerkezetek 01\",\r\n        \"category\": 1,\r\n        \"url\": \"http://localhost/empty_test_doc.pdf\"\r\n    },\r\n    {\r\n        \"taxNumber\": 1315760217,\r\n        \"documentName\": \"Adatszerkezetek 01\",\r\n        \"category\": 1,\r\n        \"url\": \"http://localhost/phpinfo.php\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/document/uploadbatch.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"document",
+						"uploadbatch.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/activity/list.php",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "ad5edbb593d31d8191cf28f01bd53bfaaf91e8904ae32119bba4b11494b80cc8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/user/activity/list.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"user",
+						"activity",
+						"list.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/activity/options.php",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "bff13ba90086c810e3bad27a684c3e105bd0b02b227280856706addf75c4a372",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"companyName\"",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/user/activity/options.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"user",
+						"activity",
+						"options.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/activity/filters/save.php",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "9534eee00ed7726cb43a225c9d62fbd7c44c18ccea11ce2021c6bf487db113ca",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"filterName\": \"Jónás Nyrt. dolgozói\",\r\n    \"filter\": {\r\n        \"companyName\": [\"Jónás Nyrt.\"],\r\n        \"userRealName\": [],\r\n        \"categoryName\": [],\r\n        \"documentName\": [],\r\n        \"added\": {},\r\n        \"validUntil\": {\r\n            \"checked\": true\r\n        },\r\n        \"downloaded\": {\r\n            \"checked\": false\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/user/activity/filters/save.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"user",
+						"activity",
+						"filters",
+						"save.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "document/view.php",
+			"request": {
+				"method": "HEAD",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "51c9d49ee8f9db98bbc39de75bcb23d179051db2bb9714ab31bfc8d1dbbde320",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/document/view.php?documentId=4240",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"document",
+						"view.php"
+					],
+					"query": [
+						{
+							"key": "documentId",
+							"value": "4240"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "document/delete.php",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "51c9d49ee8f9db98bbc39de75bcb23d179051db2bb9714ab31bfc8d1dbbde320",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"documentId\": 424\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/document/delete.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"document",
+						"delete.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/update.php",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-Token",
+						"value": "04f68f925868920a825fe64736e7ade0917f8a184a3e3abbe4f768a067dfb479",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"taxNumber\": 4283164402,\r\n    \"email\": \"kiss.jeno@gmail3.hu\",\r\n    \"password\": \"jelszo\",\r\n    \"userRealName\": \"Kiss Jenő\",\r\n    \"attempts\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost/thesis-dms/public/api/user/update.php",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"thesis-dms",
+						"public",
+						"api",
+						"user",
+						"update.php"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
