@@ -9,7 +9,7 @@ import {
 import { useHistory } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum } from '../../store/usersSliceTypes';
-import { completeRegistration, userEmailStatus } from '../../store/usersSlice';
+import { completeRegistration, userEmailStatus, userTaxNumber } from '../../store/usersSlice';
 import { emailRegex, passwordRegex } from '../utils/helpers';
 
 const { useEffect, useState } = React;
@@ -29,6 +29,7 @@ const RegistrationCompletitionForm = () => {
   }, [emailStatus]);
   // End of redirections
 
+  const taxNumber = useAppSelector(userTaxNumber);
   const [isFormValidated, setIsFormValidated] = useState(false);
   const [emailAddress, setEmailAddress] = useState('till.zoltan90@gmail.com');
   const [emailAddressRepeat, setEmailAddressRepeat] = useState('till.zoltan90@gmail.com');
@@ -115,7 +116,11 @@ const RegistrationCompletitionForm = () => {
 
     setEmailAddressError('');
     setIsFormValidated(true);
-    dispatch(completeRegistration({ email: emailAddress, password: newLoginPassword }))
+    dispatch(completeRegistration({
+      taxNumber,
+      email: emailAddress,
+      password: newLoginPassword,
+    }))
       .then(() => history.push('/validate-email'))
       .catch((err) => {
         setIsFormValidated(false);

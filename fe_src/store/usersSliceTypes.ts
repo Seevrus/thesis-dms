@@ -20,12 +20,31 @@ export enum LoginStatusEnum {
 }
 
 export interface CompleteRegistrationRequestT {
+  taxNumber: number;
   email: string;
   password: string;
 }
 
-export interface CompleteRegistrationresponseT extends BaseResponseT {
-  emailStatus?: `${EmailStatusEnum}`;
+export interface ModifyEmailResponseT extends BaseResponseT {
+  value: 'email';
+  emailStatus?: EmailStatusEnum;
+}
+
+interface ModifyPasswordResponseT extends BaseResponseT {
+  value: 'password';
+}
+
+export type CompleteRegistrationResponseT = [
+  ModifyEmailResponseT,
+  ModifyPasswordResponseT,
+];
+
+export interface EmailValidationRequestT {
+  emailCode: string;
+}
+
+export interface EmailValidationResponseT extends BaseResponseT {
+  emailStatus: EmailStatusEnum;
 }
 
 export interface LoginRequestT {
@@ -46,10 +65,6 @@ export interface LoginResponseT extends BaseResponseT {
 
 export interface LogoutResponseT extends BaseResponseT {
   loginStatus?: `${LoginStatusEnum}`;
-}
-
-export interface ValidateEmailAddressRequestT {
-  emailCode: string;
 }
 
 export interface UsersSliceT {

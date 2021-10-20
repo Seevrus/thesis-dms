@@ -42,8 +42,8 @@ function updateEmail(PDO $pdo, string $taxNumber, string $email, bool $skipValid
     $updateEmailStmt = $pdo->prepare($updateEmailQuery);
     $updateEmailStmt->execute(
       array(
-        ':uem' => $email,
-        ':est' => mapEmailStatusToDb(EMAIL_STATUS::NOT_VALIDATED),
+        ':em' => $email,
+        ':st' => mapEmailStatusToDb(EMAIL_STATUS::NOT_VALIDATED),
         ':utn' => $taxNumber,
       )
     );

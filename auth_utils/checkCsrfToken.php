@@ -6,6 +6,8 @@ function checkCsrfToken() : bool {
     } else {
       return false;
     }
+  } else {
+    return false;
   }
 }
 ?>

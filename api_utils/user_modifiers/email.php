@@ -71,7 +71,7 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
         'value' => 'email',
         'outcome' => 'success',
         'message' => $updateEmail->message,
-        'email_status' => $emailStatus,
+        'emailStatus' => $emailStatus,
       );
     }
   }

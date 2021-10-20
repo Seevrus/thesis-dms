@@ -1,15 +1,26 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
+import {
+  filter,
+  head,
+  mapAccum,
+  pipe,
+  propEq,
+// @ts-ignore
+} from 'ramda';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { BaseResponseT } from './commonTypes';
 import {
   CompleteRegistrationRequestT,
-  CompleteRegistrationresponseT,
+  CompleteRegistrationResponseT,
+  EmailValidationRequestT,
+  EmailValidationResponseT,
   LoginRequestT,
   LoginResponseT,
   LoginStatusEnum,
   LogoutResponseT,
+  ModifyEmailResponseT,
   UsersSliceT,
-  ValidateEmailAddressRequestT,
 } from './usersSliceTypes';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
@@ -36,45 +47,70 @@ export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
 );
 
 export const completeRegistration = createAsyncThunk<
-CompleteRegistrationresponseT, CompleteRegistrationRequestT
+CompleteRegistrationResponseT,
+CompleteRegistrationRequestT,
+{ rejectValue: BaseResponseT }
 >(
   'users/registerEmailAddress',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/user/completeregistration.php', requestData);
+      const response = await axios.post('/api/user/update.php', requestData);
+      // TODO: I do not really handle partial errors other than displaying them
+      const errors = head(
+        pipe(
+          filter(propEq('outcome', 'failure')),
+          mapAccum(
+            (message: string, singleResponse: any) => [
+              message
+                ? `${message}. ${singleResponse.value}: ${singleResponse.message}`
+                : `${singleResponse.value}: ${singleResponse.message}`,
+              singleResponse.message,
+            ],
+            '',
+          ),
+        )(response.data),
+      );
+      if (errors) {
+        return rejectWithValue({
+          outcome: 'failure',
+          message: errors,
+        });
+      }
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.response.data as CompleteRegistrationresponseT);
+      return rejectWithValue(e.response.data);
     }
   },
 );
 
-export const login = createAsyncThunk<LoginResponseT, LoginRequestT>(
+export const login = createAsyncThunk<
+LoginResponseT, LoginRequestT, { rejectValue: BaseResponseT }
+>(
   'users/login',
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/login.php', credentials);
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.response.data as LoginResponseT);
+      return rejectWithValue(e.response.data);
     }
   },
 );
 
-export const logout = createAsyncThunk<LogoutResponseT, void>(
+export const logout = createAsyncThunk<LogoutResponseT, void, { rejectValue: BaseResponseT }>(
   'users/logout',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/logout.php');
       return response.data;
     } catch (e) {
-      return rejectWithValue(e.response.data as LogoutResponseT);
+      return rejectWithValue(e.response.data);
     }
   },
 );
 
 export const validateEmailAddress = createAsyncThunk<
-CompleteRegistrationresponseT, ValidateEmailAddressRequestT
+EmailValidationResponseT, EmailValidationRequestT, { rejectValue: BaseResponseT }
 >(
   'users/validateEmailAddress',
   async (requestData, { rejectWithValue }) => {
@@ -128,13 +164,12 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(completeRegistration.fulfilled, (state, { payload }) => {
-      const { emailStatus } = payload;
-      state.emailStatus = emailStatus;
+      const emailResponse = payload.find((response) => response.value === 'email') as ModifyEmailResponseT;
+      state.emailStatus = emailResponse.emailStatus;
     });
 
     builder.addCase(completeRegistration.rejected, (_, { payload }) => {
-      const { message } = payload as CompleteRegistrationresponseT;
-      throw new Error(message || 'API returned an error');
+      throw new Error(payload.message || 'API returned an error');
     });
 
     builder.addCase(login.fulfilled, (state, { payload }) => {
@@ -161,8 +196,7 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(login.rejected, (_, { payload }) => {
-      const { message } = payload as LoginResponseT;
-      throw new Error(message || 'API returned an error');
+      throw new Error(payload.message || 'API returned an error');
     });
 
     builder.addCase(logout.fulfilled, (state, { payload }) => {
@@ -176,8 +210,7 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(logout.rejected, (state, { payload }) => {
-      const { message } = payload as LogoutResponseT;
-      state.message = message;
+      state.message = payload.message;
     });
 
     builder.addCase(validateEmailAddress.fulfilled, (state, { payload }) => {
@@ -185,8 +218,7 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(validateEmailAddress.rejected, (_, { payload }) => {
-      const { message } = payload as CompleteRegistrationresponseT;
-      throw new Error(message || 'API returned an error');
+      throw new Error(payload.message || 'API returned an error');
     });
   },
 });
