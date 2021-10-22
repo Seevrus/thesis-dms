@@ -9,7 +9,7 @@ import LoadableEmailValidationForm from './components/authenticate/LoadableEmail
 import Header from './components/header/Header';
 import LoadableLoginForm from './components/authenticate/LoadableLoginForm';
 import LoadableLogout from './components/authenticate/LoadableLogout';
-import Profile from './components/profile/Profile';
+import LoadableProfile from './components/profile/LoadableProfile';
 import LoadableRegistrationCompletitionForm from './components/authenticate/LoadableRegistrationCompletitionForm';
 import setupCsrfToken from './services/csrfService';
 import LoadableUserActivity from './components/useractivity/LoadableUserActivity';
@@ -50,7 +50,7 @@ const App = () => {
           <Route exact path="/documents" component={LoadableDocuments} />
           <Route exact path="/login" component={LoadableLoginForm} />
           <Route exact path="/logout" component={LoadableLogout} />
-          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/profile" component={LoadableProfile} />
           <Route exact path="/user-activity" component={LoadableUserActivity} />
           <Route exact path="/user-handling" component={UserHandling} />
           <Route exact path="/validate-email" component={LoadableEmailValidationForm} />
