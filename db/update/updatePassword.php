@@ -1,9 +1,27 @@
 <?php
-function updatePassword(PDO $pdo, string $taxNumber, string $passwordHash): string {
+function updatePassword(PDO $pdo, string $taxNumber, string $password): string {
   try {
     // do some clean-up
     $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
+    $selectUserQuery = 'SELECT
+        user_email, user_password
+      FROM user
+      WHERE user_tax_number = :utn';
+    $selectUserStmt = $pdo->prepare($selectUserQuery);
+    $selectUserStmt->execute(array( ':utn' => $taxNumber ));
+    $userRow = $selectUserStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (password_verify($password, $userRow['user_password'])) {
+      return json_encode(
+        array(
+          'outcome' => 'failure',
+          'message' => 'New password cannot be the same as the old one',
+        )
+      );
+    }
+
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     $updatePasswordQuery = 'UPDATE
         user
       SET
@@ -19,17 +37,11 @@ function updatePassword(PDO $pdo, string $taxNumber, string $passwordHash): stri
       )
     );
 
-    // we also need the email of the user to send feedback
-    $selectEmailQuery = 'SELECT user_email FROM user WHERE user_tax_number = :utn';
-    $selectEmailStmt = $pdo->prepare($selectEmailQuery);
-    $selectEmailStmt->execute(array( ':utn' => $taxNumber ));
-    $emailRow = $selectEmailStmt->fetch(PDO::FETCH_ASSOC);
-
     return json_encode(
       array(
         'outcome' => 'success',
         'message' => 'Password successfully updated',
-        'userEmail' => $emailRow['user_email'],
+        'userEmail' => $userRow['user_email'],
       )
     );
   } catch (PDOException $e) {

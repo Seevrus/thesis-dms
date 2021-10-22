@@ -18,8 +18,7 @@ if ($protectionProblem) {
     'message' => 'You do not have permission to modify this value',
   );
 } else {
-  $passwordHash = password_hash($requestData->password, PASSWORD_DEFAULT);
-  $updatePasswordJson = updatePassword($pdo, $taxNumber, $passwordHash);
+  $updatePasswordJson = updatePassword($pdo, $taxNumber, $requestData->password);
   $updatePassword = json_decode($updatePasswordJson);
   if ($updatePassword->outcome == 'failure') {
     $passwordModifyResult = array(
@@ -28,15 +27,15 @@ if ($protectionProblem) {
       'message' => $updatePassword->message,
     );
   } else {
-    // $newLine = "\r\n";
-    // $message = "";
-    // $message .= "Tisztelt Felhasználónk!" . $newLine . $newLine;
-    // $message .= "Ezt az e-mailt azért küldjük, mert észleltük, hogy az Ön jelszava módosításra került a rendszerünkben." . $newLine;
-    // $message .= "Amennyiben nem Ön indította el a folyamatot, kérem, azonnal jelezze számunkra a hibát!" . $newLine . $newLine;
-    // $message .= "Tisztelettel," . $newLine;
-    // $message .= "Dr. Till Zoltán" . $newLine;
+    $newLine = "\r\n";
+    $message = "";
+    $message .= "Tisztelt Felhasználónk!" . $newLine . $newLine;
+    $message .= "Ezt az e-mailt azért küldjük, mert észleltük, hogy az Ön jelszava módosításra került a rendszerünkben." . $newLine;
+    $message .= "Amennyiben nem Ön indította el a folyamatot, kérem, azonnal jelezze számunkra a hibát!" . $newLine . $newLine;
+    $message .= "Tisztelettel," . $newLine;
+    $message .= "Dr. Till Zoltán" . $newLine;
   
-    // emailer($updatePassword->userEmail, "Jelszava módosult (Thesis-DMS)", $message);
+    emailer($updatePassword->userEmail, "Jelszava módosult (Thesis-DMS)", $message);
   
     $passwordModifyResult = array(
       'value' => 'password',
