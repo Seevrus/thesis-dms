@@ -7,10 +7,11 @@ import {
 } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum } from '../../store/usersSliceTypes';
 import {
   companyName,
+  updateProfile,
   userEmail,
   userEmailStatus,
   userRealName,
@@ -21,6 +22,7 @@ import { emailRegex, passwordRegex } from '../utils/helpers';
 const { useEffect, useState } = React;
 
 const Profile = () => {
+  const dispatch = useAppDispatch();
   const history = useHistory();
 
   // Redirect user is they are not supposed to be here
@@ -37,17 +39,19 @@ const Profile = () => {
   // End of redirections
 
   const originalEmailAddress = useAppSelector(userEmail);
+  const taxNumber = useAppSelector(userTaxNumber);
   const [emailAddress, setEmailAddress] = useState(originalEmailAddress);
   const [emailAddressError, setEmailAddressError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
 
   const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const emailInput = e.target.value;
     setEmailAddress(emailInput);
 
-    if (!emailRegex.test(emailAddress)) {
+    if (!emailRegex.test(emailInput)) {
       setEmailAddressError('Hiba: Az email cím formátuma nem megfelelő!');
     } else {
       setEmailAddressError('');
@@ -57,6 +61,17 @@ const Profile = () => {
   const setNewEmailAddress = () => {
     if (emailAddress === originalEmailAddress) {
       setEmailAddressError('Hiba: Az új email cím nem egyezhet meg az előzővel!');
+    } else {
+      setEmailAddressError('');
+      dispatch(updateProfile({
+        taxNumber,
+        email: emailAddress,
+        ownEmail: true,
+      }))
+        .then(() => history.push('/validate-email'))
+        .catch((err) => {
+          setEmailAddressError(err.message);
+        });
     }
   };
 
@@ -67,6 +82,14 @@ const Profile = () => {
       setPasswordError('Hiba: A jelszó formátuma nem megfelelő!');
     } else {
       setPasswordError('');
+      dispatch(updateProfile({
+        taxNumber,
+        password,
+      }))
+        .then(() => setPasswordSuccess('Jelszó módosítása sikeres.'))
+        .catch((err) => {
+          setPasswordError(err.message);
+        });
     }
   };
 
@@ -76,7 +99,7 @@ const Profile = () => {
       <Form>
         <Form.Group className="mb-3" controlId="taxNumber">
           <Form.Label>Adóazonosító jel</Form.Label>
-          <Form.Control disabled value={useAppSelector(userTaxNumber)} />
+          <Form.Control disabled value={taxNumber} />
         </Form.Group>
         <Form.Group className="mb-3" controlId="taxNumber">
           <Form.Label>Név</Form.Label>
@@ -120,6 +143,7 @@ const Profile = () => {
           </Form.Label>
           <Form.Control
             isInvalid={!!passwordError}
+            isValid={!!passwordSuccess}
             onChange={
               (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
             }
@@ -134,6 +158,7 @@ const Profile = () => {
               aria-label="Jelszó újra"
               aria-describedby="userPassword2"
               isInvalid={!!passwordError}
+              isValid={!!passwordSuccess}
               onChange={
                 (e: React.ChangeEvent<HTMLInputElement>) => setPasswordRepeat(e.target.value)
               }
@@ -141,14 +166,24 @@ const Profile = () => {
               value={passwordRepeat}
             />
             <Button
-              disabled={!!passwordError}
               id="userPassword2"
               onClick={setNewPassword}
               variant="primary"
             >
               Mentés
             </Button>
-            <Form.Control.Feedback type="invalid">{passwordError}</Form.Control.Feedback>
+            {passwordError
+              && (
+                <Form.Control.Feedback type="invalid">
+                  {passwordError}
+                </Form.Control.Feedback>
+              )}
+            {passwordSuccess
+              && (
+                <Form.Control.Feedback type="valid">
+                  {passwordSuccess}
+                </Form.Control.Feedback>
+              )}
           </InputGroup>
         </Form.Group>
       </Form>

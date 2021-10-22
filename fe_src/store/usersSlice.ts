@@ -165,7 +165,7 @@ const usersSlice = createSlice({
 
     builder.addCase(updateProfile.fulfilled, (state, { payload }) => {
       const emailResponse = payload.find((response) => response.value === 'userEmail') as ModifyEmailResponseT;
-      if (emailResponse.ownEmail) {
+      if (emailResponse?.ownEmail) {
         state.userEmail = emailResponse.userEmail;
         state.emailStatus = emailResponse.emailStatus;
       }
