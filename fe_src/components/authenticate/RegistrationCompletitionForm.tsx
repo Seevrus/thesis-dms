@@ -9,7 +9,7 @@ import {
 import { useHistory } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum } from '../../store/usersSliceTypes';
-import { completeRegistration, userEmailStatus, userTaxNumber } from '../../store/usersSlice';
+import { updateProfile, userEmailStatus, userTaxNumber } from '../../store/usersSlice';
 import { emailRegex, passwordRegex } from '../utils/helpers';
 
 const { useEffect, useState } = React;
@@ -116,9 +116,10 @@ const RegistrationCompletitionForm = () => {
 
     setEmailAddressError('');
     setIsFormValidated(true);
-    dispatch(completeRegistration({
+    dispatch(updateProfile({
       taxNumber,
       email: emailAddress,
+      ownEmail: true,
       password: newLoginPassword,
     }))
       .then(() => history.push('/validate-email'))

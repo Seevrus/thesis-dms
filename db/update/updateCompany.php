@@ -23,6 +23,7 @@ function updateCompany(PDO $pdo, string $taxNumber, string $companyName): string
       array(
         'outcome' => 'success',
         'message' => 'Company of User successfully updated',
+        'company_name' => $companyName,
       )
     );
   } catch (PDOException $e) {

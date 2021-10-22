@@ -23,6 +23,7 @@ if ($protectionProblem) {
       'value' => 'companyName',
       'outcome' => 'success',
       'message' => $updateCompany->message,
+      'companyName' => $updateCompany->company_name,
     );
   }
 }

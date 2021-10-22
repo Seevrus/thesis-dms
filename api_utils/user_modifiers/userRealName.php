@@ -23,6 +23,7 @@ if ($protectionProblem) {
       'value' => 'userRealName',
       'outcome' => 'success',
       'message' => $updateUserRealName->message,
+      'userRealName' => $updateUserRealName->user_real_name,
     );
   }
 }

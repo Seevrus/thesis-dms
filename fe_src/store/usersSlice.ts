@@ -11,8 +11,6 @@ import {
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BaseResponseT } from './commonTypes';
 import {
-  CompleteRegistrationRequestT,
-  CompleteRegistrationResponseT,
   EmailValidationRequestT,
   EmailValidationResponseT,
   LoginRequestT,
@@ -20,6 +18,8 @@ import {
   LoginStatusEnum,
   LogoutResponseT,
   ModifyEmailResponseT,
+  UpdateProfileRequestT,
+  UpdateProfileResponseT,
   UsersSliceT,
 } from './usersSliceTypes';
 // eslint-disable-next-line import/no-cycle
@@ -46,12 +46,38 @@ export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
   },
 );
 
-export const completeRegistration = createAsyncThunk<
-CompleteRegistrationResponseT,
-CompleteRegistrationRequestT,
+export const login = createAsyncThunk<
+LoginResponseT, LoginRequestT, { rejectValue: BaseResponseT }
+>(
+  'users/login',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/api/user/login.php', credentials);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  },
+);
+
+export const logout = createAsyncThunk<LogoutResponseT, void, { rejectValue: BaseResponseT }>(
+  'users/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/api/user/logout.php');
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  },
+);
+
+export const updateProfile = createAsyncThunk<
+UpdateProfileResponseT,
+UpdateProfileRequestT,
 { rejectValue: BaseResponseT }
 >(
-  'users/registerEmailAddress',
+  'users/updateProfile',
   async (requestData, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/update.php', requestData);
@@ -76,32 +102,6 @@ CompleteRegistrationRequestT,
           message: errors,
         });
       }
-      return response.data;
-    } catch (e) {
-      return rejectWithValue(e.response.data);
-    }
-  },
-);
-
-export const login = createAsyncThunk<
-LoginResponseT, LoginRequestT, { rejectValue: BaseResponseT }
->(
-  'users/login',
-  async (credentials, { rejectWithValue }) => {
-    try {
-      const response = await axios.post('/api/user/login.php', credentials);
-      return response.data;
-    } catch (e) {
-      return rejectWithValue(e.response.data);
-    }
-  },
-);
-
-export const logout = createAsyncThunk<LogoutResponseT, void, { rejectValue: BaseResponseT }>(
-  'users/logout',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.post('/api/user/logout.php');
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -163,12 +163,15 @@ const usersSlice = createSlice({
       state.message = 'API returned an error';
     });
 
-    builder.addCase(completeRegistration.fulfilled, (state, { payload }) => {
-      const emailResponse = payload.find((response) => response.value === 'email') as ModifyEmailResponseT;
-      state.emailStatus = emailResponse.emailStatus;
+    builder.addCase(updateProfile.fulfilled, (state, { payload }) => {
+      const emailResponse = payload.find((response) => response.value === 'userEmail') as ModifyEmailResponseT;
+      if (emailResponse.ownEmail) {
+        state.userEmail = emailResponse.userEmail;
+        state.emailStatus = emailResponse.emailStatus;
+      }
     });
 
-    builder.addCase(completeRegistration.rejected, (_, { payload }) => {
+    builder.addCase(updateProfile.rejected, (_, { payload }) => {
       throw new Error(payload.message || 'API returned an error');
     });
 

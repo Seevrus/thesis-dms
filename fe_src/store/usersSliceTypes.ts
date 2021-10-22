@@ -19,24 +19,47 @@ export enum LoginStatusEnum {
   LOGGED_IN = 'LOGGED_IN',
 }
 
-export interface CompleteRegistrationRequestT {
+export interface UpdateProfileRequestT {
   taxNumber: number;
-  email: string;
-  password: string;
+  userRealName?: string;
+  companyName?: string;
+  email?: string;
+  ownEmail?: boolean;
+  password?: string;
+  attempts?: boolean;
+}
+
+interface UserRealNameResponseT extends BaseResponseT {
+  value: 'userRealName';
+  userRealName: string;
+}
+
+interface CompanyNameResponseT extends BaseResponseT {
+  value: 'companyName';
+  companyName: string;
 }
 
 export interface ModifyEmailResponseT extends BaseResponseT {
-  value: 'email';
+  value: 'userEmail';
   emailStatus?: EmailStatusEnum;
+  userEmail: string;
+  ownEmail: boolean;
 }
 
 interface ModifyPasswordResponseT extends BaseResponseT {
   value: 'password';
 }
 
-export type CompleteRegistrationResponseT = [
-  ModifyEmailResponseT,
-  ModifyPasswordResponseT,
+interface AttemptsResponseT extends BaseResponseT {
+  value: 'attempts';
+}
+
+export type UpdateProfileResponseT = [
+  UserRealNameResponseT?,
+  CompanyNameResponseT?,
+  ModifyEmailResponseT?,
+  ModifyPasswordResponseT?,
+  AttemptsResponseT?,
 ];
 
 export interface EmailValidationRequestT {

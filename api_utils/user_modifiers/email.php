@@ -9,7 +9,7 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
   // Modify email and skip email validation phase
   if ($protectionProblem) {
     $emailModifyResult = array(
-      'value' => 'email',
+      'value' => 'userEmail',
       'outcome' => 'failure',
       'message' => 'You do not have permission to modify this value',
     );
@@ -18,15 +18,17 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
     $updateEmail = json_decode($updateEmailJson);
     if ($updateEmail->outcome == 'failure') {
       $emailModifyResult = array(
-        'value' => 'email',
+        'value' => 'userEmail',
         'outcome' => 'failure',
         'message' => $updateEmail->message,
       );
     } else {
       $emailModifyResult = array(
-        'value' => 'email',
+        'value' => 'userEmail',
         'outcome' => 'success',
         'message' => $updateEmail->message,
+        'userEmail' => $updateEmail->user_email,
+        'ownEmail' => $requestData->ownEmail,
       );
     }
   }
@@ -36,7 +38,7 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
   // Modify email and request email validation
   if ($protectionProblem) {
     $emailModifyResult = array(
-      'value' => 'email',
+      'value' => 'userEmail',
       'outcome' => 'failure',
       'message' => 'You do not have permission to modify this value',
     );
@@ -45,7 +47,7 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
     $updateEmail = json_decode($updateEmailJson);
     if ($updateEmail->outcome == 'failure') {
       $emailModifyResult = array(
-        'value' => 'email',
+        'value' => 'userEmail',
         'outcome' => 'failure',
         'message' => $updateEmail->message,
       );
@@ -66,12 +68,15 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
       // Update email status
       $emailStatus = mapDbEmailStatus($updateEmail->email_status);
       $_SESSION['emailStatus'] = $emailStatus;
+      $_SESSION['userEmail'] = $updateEmail->user_email;
 
       $emailModifyResult = array(
-        'value' => 'email',
+        'value' => 'userEmail',
         'outcome' => 'success',
         'message' => $updateEmail->message,
         'emailStatus' => $emailStatus,
+        'userEmail' => $updateEmail->user_email,
+        'ownEmail' => $requestData->ownEmail,
       );
     }
   }

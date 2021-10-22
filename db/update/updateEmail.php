@@ -22,6 +22,7 @@ function updateEmail(PDO $pdo, string $taxNumber, string $email, bool $skipValid
         array(
           'outcome' => 'success',
           'message' => 'Email of User successfully updated',
+          'user_email' => $email,
         )
       );
     }
@@ -69,6 +70,7 @@ function updateEmail(PDO $pdo, string $taxNumber, string $email, bool $skipValid
       array(
         'outcome' => 'success',
         'message' => 'Email successfully updated',
+        'user_email' => $email,
         'email_status' => mapEmailStatusToDb(EMAIL_STATUS::NOT_VALIDATED),
         'email_code' => $emailCode,
       )

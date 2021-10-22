@@ -23,6 +23,7 @@ function updateUserRealName(PDO $pdo, string $taxNumber, string $newName): strin
       array(
         'outcome' => 'success',
         'message' => 'Name of User successfully updated',
+        'user_real_name' => $newName,
       )
     );
   } catch (PDOException $e) {
