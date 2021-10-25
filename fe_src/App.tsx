@@ -12,7 +12,7 @@ import LoadableLogout from './components/authenticate/LoadableLogout';
 import LoadableProfile from './components/profile/LoadableProfile';
 import LoadableRegistrationCompletitionForm from './components/authenticate/LoadableRegistrationCompletitionForm';
 import LoadableUserActivity from './components/useractivity/LoadableUserActivity';
-import LoadableUserHandling from './components/users/LoadableUserHandling';
+import LoadableUserHandling from './components/userhandling/LoadableUserHandling';
 import setupCsrfToken from './services/csrfService';
 
 const { useEffect, useState } = React;

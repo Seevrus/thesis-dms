@@ -11,6 +11,8 @@ import {
   Row,
 } from 'react-bootstrap';
 
+import { Mapper } from '../../interfaces/common';
+
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { DocumentT } from '../../store/documentsSliceTypes';
 import {
@@ -22,20 +24,16 @@ import paymentMethod from '../../img/payment-method.svg';
 
 const { useState, useEffect } = React;
 
-interface Map {
-  [key: string]: string | undefined
-}
-
-interface Props {
+interface SingleDocumentProps {
   id: number;
 }
 
-const DOCUMENT_CATEGORY: Map = {
+const DOCUMENT_CATEGORY: Mapper = {
   'Bérjegyzék': paymentMethod,
   'Tájékoztató': information,
 };
 
-const SingleDocument = ({ id } : Props) => {
+const SingleDocument = ({ id } : SingleDocumentProps) => {
   const dispatch = useAppDispatch();
 
   const [deleteSuccess, setDeleteSuccess] = useState('');

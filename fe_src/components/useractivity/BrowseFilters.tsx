@@ -10,6 +10,7 @@ import {
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
+import { OptionsT } from '../../interfaces/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { SavedFilterT } from '../../store/activityFilterSliceTypes';
 import {
@@ -18,7 +19,6 @@ import {
   getMatchingSavedFilter,
   getSavedFilters,
 } from '../../store/activityFilterSlice';
-import { OptionsT } from './FilterList';
 
 const { useEffect, useState } = React;
 const animatedComponents = makeAnimated();

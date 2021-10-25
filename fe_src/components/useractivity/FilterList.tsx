@@ -23,28 +23,17 @@ import {
   filterModified,
   selectActiveFilter,
 } from '../../store/activityFilterSlice';
-import { ActivityFilterT } from '../../store/activityFilterSliceTypes';
+import { OptionsT } from '../../interfaces/common';
+import { FilterListProps } from '../../interfaces/useractivity';
 import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
 
 const animatedComponents = makeAnimated();
 const { useEffect, useState } = React;
 
-export interface OptionsT {
-  readonly value: string;
-  readonly label: string;
-}
-
 const createOption = (label: string): OptionsT => ({
   label,
   value: paramCase(label),
 });
-
-export type FilterListProps = {
-  canHide: boolean;
-  columnName: keyof ActivityFilterT;
-  setVisibility: React.Dispatch<React.SetStateAction<string>>;
-  style: { [key: string]: string };
-};
 
 const FilterList = ({
   canHide,

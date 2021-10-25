@@ -19,11 +19,11 @@ import {
 } from 'react-bootstrap';
 import DatePicker from 'react-date-picker';
 
+import { FilterListProps } from '../../interfaces/useractivity';
+
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { filterModified, selectActiveFilter } from '../../store/activityFilterSlice';
 import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
-
-import { FilterListProps } from './FilterList';
 
 const { useEffect, useState } = React;
 
