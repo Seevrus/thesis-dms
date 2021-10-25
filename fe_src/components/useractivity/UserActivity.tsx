@@ -20,8 +20,9 @@ import {
   selectActiveFilter,
 } from '../../store/activityFilterSlice';
 import { listUserActivity, selectActivities } from '../../store/userActivitySlice';
-import { EmailStatusEnum } from '../../store/usersSliceTypes';
-import { userEmailStatus } from '../../store/usersSlice';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/usersSliceTypes';
+import { userEmailStatus, userLoginStatus } from '../../store/usersSlice';
+import Loading from '../utils/Loading';
 
 import BrowseFilters from './BrowseFilters';
 import DateFilter from './DateFilter';
@@ -34,17 +35,26 @@ const UserActivity = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
+  const [isComponentLoading, setIsComponentLoading] = useState(true);
+
   // Redirect user is they are not supposed to be here
   const emailStatus = useAppSelector(userEmailStatus);
+  const loginStatus = useAppSelector(userLoginStatus);
   useEffect(() => {
     if (!emailStatus) {
+      setIsComponentLoading(true);
+    } else {
+      setIsComponentLoading(false);
+    }
+
+    if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
       history.push('/login');
     } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
       history.push('/complete-registration');
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       history.push('/validate-email');
     }
-  }, [emailStatus]);
+  }, [emailStatus, loginStatus]);
   // End of redirections
 
   // store integration
@@ -69,7 +79,6 @@ const UserActivity = () => {
       dispatch(fetchFilters());
     }
   }, []);
-
   // end of store integration
 
   // filter visibilities
@@ -84,6 +93,14 @@ const UserActivity = () => {
   const activities = useAppSelector(selectActivities);
 
   // endless scrolling (nice to have, majd ha még később lesz rá időnk)
+
+  if (isComponentLoading) {
+    return (
+      <Container className="mt-5 mb-5">
+        <Loading />
+      </Container>
+    );
+  }
 
   return (
     <Container className="mt-5 mb-5">

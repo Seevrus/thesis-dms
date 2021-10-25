@@ -53,24 +53,27 @@ const Documents = () => {
 
   const documents = documentIds.map((id) => <SingleDocument key={id} id={id} />);
 
+  if (isComponentLoading) {
+    return (
+      <Container className="mt-5 mb-5">
+        <Loading />
+      </Container>
+    );
+  }
+
   return (
     <Container className="mt-5 mb-5">
-      {isComponentLoading ? <Loading />
-        : (
-          <>
-            <h3 className="page-title text-center">Dokumentumaim</h3>
-            {documents}
+      <h3 className="page-title text-center">Dokumentumaim</h3>
+      {documents}
 
-            <Container className="letoltes_blokk mt-3">
-              <div className="d-flex justify-content-end">
-                Icons made by&nbsp;
-                <a href="https://www.freepik.com" title="Freepik">Freepik</a>
+      <Container className="letoltes_blokk mt-3">
+        <div className="d-flex justify-content-end">
+          Icons made by&nbsp;
+          <a href="https://www.freepik.com" title="Freepik">Freepik</a>
 &nbsp;from&nbsp;
-                <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-              </div>
-            </Container>
-          </>
-        )}
+          <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+        </div>
+      </Container>
     </Container>
   );
 };
