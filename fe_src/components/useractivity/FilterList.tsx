@@ -1,4 +1,3 @@
-import { paramCase } from 'param-case';
 import {
   assoc,
   clone,
@@ -26,14 +25,10 @@ import {
 import { OptionsT } from '../../interfaces/common';
 import { FilterListProps } from '../../interfaces/useractivity';
 import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
+import { createOption } from '../common/common';
 
 const animatedComponents = makeAnimated();
 const { useEffect, useState } = React;
-
-const createOption = (label: string): OptionsT => ({
-  label,
-  value: paramCase(label),
-});
 
 const FilterList = ({
   canHide,

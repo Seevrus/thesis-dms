@@ -23,8 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $requestData = json_decode(file_get_contents("php://input"));
-    // possible update cases: user real name, company, email, password, reset login attempts, update user status
-
     // request body validation
     if (empty($requestData->taxNumber)) {
       http_response_code(403);
