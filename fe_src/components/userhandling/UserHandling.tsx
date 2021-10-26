@@ -7,6 +7,8 @@ import { EmailStatusEnum, LoginStatusEnum } from '../../store/usersSliceTypes';
 import { userEmailStatus, userLoginStatus } from '../../store/usersSlice';
 import Loading from '../utils/Loading';
 
+import UserSearch from './UserSearch';
+
 const { useEffect, useState } = React;
 
 const UserHandling = () => {
@@ -45,6 +47,7 @@ const UserHandling = () => {
   return (
     <Container className="mt-5 mb-5">
       <h3 className="page-title text-center">Felhasználók kezelése</h3>
+      <UserSearch />
     </Container>
   );
 };
