@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from './store/hooks';
@@ -14,8 +14,6 @@ import LoadableRegistrationCompletitionForm from './components/authenticate/Load
 import LoadableUserActivity from './components/useractivity/LoadableUserActivity';
 import LoadableUserHandling from './components/userhandling/LoadableUserHandling';
 import setupCsrfToken from './services/csrfService';
-
-const { useEffect, useState } = React;
 
 const App = () => {
   const dispatch = useAppDispatch();

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Container,
   Table,
@@ -29,8 +29,6 @@ import DateFilter from './DateFilter';
 import FilterList from './FilterList';
 import SaveLayout from './SaveLayout';
 
-const { useEffect, useState } = React;
-
 const UserActivity = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -54,7 +52,7 @@ const UserActivity = () => {
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       history.push('/validate-email');
     }
-  }, [emailStatus, loginStatus]);
+  }, [emailStatus, history, loginStatus]);
   // End of redirections
 
   // store integration
@@ -72,13 +70,13 @@ const UserActivity = () => {
     if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
       debounce(dispatch(listUserActivity(activeFilter)));
     }
-  }, [activeFilter, emailStatus]);
+  }, [activeFilter, dispatch, emailStatus]);
 
   useEffect(() => {
     if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
       dispatch(fetchFilters());
     }
-  }, []);
+  }, [dispatch, emailStatus]);
   // end of store integration
 
   // filter visibilities

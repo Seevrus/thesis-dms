@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 import { decode } from 'html-entities';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
@@ -22,8 +22,6 @@ import {
 import information from '../../img/information.svg';
 import paymentMethod from '../../img/payment-method.svg';
 
-const { useState, useEffect } = React;
-
 interface SingleDocumentProps {
   id: number;
 }
@@ -42,7 +40,7 @@ const SingleDocument = ({ id } : SingleDocumentProps) => {
 
   useEffect(() => {
     isDocumentAvailable(id).then(setIsDownloadable);
-  }, []);
+  }, [id]);
 
   const {
     added,

@@ -1,5 +1,5 @@
 import { map } from 'ramda';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Col,
   Container,
@@ -14,7 +14,6 @@ import { OptionsT } from '../../interfaces/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import debounce from '../utils/debounce';
 
-const { useEffect, useState } = React;
 const animatedComponents = makeAnimated();
 
 const UserSearch = () => {
@@ -26,7 +25,7 @@ const UserSearch = () => {
   useEffect(
     () => {
       dispatch(searchUsers(''));
-    }, [],
+    }, [dispatch],
   );
 
   useEffect(() => {

@@ -21,7 +21,8 @@
     },
     "plugins": [
         "@typescript-eslint",
-        "react"
+        "react",
+        "react-hooks"
     ],
     "rules": {
         "import/no-extraneous-dependencies": [
@@ -40,7 +41,11 @@
                 "some": [ "nesting", "id"  ]
             }
         }],
-        "linebreak-style": 0
+        "linebreak-style": 0,
+        "react/react-in-jsx-scope": "off",
+        "react/require-default-props": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
     },
     "settings": {
         "import/extensions": [".js", ".jsx", ".ts", ".tsx"],

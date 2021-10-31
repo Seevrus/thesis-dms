@@ -1,10 +1,8 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { Button, FormControl, InputGroup } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getMatchingSavedFilter, saveFilter, selectActiveFilter } from '../../store/activityFilterSlice';
-
-const { useState } = React;
 
 const SaveLayout = () => {
   const dispatch = useAppDispatch();

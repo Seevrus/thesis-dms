@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
@@ -8,8 +8,6 @@ import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
 import Loading from '../utils/Loading';
 
 import UserSearch from './UserSearch';
-
-const { useEffect, useState } = React;
 
 const UserHandling = () => {
   const history = useHistory();
@@ -33,7 +31,7 @@ const UserHandling = () => {
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       history.push('/validate-email');
     }
-  }, [emailStatus, loginStatus]);
+  }, [emailStatus, history, loginStatus]);
   // End of redirections
 
   if (isComponentLoading) {

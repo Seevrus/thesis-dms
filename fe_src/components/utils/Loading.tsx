@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Container, Spinner } from 'react-bootstrap';
 
 const Loading = () => (

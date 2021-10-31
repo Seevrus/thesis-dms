@@ -5,14 +5,17 @@ function updatePassword(PDO $pdo, string $taxNumber, string $password): string {
     $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
     $selectUserQuery = 'SELECT
-        user_email, user_password
+        user_email, email_status, user_password
       FROM user
       WHERE user_tax_number = :utn';
     $selectUserStmt = $pdo->prepare($selectUserQuery);
     $selectUserStmt->execute(array( ':utn' => $taxNumber ));
     $userRow = $selectUserStmt->fetch(PDO::FETCH_ASSOC);
 
-    if (password_verify($password, $userRow['user_password'])) {
+    if (
+      $userRow['email_status'] == mapEmailStatusToDb(EMAIL_STATUS::VALID_EMAIL)
+      && password_verify($password, $userRow['user_password'])
+    ) {
       return json_encode(
         array(
           'outcome' => 'failure',

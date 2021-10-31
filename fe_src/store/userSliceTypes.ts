@@ -71,7 +71,7 @@ export interface EmailValidationResponseT extends BaseResponseT {
 }
 
 export interface LoginRequestT {
-  taxNumber: string;
+  taxNumber: number;
   password: string;
 }
 

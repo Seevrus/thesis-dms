@@ -1,7 +1,7 @@
 import { paramCase } from 'param-case';
 // @ts-ignore
 import { find, propEq } from 'ramda';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Col,
   Container,
@@ -20,7 +20,6 @@ import {
   getSavedFilters,
 } from '../../store/activityFilterSlice';
 
-const { useEffect, useState } = React;
 const animatedComponents = makeAnimated();
 
 const createFilterOption = (filter: SavedFilterT): OptionsT => {

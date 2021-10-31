@@ -6,7 +6,7 @@ import {
   prop,
 // @ts-ignore
 } from 'ramda';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   Col,
@@ -25,10 +25,9 @@ import {
 import { OptionsT } from '../../interfaces/common';
 import { FilterListProps } from '../../interfaces/useractivity';
 import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
-import { createOption } from '../common/common';
+import { createOption } from '../utils/helpers';
 
 const animatedComponents = makeAnimated();
-const { useEffect, useState } = React;
 
 const FilterList = ({
   canHide,
@@ -50,7 +49,7 @@ const FilterList = ({
 
   useEffect(() => {
     setActiveOptions(map(createOption, prop(columnName, activeFilter)));
-  }, [activeFilter]);
+  }, [activeFilter, columnName]);
 
   const handleChange = (selectedOptions: OptionsT[]) => {
     const selectedOptionsArray: string[] = map(prop('label'), selectedOptions);

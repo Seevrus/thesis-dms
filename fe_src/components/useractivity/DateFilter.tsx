@@ -9,7 +9,7 @@ import {
   pipe,
 // @ts-ignore
 } from 'ramda';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   Col,
@@ -24,8 +24,6 @@ import { FilterListProps } from '../../interfaces/useractivity';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { filterModified, selectActiveFilter } from '../../store/activityFilterSlice';
 import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
-
-const { useEffect, useState } = React;
 
 const CheckboxLabelE = {
   validUntil: 'Korlátlan',
@@ -51,7 +49,7 @@ const DateFilter = ({
     fromProp ? setValueFrom(new Date(fromProp)) : setValueFrom(null);
     toProp ? setValueTo(new Date(toProp)) : setValueTo(null);
     setChecked(path([columnName, 'checked'], activeFilter));
-  }, [activeFilter]);
+  }, [activeFilter, columnName]);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(filterModified(

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
@@ -9,8 +9,6 @@ import { fetchDocuments, selectDocumentIds } from '../../store/documentsSlice';
 
 import Loading from '../utils/Loading';
 import SingleDocument from './SingleDocument';
-
-const { useEffect, useState } = React;
 
 const Documents = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +38,7 @@ const Documents = () => {
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       history.push('/validate-email');
     }
-  }, [emailStatus, loginStatus]);
+  }, [emailStatus, history, loginStatus]);
   // End of redirections
 
   const documentIds = useAppSelector(selectDocumentIds) as number[];
@@ -49,7 +47,7 @@ const Documents = () => {
     if (emailStatus === EmailStatusEnum.VALID_EMAIL && !documentIds.length) {
       dispatch(fetchDocuments({ }));
     }
-  }, [documentIds, emailStatus]);
+  }, [dispatch, documentIds, emailStatus]);
 
   const documents = documentIds.map((id) => <SingleDocument key={id} id={id} />);
 

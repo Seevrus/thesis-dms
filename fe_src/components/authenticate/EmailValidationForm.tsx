@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
@@ -7,72 +7,85 @@ import {
   Form,
 } from 'react-bootstrap';
 import { useHistory } from 'react-router';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum } from '../../store/userSliceTypes';
-import { userEmailStatus, validateEmailAddress } from '../../store/userSlice';
 
-const { useEffect, useState } = React;
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
+import {
+  userEmailStatus,
+  userLoginStatus,
+  validateEmailAddress,
+} from '../../store/userSlice';
+
+import EmailCode from '../form-components/EmailCode';
+import { testEmailCode } from '../utils/helpers';
+import Loading from '../utils/Loading';
 
 const EmailValidationForm = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
+  const [isComponentLoading, setIsComponentLoading] = useState(true);
+
   // Redirect user is they are not supposed to be here
   const emailStatus = useAppSelector(userEmailStatus);
+  const loginStatus = useAppSelector(userLoginStatus);
+
   useEffect(() => {
-    if (!emailStatus) {
+    if (!loginStatus) {
+      setIsComponentLoading(true);
+    } else {
+      setIsComponentLoading(false);
+    }
+
+    if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
       history.push('/login');
     } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
       history.push('/complete-registration');
     }
-  }, [emailStatus]);
+  }, [emailStatus, history, loginStatus]);
   // End of redirections
 
-  const [isFormValidated, setIsFormValidated] = useState(false);
-  const [emailCode, setEmailCode] = useState('');
-  const [emailCodeError, setEmailCodeError] = useState('');
-  const [validationError, setValidationError] = useState('');
-
-  const testEmailCode = (code: string) => {
-    const codeRegex = /^\d{6}$/;
-    return codeRegex.test(code);
-  };
-
-  const onEmailCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmailCode(e.target.value);
-    if (!testEmailCode(e.target.value)) {
-      setEmailCodeError('Hiba: A kód formátuma nem megfelelő!');
-    } else {
-      setEmailCodeError('');
-    }
-  };
+  const [isFormValidated, setIsFormValidated] = useState<boolean>(false);
+  const [emailCode, setEmailCode] = useState<string>('');
+  const [emailCodeError, setEmailCodeError] = useState<string>('');
+  const [validationError, setValidationError] = useState<string>('');
 
   const onEmailValidationAttempt = (e: React.MouseEvent) => {
     e.preventDefault();
+    let canSubmit = true;
     setIsFormValidated(false);
     setEmailCodeError('');
     setValidationError('');
 
     if (!emailCode) {
       setEmailCodeError('Hiba: A kód megadása kötelező!');
-      return false;
-    }
-    if (!testEmailCode(emailCode)) {
+      canSubmit = false;
+    } else if (!testEmailCode(emailCode)) {
       setEmailCodeError('Hiba: A kód formátuma nem megfelelő!');
-      return false;
+      canSubmit = false;
     }
 
-    setEmailCodeError('');
-    setIsFormValidated(true);
-    dispatch(validateEmailAddress({ emailCode }))
-      .then(() => history.push('/documents'))
-      .catch((err) => {
-        setIsFormValidated(false);
-        setValidationError(err.message);
-      });
-
-    return true;
+    if (canSubmit) {
+      setEmailCodeError('');
+      setIsFormValidated(true);
+      setIsComponentLoading(true);
+      dispatch(validateEmailAddress({ emailCode }))
+        .then(() => history.push('/documents'))
+        .catch((err) => {
+          setIsComponentLoading(false);
+          setIsFormValidated(false);
+          setValidationError(err.message);
+        });
+    }
   };
+
+  if (isComponentLoading) {
+    return (
+      <Container className="mt-5 mb-5">
+        <Loading />
+      </Container>
+    );
+  }
 
   return (
     <>
@@ -83,16 +96,11 @@ const EmailValidationForm = () => {
       </Container>
       <Container className="form-container" fluid="md">
         <Form noValidate validated={isFormValidated}>
-          <Form.Group className="mb-3" controlId="emailCode">
-            <Form.Label>Email kód</Form.Label>
-            <Form.Control
-              isInvalid={!!emailCodeError}
-              onInput={onEmailCodeChange}
-              required
-              value={emailCode}
-            />
-            <Form.Control.Feedback type="invalid">{emailCodeError}</Form.Control.Feedback>
-          </Form.Group>
+          <EmailCode
+            emailCode={emailCode}
+            setEmailCode={setEmailCode}
+            emailCodeError={emailCodeError}
+          />
           <Button onClick={onEmailValidationAttempt} variant="primary">
             Email cím validálása
           </Button>
