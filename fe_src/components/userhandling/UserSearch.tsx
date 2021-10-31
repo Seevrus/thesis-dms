@@ -9,7 +9,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import { OtherUserT } from 'store/otherUsersSliceTypes';
-import { searchUsers, selectUsers } from '../../store/otherUsersSlice';
+import { searchUsers, selectSearchResults, setUser } from '../../store/otherUsersSlice';
 import { OptionsT } from '../../interfaces/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import debounce from '../utils/debounce';
@@ -20,8 +20,14 @@ const animatedComponents = makeAnimated();
 const UserSearch = () => {
   const dispatch = useAppDispatch();
 
-  const users = useAppSelector(selectUsers);
+  const users = useAppSelector(selectSearchResults);
   const [userOptions, setUserOptions] = useState<OptionsT[]>();
+
+  useEffect(
+    () => {
+      dispatch(searchUsers(''));
+    }, [],
+  );
 
   useEffect(() => {
     setUserOptions(
@@ -32,6 +38,11 @@ const UserSearch = () => {
     );
   },
   [users]);
+
+  const handleChange = (user: OptionsT) => {
+    const userTaxNumber = Number(user.value);
+    dispatch(setUser(userTaxNumber));
+  };
 
   const handleInputChange = (keyword: string) => {
     if (keyword) dispatch(searchUsers(keyword));
@@ -46,6 +57,7 @@ const UserSearch = () => {
             closeMenuOnSelect
             components={animatedComponents}
             noOptionsMessage={() => 'Nincs több találat'}
+            onChange={handleChange}
             onInputChange={debounce(handleInputChange)}
             options={userOptions}
             placeholder="Felhasználó keresése..."

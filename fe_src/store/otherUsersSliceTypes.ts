@@ -10,6 +10,11 @@ export interface OtherUserT {
   emailStatus: `${EmailStatusEnum}`;
 }
 
+export interface OtherUsersSliceT {
+  searchResults: OtherUserT[];
+  selectedUser: OtherUserT;
+}
+
 export type SearchUserRequestT = string | number;
 
 export interface SearchUserResponseT extends BaseResponseT {

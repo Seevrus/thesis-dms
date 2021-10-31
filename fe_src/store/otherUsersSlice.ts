@@ -1,15 +1,17 @@
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
-import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+// import { find, propEq } from 'ramda';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
 import { BaseResponseT } from './commonTypes';
-import { OtherUserT, SearchUserRequestT, SearchUserResponseT } from './otherUsersSliceTypes';
+import { OtherUsersSliceT, SearchUserRequestT, SearchUserResponseT } from './otherUsersSliceTypes';
 
-const otherUsersAdapter = createEntityAdapter<OtherUserT>({
-  selectId: (state) => state.taxNumber,
-});
-const initialState = otherUsersAdapter.getInitialState();
+const initialState: OtherUsersSliceT = {
+  searchResults: [],
+  selectedUser: undefined,
+};
 
 export const searchUsers = createAsyncThunk<
 SearchUserResponseT, SearchUserRequestT, { rejectValue: BaseResponseT }
@@ -28,16 +30,24 @@ SearchUserResponseT, SearchUserRequestT, { rejectValue: BaseResponseT }
 const otherUsersSlice = createSlice({
   name: 'otherUsers',
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => {
+      const userTaxNumber: number = action.payload;
+      state.selectedUser = state.searchResults.find(
+        (user) => user.taxNumber === userTaxNumber,
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(searchUsers.fulfilled, (state, { payload }) => {
-      otherUsersAdapter.setMany(state, payload.users);
+      state.searchResults = payload.users;
     });
   },
 });
 
-export const {
-  selectAll: selectUsers,
-} = otherUsersAdapter.getSelectors((state: RootState) => state.otherUsers);
+export const selectSearchResults = (state: RootState) => state.otherUsers.searchResults;
+export const selectSelectedUser = (state: RootState) => state.otherUsers.selectedUser;
+
+export const { setUser } = otherUsersSlice.actions;
 
 export default otherUsersSlice.reducer;
