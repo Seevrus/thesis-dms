@@ -9,12 +9,12 @@ import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { LoginStatusEnum } from '../../store/usersSliceTypes';
+import { LoginStatusEnum } from '../../store/userSliceTypes';
 import {
   checkLoginStatus,
   loginExpires,
   userLoginStatus,
-} from '../../store/usersSlice';
+} from '../../store/userSlice';
 
 const NavigationBar = () => {
   const dispatch = useAppDispatch();

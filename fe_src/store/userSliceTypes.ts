@@ -90,7 +90,7 @@ export interface LogoutResponseT extends BaseResponseT {
   loginStatus?: `${LoginStatusEnum}`;
 }
 
-export interface UsersSliceT {
+export interface UserSliceT {
   loginStatus: `${LoginStatusEnum}`;
   expires: number;
   taxNumber: number;

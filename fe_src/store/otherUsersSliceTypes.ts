@@ -1,5 +1,5 @@
 import { BaseResponseT } from './commonTypes';
-import { EmailStatusEnum, UserPermissionsEnum } from './usersSliceTypes';
+import { EmailStatusEnum, UserPermissionsEnum } from './userSliceTypes';
 
 export interface OtherUserT {
   taxNumber: number;

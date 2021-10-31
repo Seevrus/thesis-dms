@@ -2,8 +2,8 @@ import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from './store/hooks';
-import { LoginStatusEnum } from './store/usersSliceTypes';
-import { checkLoginStatus, userLoginStatus } from './store/usersSlice';
+import { LoginStatusEnum } from './store/userSliceTypes';
+import { checkLoginStatus, userLoginStatus } from './store/userSlice';
 import LoadableDocuments from './components/documents/LoadableDocuments';
 import LoadableEmailValidationForm from './components/authenticate/LoadableEmailValidationForm';
 import Header from './components/header/Header';

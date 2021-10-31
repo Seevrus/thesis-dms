@@ -20,8 +20,8 @@ import {
   selectActiveFilter,
 } from '../../store/activityFilterSlice';
 import { listUserActivity, selectActivities } from '../../store/userActivitySlice';
-import { EmailStatusEnum, LoginStatusEnum } from '../../store/usersSliceTypes';
-import { userEmailStatus, userLoginStatus } from '../../store/usersSlice';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
+import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
 import Loading from '../utils/Loading';
 
 import BrowseFilters from './BrowseFilters';

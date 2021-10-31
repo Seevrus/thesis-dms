@@ -8,7 +8,7 @@ import {
 import { useHistory } from 'react-router';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum } from '../../store/usersSliceTypes';
+import { EmailStatusEnum } from '../../store/userSliceTypes';
 import {
   companyName,
   updateProfile,
@@ -16,7 +16,7 @@ import {
   userEmailStatus,
   userRealName,
   userTaxNumber,
-} from '../../store/usersSlice';
+} from '../../store/userSlice';
 import { emailRegex, passwordRegex } from '../utils/helpers';
 
 const { useEffect, useState } = React;

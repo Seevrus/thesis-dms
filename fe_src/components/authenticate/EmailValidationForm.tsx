@@ -8,8 +8,8 @@ import {
 } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum } from '../../store/usersSliceTypes';
-import { userEmailStatus, validateEmailAddress } from '../../store/usersSlice';
+import { EmailStatusEnum } from '../../store/userSliceTypes';
+import { userEmailStatus, validateEmailAddress } from '../../store/userSlice';
 
 const { useEffect, useState } = React;
 

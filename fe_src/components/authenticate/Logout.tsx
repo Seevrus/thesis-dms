@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { useAppDispatch } from '../../store/hooks';
 
-import { logout } from '../../store/usersSlice';
+import { logout } from '../../store/userSlice';
 
 const { useEffect } = React;
 

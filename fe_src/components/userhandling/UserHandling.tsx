@@ -3,8 +3,8 @@ import { Container } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
 import { useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum, LoginStatusEnum } from '../../store/usersSliceTypes';
-import { userEmailStatus, userLoginStatus } from '../../store/usersSlice';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
+import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
 import Loading from '../utils/Loading';
 
 import UserSearch from './UserSearch';

@@ -20,12 +20,12 @@ import {
   ModifyEmailResponseT,
   UpdateProfileRequestT,
   UpdateProfileResponseT,
-  UsersSliceT,
-} from './usersSliceTypes';
+  UserSliceT,
+} from './userSliceTypes';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
 
-const initialState: UsersSliceT = {
+const initialState: UserSliceT = {
   loginStatus: undefined,
   expires: undefined,
   taxNumber: undefined,
@@ -39,7 +39,7 @@ const initialState: UsersSliceT = {
 };
 
 export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
-  'users/checkLoginStatus',
+  'user/checkLoginStatus',
   async () => {
     const response = await axios.get('/api/auth/checkToken.php');
     return response.data;
@@ -49,7 +49,7 @@ export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
 export const login = createAsyncThunk<
 LoginResponseT, LoginRequestT, { rejectValue: BaseResponseT }
 >(
-  'users/login',
+  'user/login',
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/login.php', credentials);
@@ -61,7 +61,7 @@ LoginResponseT, LoginRequestT, { rejectValue: BaseResponseT }
 );
 
 export const logout = createAsyncThunk<LogoutResponseT, void, { rejectValue: BaseResponseT }>(
-  'users/logout',
+  'user/logout',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/logout.php');
@@ -77,7 +77,7 @@ UpdateProfileResponseT,
 UpdateProfileRequestT,
 { rejectValue: BaseResponseT }
 >(
-  'users/updateProfile',
+  'user/updateProfile',
   async (requestData, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/update.php', requestData);
@@ -112,7 +112,7 @@ UpdateProfileRequestT,
 export const validateEmailAddress = createAsyncThunk<
 EmailValidationResponseT, EmailValidationRequestT, { rejectValue: BaseResponseT }
 >(
-  'users/validateEmailAddress',
+  'user/validateEmailAddress',
   async (requestData, { rejectWithValue }) => {
     try {
       const response = await axios.post('/api/user/emailvalidation.php', requestData);
@@ -226,12 +226,12 @@ const usersSlice = createSlice({
   },
 });
 
-export const companyName = (state: RootState) => state.users.companyName;
-export const loginExpires = (state: RootState) => state.users.expires;
-export const userEmail = (state: RootState) => state.users.userEmail;
-export const userEmailStatus = (state: RootState) => state.users.emailStatus;
-export const userLoginStatus = (state: RootState) => state.users.loginStatus;
-export const userRealName = (state: RootState) => state.users.userRealName;
-export const userTaxNumber = (state: RootState) => state.users.taxNumber;
+export const companyName = (state: RootState) => state.user.companyName;
+export const loginExpires = (state: RootState) => state.user.expires;
+export const userEmail = (state: RootState) => state.user.userEmail;
+export const userEmailStatus = (state: RootState) => state.user.emailStatus;
+export const userLoginStatus = (state: RootState) => state.user.loginStatus;
+export const userRealName = (state: RootState) => state.user.userRealName;
+export const userTaxNumber = (state: RootState) => state.user.taxNumber;
 
 export default usersSlice.reducer;

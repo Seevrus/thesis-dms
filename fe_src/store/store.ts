@@ -5,7 +5,7 @@ import activityFilterSlice from './activityFilterSlice';
 import documentsSlice from './documentsSlice';
 import otherUsersSlice from './otherUsersSlice';
 import userActivityScile from './userActivitySlice';
-import usersSlice from './usersSlice';
+import userSlice from './userSlice';
 
 const store = configureStore({
   reducer: {
@@ -13,7 +13,7 @@ const store = configureStore({
     documents: documentsSlice,
     otherUsers: otherUsersSlice,
     userActivity: userActivityScile,
-    users: usersSlice,
+    user: userSlice,
   },
 });
 
