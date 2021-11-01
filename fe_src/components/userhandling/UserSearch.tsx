@@ -9,7 +9,12 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import { OtherUserT } from 'store/otherUsersSliceTypes';
-import { searchUsers, selectSearchResults, setUser } from '../../store/otherUsersSlice';
+import {
+  searchUsers,
+  selectSearchResults,
+  selectSelectedUser,
+  setUser,
+} from '../../store/otherUsersSlice';
 import { OptionsT } from '../../interfaces/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import debounce from '../utils/debounce';
@@ -20,7 +25,9 @@ const UserSearch = () => {
   const dispatch = useAppDispatch();
 
   const users = useAppSelector(selectSearchResults);
+  const selectedUser = useAppSelector(selectSelectedUser);
   const [userOptions, setUserOptions] = useState<OptionsT[]>();
+  const [activeOption, setActiveOption] = useState<OptionsT>(undefined);
 
   useEffect(
     () => {
@@ -37,6 +44,15 @@ const UserSearch = () => {
     );
   },
   [users]);
+
+  useEffect(() => {
+    if (selectedUser) {
+      setActiveOption({
+        label: selectedUser.userRealName,
+        value: String(selectedUser.taxNumber),
+      });
+    }
+  }, [selectedUser]);
 
   const handleChange = (user: OptionsT) => {
     const userTaxNumber = Number(user.value);
@@ -60,6 +76,7 @@ const UserSearch = () => {
             onInputChange={debounce(handleInputChange)}
             options={userOptions}
             placeholder="Felhasználó keresése..."
+            value={activeOption}
           />
         </Col>
       </Row>

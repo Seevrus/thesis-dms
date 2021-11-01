@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 
 import { useAppSelector } from '../../store/hooks';
+import { selectSelectedUser } from '../../store/otherUsersSlice';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
 import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
+import CompanyName from '../form-components/CompanyName';
+import TaxNumber from '../form-components/TaxNumber';
+import UserRealName from '../form-components/UserRealName';
 import Loading from '../utils/Loading';
 
 import UserSearch from './UserSearch';
@@ -34,6 +38,19 @@ const UserHandling = () => {
   }, [emailStatus, history, loginStatus]);
   // End of redirections
 
+  const selectedUser = useAppSelector(selectSelectedUser);
+  const [companyName, setCompanyName] = useState('');
+  const [taxNumber, setTaxNumber] = useState('');
+  const [userRealName, setUserRealName] = useState('');
+
+  useEffect(() => {
+    if (selectedUser) {
+      setCompanyName(selectedUser.companyName);
+      setTaxNumber(String(selectedUser.taxNumber));
+      setUserRealName(selectedUser.userRealName);
+    }
+  }, [selectedUser]);
+
   if (isComponentLoading) {
     return (
       <Container className="mt-5 mb-5">
@@ -46,6 +63,28 @@ const UserHandling = () => {
     <Container className="mt-5 mb-5">
       <h3 className="page-title text-center">Felhasználók kezelése</h3>
       <UserSearch />
+      {selectedUser
+      && (
+      <Container className="form-container">
+        <Form>
+          <TaxNumber
+            disabled
+            taxNumber={taxNumber}
+            feedback={false}
+          />
+          <UserRealName
+            disabled={false}
+            userRealName={userRealName}
+            setUserRealName={setUserRealName}
+          />
+          <CompanyName
+            disabled={false}
+            companyName={companyName}
+            setCompanyName={setCompanyName}
+          />
+        </Form>
+      </Container>
+      )}
     </Container>
   );
 };

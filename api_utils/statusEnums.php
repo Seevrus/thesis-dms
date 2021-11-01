@@ -20,6 +20,12 @@ abstract class USER_PERMISSIONS
   const DOCUMENT_CREATOR = 'DOCUMENT_CREATOR';
 };
 
+abstract class USER_STATUS
+{
+  const INACTIVE = 'INACTIVE';
+  CONST ACTIVE = 'ACTIVE';
+}
+
 function mapDbUserPermission($dbUserPermission) {
   switch ($dbUserPermission) {
   case 0:
@@ -65,6 +71,24 @@ function mapEmailStatusToDb($emailStatus) {
     return 1;
   case EMAIL_STATUS::VALID_EMAIL:
     return 2;
+  }
+}
+
+function mapDbUserStatus($dbUserStatus) {
+  switch ($dbUserStatus) {
+    case 0:
+      return USER_STATUS::INACTIVE;
+    case 1:
+      return USER_STATUS::ACTIVE;
+  }
+}
+
+function mapUserStatusToDb($userStatus) {
+  switch ($userStatus) {
+    case USER_STATUS::INACTIVE:
+      return 0;
+    case USER_STATUS::ACTIVE:
+      return 1;
   }
 }
 ?>

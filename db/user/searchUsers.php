@@ -16,7 +16,8 @@ function searchUsers(PDO $pdo, string $query): string {
         u.user_status AS userStatus,
         u.user_real_name AS userRealName,
         u.user_email AS userEmail,
-        u.email_status AS emailStatus
+        u.email_status AS emailStatus,
+        u.user_login_attempt AS loginAttempts
       FROM user u
       JOIN company c ON u.company_code = c.company_id
       WHERE
@@ -29,12 +30,34 @@ function searchUsers(PDO $pdo, string $query): string {
     $fetchUserStmt = $pdo->prepare($fetchUserQuery);
     $fetchUserStmt->execute(array( ':lm' => $USER_LIMIT ));
 
-    $fetchedUsers = $fetchUserStmt->fetchAll(PDO::FETCH_OBJ);
+    // obtain user permissions
+    $userPermissionsQuery = 'SELECT
+      *
+    FROM user_permissions
+    WHERE user_tax_number = :utn';
+    $userPermissionsStmt = $pdo->prepare($userPermissionsQuery);
+
+    $usersResult = array();
+    while ($user = $fetchUserStmt->fetch(PDO::FETCH_ASSOC)) {
+      $userPermissionsStmt->execute(array( ':utn' => $user["taxNumber"]));
+      $userPermissionRows = $userPermissionsStmt->fetchAll(PDO::FETCH_ASSOC);
+      $userPermissions = array();
+      foreach ($userPermissionRows as $row) {
+        array_push($userPermissions, mapDbUserPermission($row['user_permission']));
+      }
+
+      $extendedUser = $user; // PHP copies the array by default
+      $extendedUser["userStatus"] = mapDbUserStatus($user["userStatus"]);
+      $extendedUser["emailStatus"] = mapDbEmailStatus($user["emailStatus"]);
+      $extendedUser["userPermissions"] = $userPermissions;
+      array_push($usersResult, $extendedUser);
+    }
+
     return json_encode(
       array(
         'outcome' => 'success',
         'message' => 'Users successfully fetched',
-        'users' => $fetchedUsers,
+        'users' => $usersResult,
       )
     );
   } catch (PDOException $e) {

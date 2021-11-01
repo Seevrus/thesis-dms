@@ -127,8 +127,8 @@ const Profile = () => {
           taxNumber={originalTaxNumber}
           feedback={false}
         />
-        <UserRealName value={originalUserRealName} />
-        <CompanyName value={originalCompanyName} />
+        <UserRealName userRealName={originalUserRealName} />
+        <CompanyName companyName={originalCompanyName} />
         <EmailAddress
           emailAddress={emailAddress}
           setEmailAddress={setEmailAddress}
