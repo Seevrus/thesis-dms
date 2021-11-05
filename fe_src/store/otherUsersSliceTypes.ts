@@ -1,5 +1,5 @@
 import { BaseResponseT } from './commonTypes';
-import { EmailStatusEnum, UserPermissionsEnum } from './userSliceTypes';
+import { EmailStatusEnum, UserPermissionsEnum, UserStatusEnum } from './userSliceTypes';
 
 interface CompanyWithIdT {
   id: number;
@@ -10,10 +10,10 @@ export interface OtherUserT {
   taxNumber: number;
   companyName: string;
   userRealName: string;
-  userStatus: number;
+  userStatus: `${UserStatusEnum}`;
   userEmail: string;
   emailStatus: `${EmailStatusEnum}`;
-  loginAttempts: number;
+  lockedOut: boolean;
   userPermissions: `${UserPermissionsEnum}`[];
 }
 

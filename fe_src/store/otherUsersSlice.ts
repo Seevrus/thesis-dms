@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
+import { forEach } from 'ramda';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line import/no-cycle
@@ -11,6 +12,8 @@ import {
   SearchUserRequestT,
   SearchUserResponseT,
 } from './otherUsersSliceTypes';
+import { UpdateProfileRequestT, UpdateProfileResponseT } from './userSliceTypes';
+import { checkUpdateProfileResponseForErrors } from './helpers';
 
 const initialState: OtherUsersSliceT = {
   companies: [],
@@ -46,6 +49,30 @@ FetchCompaniesResponseT, null, { rejectValue: BaseResponseT }
   },
 );
 
+export const updateUser = createAsyncThunk<
+UpdateProfileResponseT,
+UpdateProfileRequestT,
+{ rejectValue: BaseResponseT }
+>(
+  'otherUsers/updateUser',
+  async (requestData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/api/user/update.php', requestData);
+      // TODO: I do not really handle partial errors other than displaying them
+      const errors = checkUpdateProfileResponseForErrors(response);
+      if (errors) {
+        return rejectWithValue({
+          outcome: 'failure',
+          message: errors,
+        });
+      }
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  },
+);
+
 const otherUsersSlice = createSlice({
   name: 'otherUsers',
   initialState,
@@ -61,8 +88,21 @@ const otherUsersSlice = createSlice({
     builder.addCase(searchUsers.fulfilled, (state, { payload }) => {
       state.searchResults = payload.users;
     });
+
     builder.addCase(fetchCompanies.fulfilled, (state, { payload }) => {
       state.companies = payload.companies;
+    });
+
+    builder.addCase(updateUser.fulfilled, (state, { payload }) => {
+      forEach((payloadElement) => {
+        if (payloadElement.outcome === 'success') {
+          state.selectedUser[payloadElement.value] = payloadElement[payloadElement.value];
+        }
+      }, payload);
+    });
+
+    builder.addCase(updateUser.rejected, (_, { payload }) => {
+      throw new Error(payload.message || 'API returned an error');
     });
   },
 });

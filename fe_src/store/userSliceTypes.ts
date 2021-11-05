@@ -2,7 +2,7 @@ import { BaseResponseT, OutcomeT } from './commonTypes';
 
 export enum UserPermissionsEnum {
   INACTIVE = 'INACTIVE',
-  USER = 'USER',
+  REGULAR = 'REGULAR',
   ACTIVITY_ADMINISTRATOR = 'ACTIVITY_ADMINISTRATOR',
   USER_ADMINISTRATOR = 'USER_ADMINISTRATOR',
   DOCUMENT_CREATOR = 'DOCUMENT_CREATOR',
@@ -19,29 +19,42 @@ export enum LoginStatusEnum {
   LOGGED_IN = 'LOGGED_IN',
 }
 
+export enum UserStatusEnum {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
 export interface UpdateProfileRequestT {
   taxNumber: number;
   userRealName?: string;
   companyName?: string;
-  email?: string;
+  userEmail?: string;
+  userStatus?: `${UserStatusEnum}`;
+  emailStatus?: `${EmailStatusEnum}`;
   ownEmail?: boolean;
   password?: string;
   attempts?: boolean;
+  userPermissions?: `${UserPermissionsEnum}`[];
 }
 
 interface UserRealNameResponseT extends BaseResponseT {
   value: 'userRealName';
-  userRealName: string;
+  userRealName?: string;
 }
 
 interface CompanyNameResponseT extends BaseResponseT {
   value: 'companyName';
-  companyName: string;
+  companyName?: string;
+}
+
+interface UserStatusResponseT extends BaseResponseT {
+  value: 'userStatus';
+  userStatus: `${UserStatusEnum}`;
 }
 
 export interface ModifyEmailResponseT extends BaseResponseT {
   value: 'userEmail';
-  emailStatus?: EmailStatusEnum;
+  emailStatus?: `${EmailStatusEnum}`;
   userEmail: string;
   ownEmail: boolean;
 }
@@ -54,12 +67,19 @@ interface AttemptsResponseT extends BaseResponseT {
   value: 'attempts';
 }
 
+interface UserPermissionsResponseT extends BaseResponseT {
+  value: 'userPermissions';
+  userPermissions: `${UserPermissionsEnum}`[];
+}
+
 export type UpdateProfileResponseT = [
   UserRealNameResponseT?,
   CompanyNameResponseT?,
+  UserStatusResponseT?,
   ModifyEmailResponseT?,
   ModifyPasswordResponseT?,
   AttemptsResponseT?,
+  UserPermissionsResponseT?,
 ];
 
 export interface EmailValidationRequestT {

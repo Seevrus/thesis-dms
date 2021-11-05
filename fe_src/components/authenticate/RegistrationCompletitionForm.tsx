@@ -90,7 +90,7 @@ const RegistrationCompletitionForm = () => {
       setIsComponentLoading(true);
       dispatch(updateProfile({
         taxNumber,
-        email: emailAddress,
+        userEmail: emailAddress,
         ownEmail: true,
         password: newLoginPassword,
       }))
@@ -123,7 +123,6 @@ const RegistrationCompletitionForm = () => {
           <EmailAddress
             emailAddress={emailAddress}
             setEmailAddress={setEmailAddress}
-            feedback={false}
             emailAddressError={emailAddressError}
           />
           <EmailAddress

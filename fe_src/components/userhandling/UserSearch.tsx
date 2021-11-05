@@ -38,7 +38,7 @@ const UserSearch = () => {
   useEffect(() => {
     setUserOptions(
       map((user: OtherUserT): OptionsT => ({
-        label: user.userRealName,
+        label: `${user.taxNumber}: ${user.userRealName} (${user.userEmail ?? '-'})`,
         value: String(user.taxNumber),
       }), users),
     );
@@ -60,7 +60,7 @@ const UserSearch = () => {
   };
 
   const handleInputChange = (keyword: string) => {
-    if (keyword) dispatch(searchUsers(keyword));
+    dispatch(searchUsers(keyword));
   };
 
   return (
@@ -71,9 +71,10 @@ const UserSearch = () => {
             className="filter-list-dropdown"
             closeMenuOnSelect
             components={animatedComponents}
+            isSearchable
             noOptionsMessage={() => 'Nincs több találat'}
             onChange={handleChange}
-            onInputChange={debounce(handleInputChange)}
+            onInputChange={debounce(handleInputChange, 500)}
             options={userOptions}
             placeholder="Felhasználó keresése..."
             value={activeOption}

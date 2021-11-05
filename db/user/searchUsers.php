@@ -17,7 +17,8 @@ function searchUsers(PDO $pdo, string $query): string {
         u.user_real_name AS userRealName,
         u.user_email AS userEmail,
         u.email_status AS emailStatus,
-        u.user_login_attempt AS loginAttempts
+        u.user_login_attempt,
+        u.user_last_login_attempt
       FROM user u
       JOIN company c ON u.company_code = c.company_id
       WHERE
@@ -50,6 +51,25 @@ function searchUsers(PDO $pdo, string $query): string {
       $extendedUser["userStatus"] = mapDbUserStatus($user["userStatus"]);
       $extendedUser["emailStatus"] = mapDbEmailStatus($user["emailStatus"]);
       $extendedUser["userPermissions"] = $userPermissions;
+      
+      // is user locked out?
+      $MAX_ATTEMPTS_PER_TIMESPAN = 3;
+      if ($user["user_login_attempt"] <= $MAX_ATTEMPTS_PER_TIMESPAN) {
+        $extendedUser["lockedOut"] = false;
+      } else {
+        $MAX_ATTEMPT_TIMESPAN_HOURS = 1;
+        $lastTrialTimestamp = strtotime($user["user_last_login_attempt"]);
+        $now = time();
+        $hoursSinceLastTrial = abs($now - $lastTrialTimestamp)/(60*60);
+        if ($hoursSinceLastTrial > $MAX_ATTEMPT_TIMESPAN_HOURS) {
+          $extendedUser["lockedOut"] = false;
+        } else {
+          $extendedUser["lockedOut"] = true;
+        }
+      }
+      unset($extendedUser["user_login_attempt"]);
+      unset($extendedUser["user_last_login_attempt"]);
+
       array_push($usersResult, $extendedUser);
     }
 

@@ -5,8 +5,8 @@ interface EmailAddressProps {
   label?: string;
   emailAddress: string;
   setEmailAddress: React.Dispatch<React.SetStateAction<string>>;
-  feedback: boolean;
-  emailAddressError: string;
+  feedback?: boolean;
+  emailAddressError?: string;
   updatable?: boolean;
   updateEmailAddress?: () => void;
 }
@@ -15,7 +15,7 @@ const EmailAddress = ({
   label = 'Email cím',
   emailAddress,
   setEmailAddress,
-  feedback,
+  feedback = false,
   emailAddressError,
   updatable = false,
   updateEmailAddress,
@@ -32,7 +32,7 @@ const EmailAddress = ({
           isInvalid={!!emailAddressError}
           onInput={onEmailAddressChange}
           required
-          value={emailAddress}
+          value={emailAddress ?? ''}
         />
         {updatable && (
           <Button

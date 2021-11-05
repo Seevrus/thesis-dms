@@ -8,12 +8,11 @@ function updateEmail(PDO $pdo, string $taxNumber, string $email, bool $skipValid
     $email = htmlspecialchars($email, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
     if ($skipValidation) {
-      $updateEmailQuery = 'UPDATE user SET user_email = :em, email_status = :st WHERE user_tax_number = :utn';
+      $updateEmailQuery = 'UPDATE user SET user_email = :em WHERE user_tax_number = :utn';
       $updateEmailStmt = $pdo->prepare($updateEmailQuery);
       $updateEmailStmt->execute(
         array(
           ':em' => $email,
-          ':st' => mapEmailStatusToDb(EMAIL_STATUS::VALID_EMAIL),
           ':utn' => $taxNumber,
         )
       );

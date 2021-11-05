@@ -14,7 +14,9 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
       'message' => 'You do not have permission to modify this value',
     );
   } else {
-    $updateEmailJson = updateEmail($pdo, $requestData->taxNumber, $requestData->email, true);
+    $updateEmailJson = updateEmail(
+      $pdo, $requestData->taxNumber, $requestData->userEmail, true
+    );
     $updateEmail = json_decode($updateEmailJson);
     if ($updateEmail->outcome == 'failure') {
       $emailModifyResult = array(
@@ -43,7 +45,9 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
       'message' => 'You do not have permission to modify this value',
     );
   } else {
-    $updateEmailJson = updateEmail($pdo, $_SESSION['taxNumber'], $requestData->email, false);
+    $updateEmailJson = updateEmail(
+      $pdo, $_SESSION['taxNumber'], $requestData->userEmail, false
+    );
     $updateEmail = json_decode($updateEmailJson);
     if ($updateEmail->outcome == 'failure') {
       $emailModifyResult = array(
@@ -63,7 +67,7 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
       $message .= "Tisztelettel," . $newLine;
       $message .= "Dr. Till Zoltán" . $newLine;
   
-      emailer($requestData->email, "Dokumentumkezelő regisztráció", $message);
+      emailer($requestData->userEmail, "Dokumentumkezelő regisztráció", $message);
 
       // Update email status
       $emailStatus = mapDbEmailStatus($updateEmail->email_status);

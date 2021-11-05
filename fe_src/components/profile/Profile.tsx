@@ -75,7 +75,7 @@ const Profile = () => {
       setIsComponentLoading(true);
       dispatch(updateProfile({
         taxNumber: originalTaxNumber,
-        email: emailAddress,
+        userEmail: emailAddress,
         ownEmail: true,
       }))
         .then(() => history.push('/validate-email'))

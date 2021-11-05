@@ -1,13 +1,5 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
-import {
-  filter,
-  head,
-  mapAccum,
-  pipe,
-  propEq,
-// @ts-ignore
-} from 'ramda';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { BaseResponseT } from './commonTypes';
 import {
@@ -24,6 +16,7 @@ import {
 } from './userSliceTypes';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
+import { checkUpdateProfileResponseForErrors } from './helpers';
 
 const initialState: UserSliceT = {
   loginStatus: undefined,
@@ -82,20 +75,7 @@ UpdateProfileRequestT,
     try {
       const response = await axios.post('/api/user/update.php', requestData);
       // TODO: I do not really handle partial errors other than displaying them
-      const errors = head(
-        pipe(
-          filter(propEq('outcome', 'failure')),
-          mapAccum(
-            (message: string, singleResponse: any) => [
-              message
-                ? `${message}. ${singleResponse.value}: ${singleResponse.message}`
-                : `${singleResponse.value}: ${singleResponse.message}`,
-              singleResponse.message,
-            ],
-            '',
-          ),
-        )(response.data),
-      );
+      const errors = checkUpdateProfileResponseForErrors(response);
       if (errors) {
         return rejectWithValue({
           outcome: 'failure',

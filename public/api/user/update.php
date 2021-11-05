@@ -48,9 +48,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       array_push($requestAnswer, $companyModifyResult);
     }
 
-    if (!!$requestData->email) {
+    if (!!$requestData->userStatus) {
+      require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/user_modifiers/userStatus.php';
+      array_push($requestAnswer, $userStatusModifyResult);
+    }
+
+    if (!!$requestData->userEmail) {
       require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/user_modifiers/email.php';
       array_push($requestAnswer, $emailModifyResult);
+    }
+
+    if (!!$requestData->emailStatus) {
+      require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/user_modifiers/emailStatus.php';
+      array_push($requestAnswer, $emailStatusModifyResult);
     }
 
     if (!!$requestData->password) {
@@ -61,6 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($requestData->attempts) {
       require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/user_modifiers/attempts.php';
       array_push($requestAnswer, $attemptsModifyResult);
+    }
+
+    if (array_key_exists('userPermissions', $requestData)) {
+      require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/user_modifiers/userPermissions.php';
+      array_push($requestAnswer, $userPermissionsModifyResult);
     }
 
     echo(json_encode($requestAnswer));
