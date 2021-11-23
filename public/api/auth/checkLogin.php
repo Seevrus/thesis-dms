@@ -41,7 +41,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
   http_response_code(405);
   echo json_encode(
     array(
-      'outcome' => 'error',
+      'outcome' => 'failure',
       'message' => 'Method not allowed',
     )
   );

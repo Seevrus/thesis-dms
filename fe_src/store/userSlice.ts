@@ -34,7 +34,7 @@ const initialState: UserSliceT = {
 export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
   'user/checkLoginStatus',
   async () => {
-    const response = await axios.get('/api/auth/checkToken.php');
+    const response = await axios.get('/api/auth/checkLogin.php');
     return response.data;
   },
 );
