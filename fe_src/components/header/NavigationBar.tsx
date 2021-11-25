@@ -4,8 +4,7 @@ import {
   Navbar,
 } from 'react-bootstrap';
 import Countdown from 'react-countdown';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { LoginStatusEnum } from '../../store/userSliceTypes';
@@ -17,7 +16,7 @@ import {
 
 const NavigationBar = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const loggedin = useAppSelector(userLoginStatus);
   const expires = useAppSelector(loginExpires);
@@ -26,7 +25,7 @@ const NavigationBar = () => {
     const idleCheck = setInterval(() => {
       if ((expires * 1000 - Date.now() < 0)) {
         clearInterval(idleCheck);
-        history.push('/logout');
+        navigate('/logout');
       }
     }, 5000);
   }
