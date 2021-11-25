@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { LoginStatusEnum } from './store/userSliceTypes';
 import { checkLoginStatus, userLoginStatus } from './store/userSlice';
-import Header from './components/header/Header';
+import Admin from './components/dashboard/Admin';
 import LoadableDocuments from './components/documents/LoadableDocuments';
 import LoadableEmailValidationForm from './components/authenticate/LoadableEmailValidationForm';
 import LoadableLoginForm from './components/authenticate/LoadableLoginForm';
@@ -36,15 +36,14 @@ const App = () => {
   } else if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
     rootComponent = <LoadableLoginForm />;
   } else {
-    rootComponent = <LoadableDocuments />;
+    rootComponent = <Admin />;
   }
 
   return (
     <>
       <Router>
-        <Header />
         <Routes>
-          <Route path="/" element={rootComponent} />
+          <Route path="/*" element={rootComponent} />
           <Route
             path="/complete-registration"
             element={<LoadableRegistrationCompletitionForm />}
