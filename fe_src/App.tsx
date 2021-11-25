@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { LoginStatusEnum } from './store/userSliceTypes';
 import { checkLoginStatus, userLoginStatus } from './store/userSlice';
 import LoadableDocuments from './components/documents/LoadableDocuments';
 import LoadableEmailValidationForm from './components/authenticate/LoadableEmailValidationForm';
-import Header from './components/header/Header';
 import LoadableLoginForm from './components/authenticate/LoadableLoginForm';
 import LoadableLogout from './components/authenticate/LoadableLogout';
 import LoadableProfile from './components/profile/LoadableProfile';
 import LoadableRegistrationCompletitionForm from './components/authenticate/LoadableRegistrationCompletitionForm';
 import LoadableUserActivity from './components/useractivity/LoadableUserActivity';
 import LoadableUserHandling from './components/userhandling/LoadableUserHandling';
+import Loading from './components/utils/Loading';
 import setupCsrfToken from './services/csrfService';
 
 const App = () => {
@@ -30,29 +30,32 @@ const App = () => {
   }, [loggedinState]);
 
   let rootComponent;
-  if (loginStatus === null) {
-    rootComponent = null;
+  if (!loginStatus) {
+    rootComponent = <Loading />;
   } else if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
-    rootComponent = LoadableLoginForm;
+    rootComponent = <LoadableLoginForm />;
   } else {
-    rootComponent = LoadableDocuments;
+    rootComponent = <LoadableDocuments />;
   }
 
   return (
     <>
       <Router>
         <Header />
-        <Switch>
-          <Route exact path="/" component={rootComponent} />
-          <Route exact path="/complete-registration" component={LoadableRegistrationCompletitionForm} />
-          <Route exact path="/documents" component={LoadableDocuments} />
-          <Route exact path="/login" component={LoadableLoginForm} />
-          <Route exact path="/logout" component={LoadableLogout} />
-          <Route exact path="/profile" component={LoadableProfile} />
-          <Route exact path="/user-activity" component={LoadableUserActivity} />
-          <Route exact path="/user-handling" component={LoadableUserHandling} />
-          <Route exact path="/validate-email" component={LoadableEmailValidationForm} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={rootComponent} />
+          <Route
+            path="/complete-registration"
+            element={<LoadableRegistrationCompletitionForm />}
+          />
+          <Route path="/documents" element={<LoadableDocuments />} />
+          <Route path="/login" element={<LoadableLoginForm />} />
+          <Route path="/logout" element={<LoadableLogout />} />
+          <Route path="/profile" element={<LoadableProfile />} />
+          <Route path="/user-activity" element={<LoadableUserActivity />} />
+          <Route path="/user-handling" element={<LoadableUserHandling />} />
+          <Route path="/validate-email" element={<LoadableEmailValidationForm />} />
+        </Routes>
       </Router>
     </>
   );

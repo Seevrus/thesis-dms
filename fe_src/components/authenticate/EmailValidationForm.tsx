@@ -6,7 +6,7 @@ import {
   Container,
   Form,
 } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
@@ -22,7 +22,7 @@ import Loading from '../utils/Loading';
 
 const EmailValidationForm = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
@@ -38,11 +38,11 @@ const EmailValidationForm = () => {
     }
 
     if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
-      history.push('/login');
+      navigate('/login');
     } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
-      history.push('/complete-registration');
+      navigate('/complete-registration');
     }
-  }, [emailStatus, history, loginStatus]);
+  }, [emailStatus, navigate, loginStatus]);
   // End of redirections
 
   const [isFormValidated, setIsFormValidated] = useState<boolean>(false);
@@ -70,7 +70,7 @@ const EmailValidationForm = () => {
       setIsFormValidated(true);
       setIsComponentLoading(true);
       dispatch(validateEmailAddress({ emailCode }))
-        .then(() => history.push('/documents'))
+        .then(() => navigate('/documents'))
         .catch((err) => {
           setIsComponentLoading(false);
           setIsFormValidated(false);

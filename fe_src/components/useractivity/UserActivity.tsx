@@ -3,7 +3,7 @@ import {
   Container,
   Table,
 } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import debounce from '../utils/debounce';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -31,7 +31,7 @@ import SaveLayout from './SaveLayout';
 
 const UserActivity = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
@@ -46,13 +46,13 @@ const UserActivity = () => {
     }
 
     if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
-      history.push('/login');
+      navigate('/login');
     } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
-      history.push('/complete-registration');
+      navigate('/complete-registration');
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
-      history.push('/validate-email');
+      navigate('/validate-email');
     }
-  }, [emailStatus, history, loginStatus]);
+  }, [emailStatus, navigate, loginStatus]);
   // End of redirections
 
   // store integration

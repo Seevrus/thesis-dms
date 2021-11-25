@@ -6,7 +6,7 @@ import {
   Container,
   Form,
 } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
 import {
@@ -22,7 +22,7 @@ import Loading from '../utils/Loading';
 
 const RegistrationCompletitionForm = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
@@ -38,11 +38,11 @@ const RegistrationCompletitionForm = () => {
     }
 
     if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
-      history.push('/login');
+      navigate('/login');
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
-      history.push('/validate-email');
+      navigate('/validate-email');
     }
-  }, [emailStatus, history, loginStatus]);
+  }, [emailStatus, navigate, loginStatus]);
   // End of redirections
 
   const taxNumber = useAppSelector(userTaxNumber);
@@ -94,7 +94,7 @@ const RegistrationCompletitionForm = () => {
         ownEmail: true,
         password: newLoginPassword,
       }))
-        .then(() => history.push('/validate-email'))
+        .then(() => navigate('/validate-email'))
         .catch((err) => {
           setIsComponentLoading(false);
           setIsFormValidated(false);

@@ -5,7 +5,7 @@ import {
   Container,
   Form,
 } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum } from '../../store/userSliceTypes';
@@ -17,7 +17,7 @@ import Loading from '../utils/Loading';
 
 const LoginForm = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
@@ -33,13 +33,13 @@ const LoginForm = () => {
     }
 
     if (emailStatus === EmailStatusEnum.NO_EMAIL) {
-      history.push('/complete-registration');
+      navigate('/complete-registration');
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
-      history.push('/validate-email');
+      navigate('/validate-email');
     } else if (emailStatus === EmailStatusEnum.VALID_EMAIL) {
-      history.push('/documents');
+      navigate('/documents');
     }
-  }, [emailStatus, history, loginStatus]);
+  }, [emailStatus, navigate, loginStatus]);
   // End of redirections
 
   const [isFormValidated, setIsFormValidated] = useState<boolean>(false);
@@ -98,9 +98,6 @@ const LoginForm = () => {
         />
         <Button onClick={onLoginAttempt} variant="primary">
           Belépés
-        </Button>
-        <Button disabled variant="secondary">
-          Elfelejtettem a jelszavam
         </Button>
       </Form>
       {loginError && (

@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../store/hooks';
 
 import { logout } from '../../store/userSlice';
 
 const Logout = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(logout())
-      .then(() => history.push('/'));
-  }, [dispatch, history]);
+      .then(() => navigate('/'));
+  }, [dispatch, navigate]);
 
   return (
     <Container>

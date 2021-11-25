@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Form } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
@@ -23,7 +23,7 @@ import Loading from '../utils/Loading';
 
 const Profile = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
@@ -39,13 +39,13 @@ const Profile = () => {
     }
 
     if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
-      history.push('/login');
+      navigate('/login');
     } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
-      history.push('/complete-registration');
+      navigate('/complete-registration');
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
-      history.push('/validate-email');
+      navigate('/validate-email');
     }
-  }, [emailStatus, history, loginStatus]);
+  }, [emailStatus, navigate, loginStatus]);
   // End of redirections
 
   // State of the form
@@ -78,7 +78,7 @@ const Profile = () => {
         userEmail: emailAddress,
         ownEmail: true,
       }))
-        .then(() => history.push('/validate-email'))
+        .then(() => navigate('/validate-email'))
         .catch((err) => {
           setIsComponentLoading(false);
           setEmailAddressError(err.message);

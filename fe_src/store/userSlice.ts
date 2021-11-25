@@ -16,7 +16,7 @@ import {
 } from './userSliceTypes';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
-import { checkUpdateProfileResponseForErrors } from './helpers';
+import { checkUpdateProfileResponseForErrors, sleep } from './helpers';
 
 const initialState: UserSliceT = {
   loginStatus: undefined,
@@ -35,6 +35,7 @@ export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
   'user/checkLoginStatus',
   async () => {
     const response = await axios.get('/api/auth/checkLogin.php');
+    await sleep();
     return response.data;
   },
 );

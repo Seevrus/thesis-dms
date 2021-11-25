@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
@@ -12,7 +12,7 @@ import SingleDocument from './SingleDocument';
 
 const Documents = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
@@ -32,13 +32,13 @@ const Documents = () => {
     }
 
     if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
-      history.push('/login');
+      navigate('/login');
     } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
-      history.push('/complete-registration');
+      navigate('/complete-registration');
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
-      history.push('/validate-email');
+      navigate('/validate-email');
     }
-  }, [emailStatus, history, loginStatus]);
+  }, [emailStatus, navigate, loginStatus]);
   // End of redirections
 
   const documentIds = useAppSelector(selectDocumentIds) as number[];
