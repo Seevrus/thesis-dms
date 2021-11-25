@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { LoginStatusEnum } from './store/userSliceTypes';
 import { checkLoginStatus, userLoginStatus } from './store/userSlice';
+import Header from './components/header/Header';
 import LoadableDocuments from './components/documents/LoadableDocuments';
 import LoadableEmailValidationForm from './components/authenticate/LoadableEmailValidationForm';
 import LoadableLoginForm from './components/authenticate/LoadableLoginForm';
