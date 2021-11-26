@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/prop-types */
 /*!
 
@@ -14,7 +13,8 @@
 
 =========================================================
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* The above copyright notice and this permission notice
+shall be included in all copies or substantial portions of the Software.
 
 */
 import * as React from 'react';
@@ -36,23 +36,18 @@ function Sidebar({ color, image, routes }) {
       />
       <div className="sidebar-wrapper">
         <div className="logo d-flex align-items-center justify-content-start">
-          <a
-            href="https://www.creative-tim.com?ref=lbd-sidebar"
-            className="simple-text logo-mini mx-1"
-          >
-            <div className="logo-img">
-              <img
-                src={logo}
-                alt="..."
-              />
-            </div>
-          </a>
-          <a className="simple-text" href="http://www.creative-tim.com">
-            Creative Tim
-          </a>
+          <div className="logo-img">
+            <img
+              src={logo}
+              alt="..."
+            />
+          </div>
+          <span className="simple-text">
+            Thesis-DMS
+          </span>
         </div>
         <Nav>
-          {routes.map((prop, key) => {
+          {routes.map((prop) => {
             if (!prop.redirect) {
               return (
                 <li
@@ -61,11 +56,14 @@ function Sidebar({ color, image, routes }) {
                       ? 'active active-pro'
                       : activeRoute(prop.layout + prop.path)
                   }
-                  key={key}
+                  key={prop.id}
                 >
                   <NavLink
                     to={prop.layout + prop.path}
-                    className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                    // eslint-disable-next-line arrow-body-style
+                    className={({ isActive }) => {
+                      return isActive ? 'nav-link active' : 'nav-link';
+                    }}
                   >
                     <i className={prop.icon} />
                     <p>{prop.name}</p>

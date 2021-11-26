@@ -12,50 +12,56 @@
 
 =========================================================
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* The above copyright notice and this permission notice
+shall be included in all copies or substantial portions of the Software.
 
 */
 import * as React from 'react';
-import Dashboard from '../views/Dashboard';
-import UserProfile from '../views/UserProfile';
-import TableList from '../views/TableList';
+import { v4 as uuidv4 } from 'uuid';
+
 import Typography from '../views/Typography';
 import Icons from '../views/Icons';
-import Maps from '../views/Maps';
-import Notifications from '../views/Notifications';
-import Upgrade from '../views/Upgrade';
+import LoadableDocuments from '../documents/LoadableDocuments';
+import LoadableProfile from '../profile/LoadableProfile';
+import LoadableUserActivity from '../useractivity/LoadableUserActivity';
+import LoadableUserHandling from '../userhandling/LoadableUserHandling';
+import TableList from '../views/TableList';
 
 const dashboardRoutes = [
   {
-    upgrade: true,
-    path: '/upgrade',
-    name: 'Upgrade to PRO',
-    icon: 'nc-icon nc-alien-33',
-    component: <Upgrade />,
-    layout: '',
-  },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    icon: 'nc-icon nc-chart-pie-35',
-    component: <Dashboard />,
-    layout: '',
-  },
-  {
-    path: '/user',
-    name: 'User Profile',
+    id: uuidv4(),
+    path: '/profile',
+    name: 'Profilom',
     icon: 'nc-icon nc-circle-09',
-    component: <UserProfile />,
+    component: <LoadableProfile />,
     layout: '',
   },
   {
-    path: '/table',
-    name: 'Table List',
+    id: uuidv4(),
+    path: '/documents',
+    name: 'Dokumentumok',
+    icon: 'nc-icon nc-email-85',
+    component: <LoadableDocuments />,
+    layout: '',
+  },
+  {
+    id: uuidv4(),
+    path: '/user-activity',
+    name: 'Felhasználói aktivitás',
     icon: 'nc-icon nc-notes',
-    component: <TableList />,
+    component: <LoadableUserActivity />,
     layout: '',
   },
   {
+    id: uuidv4(),
+    path: '/user-handling',
+    name: 'Felhasználók kezelése',
+    icon: 'nc-icon nc-preferences-circle-rotate',
+    component: <LoadableUserHandling />,
+    layout: '',
+  },
+  {
+    id: uuidv4(),
     path: '/typography',
     name: 'Typography',
     icon: 'nc-icon nc-paper-2',
@@ -63,6 +69,7 @@ const dashboardRoutes = [
     layout: '',
   },
   {
+    id: uuidv4(),
     path: '/icons',
     name: 'Icons',
     icon: 'nc-icon nc-atom',
@@ -70,17 +77,11 @@ const dashboardRoutes = [
     layout: '',
   },
   {
-    path: '/maps',
-    name: 'Maps',
-    icon: 'nc-icon nc-pin-3',
-    component: <Maps />,
-    layout: '',
-  },
-  {
-    path: '/notifications',
-    name: 'Notifications',
-    icon: 'nc-icon nc-bell-55',
-    component: <Notifications />,
+    id: uuidv4(),
+    path: '/table',
+    name: 'Table List',
+    icon: 'nc-icon nc-notes',
+    component: <TableList />,
     layout: '',
   },
 ];

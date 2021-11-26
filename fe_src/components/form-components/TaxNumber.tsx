@@ -1,4 +1,4 @@
-import { Form } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
 interface TaxNumberProps {
@@ -22,21 +22,25 @@ const TaxNumber = ({
   };
 
   return (
-    <Form.Group className="mb-3" controlId={`taxNumber-${uuidv4()}`}>
-      <Form.Label>Adóazonosító jel</Form.Label>
-      <Form.Control
-        disabled={disabled}
-        isInvalid={!!taxNumberError}
-        onChange={!disabled ? onTaxNumberChange : undefined}
-        required
-        value={taxNumber}
-      />
-      {feedback && (
-      <Form.Control.Feedback type="invalid">
-        {taxNumberError}
-      </Form.Control.Feedback>
-      )}
-    </Form.Group>
+    <Row>
+      <Col md="12">
+        <Form.Group controlId={`taxNumber-${uuidv4()}`}>
+          <Form.Label>Adóazonosító jel</Form.Label>
+          <Form.Control
+            disabled={disabled}
+            isInvalid={!!taxNumberError}
+            onChange={!disabled ? onTaxNumberChange : undefined}
+            required
+            value={taxNumber}
+          />
+          {feedback && (
+          <Form.Control.Feedback type="invalid">
+            {taxNumberError}
+          </Form.Control.Feedback>
+          )}
+        </Form.Group>
+      </Col>
+    </Row>
   );
 };
 

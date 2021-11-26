@@ -1,5 +1,3 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/jsx-props-no-spreading */
 /*!
 
 =========================================================
@@ -14,78 +12,109 @@
 
 =========================================================
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* The above copyright notice and this permission notice
+shall be included in all copies or substantial portions of the Software.
 
 */
 import * as React from 'react';
-import { useLocation, Route, Routes } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+  Route,
+  Routes,
+} from 'react-router-dom';
 
+import { useAppSelector } from '../../store/hooks';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
+import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
+
+import routes from './routes';
+import Loading from '../utils/Loading';
 import AdminNavbar from './AdminNavbar';
 import Footer from './Footer';
 import Sidebar from './Sidebar';
-import FixedPlugin from './FixedPlugin';
+import LoadableDocuments from '../documents/LoadableDocuments';
 
-import routes from './routes';
-
-import '../../assets/css/animate.min.css';
-import '../../assets/scss/light-bootstrap-dashboard-react.scss';
-import '../../assets/css/demo.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import sidebarImage from '../../assets/img/sidebar-3.jpg';
+import sidebarImage from '../../assets/img/sidebar-4.jpg';
 
 const { useEffect, useRef, useState } = React;
 
 function Admin() {
-  const [image, setImage] = useState(sidebarImage);
-  const [color, setColor] = useState('black');
-  const [hasImage, setHasImage] = useState(true);
+  const navigate = useNavigate();
+
+  const [isComponentLoading, setIsComponentLoading] = useState(true);
+
+  // Redirect user is they are not supposed to be here
+  const emailStatus = useAppSelector(userEmailStatus);
+  const loginStatus = useAppSelector(userLoginStatus);
+
+  useEffect(() => {
+    if (!loginStatus) {
+      setIsComponentLoading(true);
+    } else {
+      setIsComponentLoading(false);
+    }
+
+    if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
+      navigate('/login');
+    } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
+      navigate('/complete-registration');
+    } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
+      navigate('/validate-email');
+    }
+  }, [emailStatus, navigate, loginStatus]);
+  // End of redirections
+
   const location = useLocation();
   const mainPanel = useRef(null);
-  const getRoutes = (r) => r.map((prop, key) => {
+  const getRoutes = (r) => r.map((prop) => {
     if (prop.layout === '') {
       return (
         <Route
           path={prop.layout + prop.path}
           element={prop.component}
-          key={key}
+          key={prop.id}
         />
       );
     }
     return null;
   });
+
   useEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    mainPanel.current.scrollTop = 0;
-    if (
-      window.innerWidth < 993
-      && document.documentElement.className.indexOf('nav-open') !== -1
-    ) {
-      document.documentElement.classList.toggle('nav-open');
-      const element = document.getElementById('bodyClick');
-      element.parentNode.removeChild(element);
+    if (!isComponentLoading) {
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      mainPanel.current.scrollTop = 0;
+      if (
+        window.innerWidth < 993
+        && document.documentElement.className.indexOf('nav-open') !== -1
+      ) {
+        document.documentElement.classList.toggle('nav-open');
+        const element = document.getElementById('bodyClick');
+        element.parentNode.removeChild(element);
+      }
     }
-  }, [location]);
+  }, [isComponentLoading, location]);
+
+  if (isComponentLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <div className="wrapper">
-        <Sidebar color={color} image={hasImage ? image : ''} routes={routes} />
+        <Sidebar color="black" image={sidebarImage} routes={routes} />
         <div className="main-panel" ref={mainPanel}>
           <AdminNavbar />
           <div className="content">
-            <Routes>{getRoutes(routes)}</Routes>
+            <Routes>
+              <Route path="/" element={<LoadableDocuments />} />
+              {getRoutes(routes)}
+            </Routes>
           </div>
           <Footer />
         </div>
       </div>
-      <FixedPlugin
-        hasImage={hasImage}
-        setHasImage={() => setHasImage(!hasImage)}
-        color={color}
-        setColor={setColor}
-        image={image}
-        setImage={setImage}
-      />
     </>
   );
 }

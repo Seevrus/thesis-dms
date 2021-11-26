@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
+  Card,
+  Col,
   Container,
   Form,
+  Row,
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -82,27 +85,38 @@ const LoginForm = () => {
   }
 
   return (
-    <Container className="form-container" fluid="md">
-      <Form noValidate validated={isFormValidated}>
-        <TaxNumber
-          taxNumber={taxNumber}
-          setTaxNumber={setTaxNumber}
-          taxNumberError={taxNumberError}
-          feedback
-        />
-        <Password
-          password={loginPassword}
-          setPassword={setLoginPassword}
-          showRequirements={false}
-          requireValidation={false}
-        />
-        <Button onClick={onLoginAttempt} variant="primary">
-          Belépés
-        </Button>
-      </Form>
-      {loginError && (
-        <Alert variant="danger">{loginError}</Alert>
-      )}
+    <Container fluid>
+      <Row className="justify-content-md-center">
+        <Col md="8">
+          <Card className="login">
+            <Card.Header>
+              <Card.Title as="h4">Thesis-DMS Bejelentkezés</Card.Title>
+            </Card.Header>
+            <Card.Body>
+              <Form noValidate validated={isFormValidated}>
+                <TaxNumber
+                  taxNumber={taxNumber}
+                  setTaxNumber={setTaxNumber}
+                  taxNumberError={taxNumberError}
+                  feedback
+                />
+                <Password
+                  password={loginPassword}
+                  setPassword={setLoginPassword}
+                  showRequirements={false}
+                  requireValidation={false}
+                />
+                <Button onClick={onLoginAttempt} variant="primary">
+                  Belépés
+                </Button>
+              </Form>
+              {loginError && (
+                <Alert variant="danger">{loginError}</Alert>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };
