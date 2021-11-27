@@ -26,9 +26,9 @@ import {
 
 import { useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
-import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
+import { userEmailStatus, userLoginStatus, userPermissions } from '../../store/userSlice';
 
-import routes from './routes';
+import getDashboardRoutes from './routes';
 import Loading from '../utils/Loading';
 import AdminNavbar from './AdminNavbar';
 import Footer from './Footer';
@@ -41,8 +41,10 @@ const { useEffect, useRef, useState } = React;
 
 function Admin() {
   const navigate = useNavigate();
-
   const [isComponentLoading, setIsComponentLoading] = useState(true);
+  const [routes, setRoutes] = useState([]);
+
+  const permissions = useAppSelector(userPermissions);
 
   // Redirect user is they are not supposed to be here
   const emailStatus = useAppSelector(userEmailStatus);
@@ -65,20 +67,28 @@ function Admin() {
   }, [emailStatus, navigate, loginStatus]);
   // End of redirections
 
+  useEffect(() => {
+    setRoutes(getDashboardRoutes(permissions));
+  }, [permissions]);
+
   const location = useLocation();
   const mainPanel = useRef(null);
-  const getRoutes = (r) => r.map((prop) => {
-    if (prop.layout === '') {
-      return (
-        <Route
-          path={prop.layout + prop.path}
-          element={prop.component}
-          key={prop.id}
-        />
-      );
-    }
-    return null;
-  });
+  const getRoutes = (r) => {
+    if (!r) return null;
+
+    return r.map((prop) => {
+      if (prop.layout === '') {
+        return (
+          <Route
+            path={prop.layout + prop.path}
+            element={prop.component}
+            key={prop.id}
+          />
+        );
+      }
+      return null;
+    });
+  };
 
   useEffect(() => {
     if (!isComponentLoading) {
@@ -105,7 +115,7 @@ function Admin() {
       <div className="wrapper">
         <Sidebar color="black" image={sidebarImage} routes={routes} />
         <div className="main-panel" ref={mainPanel}>
-          <AdminNavbar />
+          <AdminNavbar routes={routes} />
           <div className="content">
             <Routes>
               <Route path="/" element={<LoadableDocuments />} />

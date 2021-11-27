@@ -212,6 +212,7 @@ export const loginExpires = (state: RootState) => state.user.expires;
 export const userEmail = (state: RootState) => state.user.userEmail;
 export const userEmailStatus = (state: RootState) => state.user.emailStatus;
 export const userLoginStatus = (state: RootState) => state.user.loginStatus;
+export const userPermissions = (state: RootState) => state.user.userPermissions;
 export const userRealName = (state: RootState) => state.user.userRealName;
 export const userTaxNumber = (state: RootState) => state.user.taxNumber;
 

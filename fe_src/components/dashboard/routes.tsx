@@ -16,9 +16,17 @@
 shall be included in all copies or substantial portions of the Software.
 
 */
-import * as React from 'react';
+import {
+  __,
+  contains,
+  either,
+  filter,
+  isEmpty,
+  propSatisfies,
+} from 'ramda';
 import { v4 as uuidv4 } from 'uuid';
 
+import { UserPermissionsEnum } from '../../store/userSliceTypes';
 import Typography from '../views/Typography';
 import Icons from '../views/Icons';
 import LoadableDocuments from '../documents/LoadableDocuments';
@@ -35,6 +43,7 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-circle-09',
     component: <LoadableProfile />,
     layout: '',
+    permission: '',
   },
   {
     id: uuidv4(),
@@ -43,6 +52,7 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-email-85',
     component: <LoadableDocuments />,
     layout: '',
+    permission: UserPermissionsEnum.REGULAR,
   },
   {
     id: uuidv4(),
@@ -51,6 +61,7 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-notes',
     component: <LoadableUserActivity />,
     layout: '',
+    permission: UserPermissionsEnum.ACTIVITY_ADMINISTRATOR,
   },
   {
     id: uuidv4(),
@@ -59,6 +70,7 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-preferences-circle-rotate',
     component: <LoadableUserHandling />,
     layout: '',
+    permission: UserPermissionsEnum.USER_ADMINISTRATOR,
   },
   {
     id: uuidv4(),
@@ -67,6 +79,7 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-paper-2',
     component: <Typography />,
     layout: '',
+    permission: '',
   },
   {
     id: uuidv4(),
@@ -75,6 +88,7 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-atom',
     component: <Icons />,
     layout: '',
+    permission: '',
   },
   {
     id: uuidv4(),
@@ -83,7 +97,17 @@ const dashboardRoutes = [
     icon: 'nc-icon nc-notes',
     component: <TableList />,
     layout: '',
+    permission: '',
   },
 ];
 
-export default dashboardRoutes;
+const getDashboardRoutes = (userPermissions: `${UserPermissionsEnum}`[]) => filter(
+  propSatisfies(
+    either(
+      isEmpty,
+      contains(__, userPermissions),
+    ), 'permission',
+  ), dashboardRoutes,
+);
+
+export default getDashboardRoutes;

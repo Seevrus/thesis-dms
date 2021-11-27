@@ -3,8 +3,8 @@ import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
-import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
+import { EmailStatusEnum } from '../../store/userSliceTypes';
+import { userEmailStatus } from '../../store/userSlice';
 import { fetchDocuments, selectDocumentIds } from '../../store/documentsSlice';
 
 import Loading from '../utils/Loading';
@@ -22,23 +22,20 @@ const Documents = () => {
 
   // Redirect user is they are not supposed to be here
   const emailStatus = useAppSelector(userEmailStatus);
-  const loginStatus = useAppSelector(userLoginStatus);
 
   useEffect(() => {
-    if (!loginStatus) {
+    if (!emailStatus) {
       setIsComponentLoading(true);
     } else {
       setIsComponentLoading(false);
     }
 
-    if (loginStatus === LoginStatusEnum.NOT_LOGGED_IN) {
-      navigate('/login');
-    } else if (emailStatus === EmailStatusEnum.NO_EMAIL) {
+    if (emailStatus === EmailStatusEnum.NO_EMAIL) {
       navigate('/complete-registration');
     } else if (emailStatus === EmailStatusEnum.NOT_VALIDATED) {
       navigate('/validate-email');
     }
-  }, [emailStatus, navigate, loginStatus]);
+  }, [emailStatus, navigate]);
   // End of redirections
 
   const documentIds = useAppSelector(selectDocumentIds) as number[];
@@ -52,16 +49,11 @@ const Documents = () => {
   const documents = documentIds.map((id) => <SingleDocument key={id} id={id} />);
 
   if (isComponentLoading) {
-    return (
-      <Container className="mt-5 mb-5">
-        <Loading />
-      </Container>
-    );
+    return <Loading />;
   }
 
   return (
     <Container className="mt-5 mb-5">
-      <h3 className="page-title text-center">Dokumentumaim</h3>
       {documents}
 
       <Container className="letoltes_blokk mt-3">

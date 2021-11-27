@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable react/no-this-in-sfc */
@@ -29,9 +30,7 @@ import {
 import { useAppSelector } from '../../store/hooks';
 import { loginExpires } from '../../store/userSlice';
 
-import routes from './routes';
-
-function Header() {
+function Header({ routes }) {
   const expires = useAppSelector(loginExpires);
 
   const location = useLocation();
