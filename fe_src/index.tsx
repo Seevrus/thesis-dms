@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/animate.min.css';
 import './assets/scss/light-bootstrap-dashboard-react.scss';
-import './assets/css/demo.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import App from './App';
