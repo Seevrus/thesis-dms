@@ -86,7 +86,7 @@
         right: 0 !important;
         left: auto;
         position: absolute;
-        @include transform-translate-3d(262px);
+        @include transform-translate-3d(302px);
         @include transition (0.5s, cubic-bezier(0.685, 0.0473, 0.346, 1));
     }
 
@@ -174,6 +174,7 @@
     .wrapper{
        left: 0;
        background-color: white;
+       overflow: hidden;
     }
     .navbar .container{
         left: 15px;
@@ -448,6 +449,10 @@
             margin-right: 10px;
         }
     }
+
+    .row {
+        margin: 0;
+    }
 }
 
 //overwrite table responsive for 768px screens
@@ -463,8 +468,7 @@
     .table-responsive {
         width: 100%;
         margin-bottom: 15px;
-        overflow-x: scroll;
-        overflow-y: hidden;
+        overflow: hidden;
         -ms-overflow-style: -ms-autohiding-scrollbar;
         -webkit-overflow-scrolling: touch;
     }
