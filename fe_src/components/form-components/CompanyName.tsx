@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Form } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchCompanies, selectCompanies } from '../../store/otherUsersSlice';
@@ -29,31 +29,35 @@ const CompanyName = ({
   };
 
   return (
-    <Form.Group className="mb-3" controlId={`companyName-${uuidv4()}`}>
-      <Form.Label>Cég</Form.Label>
-      {disabled && (
-        <Form.Control
-          disabled
-          value={companyName}
-        />
-      )}
-      {!disabled && (
-        <Form.Control
-          as="select"
-          default={companyName}
-          onChange={onCompanyChange}
-        >
-          {companies.map((company) => (
-            <option
-              key={company.id}
-              value={company.companyName}
-            >
-              {company.companyName}
-            </option>
-          ))}
-        </Form.Control>
-      )}
-    </Form.Group>
+    <Row>
+      <Col className="md-12">
+        <Form.Group controlId={`companyName-${uuidv4()}`}>
+          <Form.Label>Cég</Form.Label>
+          {disabled && (
+          <Form.Control
+            disabled
+            value={companyName}
+          />
+          )}
+          {!disabled && (
+          <Form.Control
+            as="select"
+            default={companyName}
+            onChange={onCompanyChange}
+          >
+            {companies.map((company) => (
+              <option
+                key={company.id}
+                value={company.companyName}
+              >
+                {company.companyName}
+              </option>
+            ))}
+          </Form.Control>
+          )}
+        </Form.Group>
+      </Col>
+    </Row>
   );
 };
 

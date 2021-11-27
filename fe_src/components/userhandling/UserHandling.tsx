@@ -9,8 +9,10 @@ import { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
+  Col,
   Container,
   Form,
+  Row,
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -141,7 +143,6 @@ const UserHandling = () => {
 
   return (
     <Container className="mt-5 mb-5">
-      <h3 className="page-title text-center">Felhasználók kezelése</h3>
       <UserSearch />
       {selectedUser
       && (
@@ -186,9 +187,17 @@ const UserHandling = () => {
             unlockUserST={unlockUserST}
             setUnlockUserST={setUnlockUserST}
           />
-          <Button onClick={onUserUpdate} variant="primary">
-            Mentés
-          </Button>
+          <Row>
+            <Col sm={7}>
+              <Button
+                onClick={onUserUpdate}
+                variant="primary"
+                className="btn-fill float-right"
+              >
+                Mentés
+              </Button>
+            </Col>
+          </Row>
         </Form>
         {updateFeedback && (
         <Alert className="alert-warning" variant="warning">

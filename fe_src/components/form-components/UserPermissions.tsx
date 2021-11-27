@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
+import {
+  Col,
+  Form,
+  InputGroup,
+  Row,
+} from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UserPermissionsEnum } from '../../store/userSliceTypes';
@@ -42,27 +47,31 @@ const UserPermissions = ({
   };
 
   return (
-    <Form.Group controlId={`inline-email-status-${uuidv4()}`}>
-      <Form.Label>Jogosultságok</Form.Label>
-      <InputGroup className="mb-3">
-        {Object.keys(UserPermissionsEnum).map(
-          (userPermission: `${UserPermissionsEnum}`) => (
-            userPermission !== UserPermissionsEnum.DOCUMENT_CREATOR && (
-            <Form.Check
-              inline
-              id={userPermission}
-              key={`inline-email-status-${userPermission}`}
-              label={userPermissionsTranslate[userPermission]}
-              name="user-permission"
-              type="checkbox"
-              checked={userPermissionsST.includes(userPermission)}
-              onChange={handleChange}
-            />
-            )
-          ),
-        )}
-      </InputGroup>
-    </Form.Group>
+    <Row>
+      <Col className="md-12">
+        <Form.Group controlId={`inline-email-status-${uuidv4()}`}>
+          <Form.Label>Jogosultságok</Form.Label>
+          <InputGroup className="mb-3">
+            {Object.keys(UserPermissionsEnum).map(
+              (userPermission: `${UserPermissionsEnum}`) => (
+                userPermission !== UserPermissionsEnum.DOCUMENT_CREATOR && (
+                <Form.Check
+                  inline
+                  id={userPermission}
+                  key={`inline-email-status-${userPermission}`}
+                  label={userPermissionsTranslate[userPermission]}
+                  name="user-permission"
+                  type="checkbox"
+                  checked={userPermissionsST.includes(userPermission)}
+                  onChange={handleChange}
+                />
+                )
+              ),
+            )}
+          </InputGroup>
+        </Form.Group>
+      </Col>
+    </Row>
   );
 };
 

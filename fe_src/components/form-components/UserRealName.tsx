@@ -1,4 +1,4 @@
-import { Form } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
 interface UserRealNameProps {
@@ -17,14 +17,18 @@ const UserRealName = ({
   };
 
   return (
-    <Form.Group className="mb-3" controlId={`userRealName-${uuidv4()}`}>
-      <Form.Label>Név</Form.Label>
-      <Form.Control
-        disabled={disabled}
-        onInput={onNameChange}
-        value={userRealName}
-      />
-    </Form.Group>
+    <Row>
+      <Col className="md-12">
+        <Form.Group className="mb-3" controlId={`userRealName-${uuidv4()}`}>
+          <Form.Label>Név</Form.Label>
+          <Form.Control
+            disabled={disabled}
+            onInput={onNameChange}
+            value={userRealName}
+          />
+        </Form.Group>
+      </Col>
+    </Row>
   );
 };
 

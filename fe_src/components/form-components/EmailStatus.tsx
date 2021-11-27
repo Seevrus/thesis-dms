@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
+import {
+  Col,
+  Form,
+  InputGroup,
+  Row,
+} from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
 import { EmailStatusEnum } from '../../store/userSliceTypes';
@@ -24,23 +29,27 @@ const EmailStatus = ({
   };
 
   return (
-    <Form.Group controlId={`inline-email-status-${uuidv4()}`}>
-      <Form.Label>Email státusz</Form.Label>
-      <InputGroup className="mb-3">
-        {Object.keys(EmailStatusEnum).map((emailStatus: `${EmailStatusEnum}`) => (
-          <Form.Check
-            inline
-            id={emailStatus}
-            key={`inline-email-status-${emailStatus}`}
-            label={emailStatusTranslate[emailStatus]}
-            name="email-status"
-            type="radio"
-            checked={emailStatus === emailStatusST}
-            onChange={handleChange}
-          />
-        ))}
-      </InputGroup>
-    </Form.Group>
+    <Row>
+      <Col className="md-12">
+        <Form.Group controlId={`inline-email-status-${uuidv4()}`}>
+          <Form.Label>Email státusz</Form.Label>
+          <InputGroup className="mb-3">
+            {Object.keys(EmailStatusEnum).map((emailStatus: `${EmailStatusEnum}`) => (
+              <Form.Check
+                inline
+                id={emailStatus}
+                key={`inline-email-status-${emailStatus}`}
+                label={emailStatusTranslate[emailStatus]}
+                name="email-status"
+                type="radio"
+                checked={emailStatus === emailStatusST}
+                onChange={handleChange}
+              />
+            ))}
+          </InputGroup>
+        </Form.Group>
+      </Col>
+    </Row>
   );
 };
 
