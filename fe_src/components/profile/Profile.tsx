@@ -120,7 +120,6 @@ const Profile = () => {
 
   return (
     <Container className="form-container">
-      <h3 className="page-title text-center">Profilom</h3>
       <Form>
         <TaxNumber
           disabled

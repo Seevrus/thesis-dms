@@ -1,4 +1,10 @@
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Form,
+  InputGroup,
+  Row,
+} from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
 interface EmailAddressProps {
@@ -25,31 +31,38 @@ const EmailAddress = ({
   };
 
   return (
-    <Form.Group controlId={`email-${uuidv4()}`}>
-      <Form.Label>{label}</Form.Label>
-      <InputGroup className="mb-3">
-        <Form.Control
-          isInvalid={!!emailAddressError}
-          onInput={onEmailAddressChange}
-          required
-          value={emailAddress ?? ''}
-        />
-        {updatable && (
-          <Button
-            id={`emailUpdateButton-${uuidv4()}`}
-            onClick={updateEmailAddress}
-            variant="primary"
-          >
-            Mentés
-          </Button>
-        )}
-        {feedback && (
-        <Form.Control.Feedback type="invalid">
-          {emailAddressError}
-        </Form.Control.Feedback>
-        )}
-      </InputGroup>
-    </Form.Group>
+    <Row>
+      <Col md="12">
+        <Form.Group controlId={`email-${uuidv4()}`}>
+          <Form.Label>{label}</Form.Label>
+          <InputGroup>
+            <Form.Control
+              isInvalid={!!emailAddressError}
+              onInput={onEmailAddressChange}
+              required
+              value={emailAddress ?? ''}
+            />
+            {updatable && (
+              <InputGroup.Append>
+                <Button
+                  id={`emailUpdateButton-${uuidv4()}`}
+                  onClick={updateEmailAddress}
+                  className="btn-fill"
+                  variant="primary"
+                >
+                  Mentés
+                </Button>
+              </InputGroup.Append>
+            )}
+            {feedback && (
+              <Form.Control.Feedback type="invalid">
+                {emailAddressError}
+              </Form.Control.Feedback>
+            )}
+          </InputGroup>
+        </Form.Group>
+      </Col>
+    </Row>
   );
 };
 

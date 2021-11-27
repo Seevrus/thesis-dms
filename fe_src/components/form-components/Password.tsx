@@ -54,7 +54,7 @@ const Password = ({
             </ul>
             )}
           </Form.Label>
-          <InputGroup className="mb-3">
+          <InputGroup>
             <Form.Control
               isInvalid={requireValidation && !!passwordError}
               isValid={requireValidation && !!passwordSuccess}
@@ -64,13 +64,16 @@ const Password = ({
               value={password}
             />
             {updatable && (
-            <Button
-              id={`passwordUpdateButton-${uuidv4()}`}
-              onClick={updatePassword}
-              variant="primary"
-            >
-              Mentés
-            </Button>
+              <InputGroup.Append>
+                <Button
+                  id={`passwordUpdateButton-${uuidv4()}`}
+                  onClick={updatePassword}
+                  className="btn-fill"
+                  variant="primary"
+                >
+                  Mentés
+                </Button>
+              </InputGroup.Append>
             )}
             {negativeFeedback && (
             <Form.Control.Feedback type="invalid">
