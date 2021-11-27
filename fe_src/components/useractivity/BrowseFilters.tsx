@@ -64,16 +64,15 @@ const BrowseFilters = () => {
   };
 
   return (
-    <Container className="filter-list">
+    <Container fluid className="filter-list">
       <Row>
-        <Col className="filter-list-label" md={2}>
+        <Col md={2} className="filter-list-label">
           Mentett szűrők:
         </Col>
-        <Col md={9}>
+        <Col md={8}>
           <Select
             closeMenuOnSelect={false}
             components={animatedComponents}
-            className="filter-list-dropdown"
             isClearable
             noOptionsMessage={() => 'Nincs több találat'}
             onChange={handleChange}
@@ -82,7 +81,7 @@ const BrowseFilters = () => {
             value={defaultOption}
           />
         </Col>
-        <Col md={1} />
+        <Col md={2} />
       </Row>
     </Container>
   );

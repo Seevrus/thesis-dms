@@ -1,8 +1,16 @@
 import { useState } from 'react';
-import { Button, FormControl, InputGroup } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Row,
+} from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getMatchingSavedFilter, saveFilter, selectActiveFilter } from '../../store/activityFilterSlice';
+
+import './filter-list.scss';
 
 const SaveLayout = () => {
   const dispatch = useAppDispatch();
@@ -23,27 +31,44 @@ const SaveLayout = () => {
   };
 
   return (
-    <InputGroup className="mb-3 filter-list" hasValidation>
-      <FormControl
-        placeholder="Nézet mentése..."
-        aria-label="Nézet mentése..."
-        aria-describedby="basic-save-layout"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterName(e.target.value)}
-        required
-        isInvalid={formInvalid}
-        value={matchingSavedFilter ? `Mentett szűrő: ${matchingSavedFilter.filterName}` : ''}
-        disabled={!!matchingSavedFilter}
-      />
-      <Button
-        variant="outline-primary"
-        id="button-save-layout"
-        onClick={handleClick}
-        disabled={!!matchingSavedFilter}
-      >
-        Mentés
-      </Button>
-      <FormControl.Feedback type="invalid">A mező kitöltése kötelező!</FormControl.Feedback>
-    </InputGroup>
+    <Container fluid className="filter-list">
+      <Row>
+        <Col className="filter-list-label" md={2}>
+          Nézet mentése:
+        </Col>
+        <Col md={8}>
+          <Form.Group className="mb-3">
+            <Form.Control
+              aria-describedby="basic-save-layout"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterName(e.target.value)}
+              required
+              isInvalid={formInvalid}
+              value={
+              matchingSavedFilter
+                ? `Mentett szűrő: ${matchingSavedFilter.filterName}`
+                : filterName
+            }
+              disabled={!!matchingSavedFilter}
+            />
+            <Form.Control.Feedback type="invalid">
+              A mező kitöltése kötelező!
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Col md={2} className="filter-list-button">
+          <Button
+            className="float-right"
+            variant="primary"
+            id="button-save-layout"
+            onClick={handleClick}
+            disabled={!!matchingSavedFilter}
+            size="sm"
+          >
+            Mentés
+          </Button>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

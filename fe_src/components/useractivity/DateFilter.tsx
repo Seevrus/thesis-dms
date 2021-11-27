@@ -114,7 +114,12 @@ const DateFilter = ({
         </Col>
         <Col md={1}>
           {canHide && (
-          <Button variant="outline-primary" onClick={() => setVisibility('none')} size="sm">
+          <Button
+            className="float-right"
+            variant="primary"
+            onClick={() => setVisibility('none')}
+            size="sm"
+          >
             Elrejt
           </Button>
           )}

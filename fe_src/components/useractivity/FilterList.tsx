@@ -27,6 +27,8 @@ import { FilterListProps } from '../../interfaces/useractivity';
 import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
 import { createOption } from '../utils/helpers';
 
+import './filter-list.scss';
+
 const animatedComponents = makeAnimated();
 
 const FilterList = ({
@@ -62,15 +64,14 @@ const FilterList = ({
   };
 
   return (
-    <Container className="filter-list" style={style}>
+    <Container fluid className="filter-list" style={style}>
       <Row>
         <Col className="filter-list-label" md={2}>
           {UserActivityColumnsEnum[columnName]}
           :
         </Col>
-        <Col md={9}>
+        <Col md={8}>
           <Select
-            className="filter-list-dropdown"
             closeMenuOnSelect={false}
             components={animatedComponents}
             isMulti
@@ -81,9 +82,14 @@ const FilterList = ({
             value={activeOptions}
           />
         </Col>
-        <Col md={1}>
+        <Col md={2} className="filter-list-button">
           {canHide && (
-            <Button variant="outline-primary" onClick={() => setVisibility('none')} size="sm">
+            <Button
+              className="float-right"
+              variant="primary"
+              onClick={() => setVisibility('none')}
+              size="sm"
+            >
               Elrejt
             </Button>
           )}
