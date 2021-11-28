@@ -28,11 +28,15 @@ function connectToDb(): PDO
     return $pdo;
 }
 
+function str_contains($haystack, $needle) {
+	return $needle !== '' && mb_strpos($haystack, $needle) !== false;
+}
+
 // connect to database
 $pdo = connectToDb();
 
 // select all document ID-s
-$selectDocumentIdsQuery = 'SELECT document_id, document_name FROM documents';
+$selectDocumentIdsQuery = 'SELECT document_id, document_name FROM document';
 $selectDocumentIdsStmt = $pdo->query($selectDocumentIdsQuery);
 $documentIds = $selectDocumentIdsStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -41,25 +45,29 @@ foreach ($documentIds as $row) {
 	$document_name = $row["document_name"];
 	
 	// based on the name
-	if (str_contains("2021. augusztus", $document_name)) {
+	if (str_contains($document_name, "2021. augusztus")) {
 		// we generate a new date when it was added
-		$added = date("Y-m-d H:i:s", 1630807200);
-	} else if (str_contains("2021. szeptember", $document_name)) {
-		$added = date("Y-m-d H:i:s", 1633399200);
-	} else if (str_contains("2021. október", $document_name)) {
-		$added = date("Y-m-d H:i:s", 1636081200);
-	} else if (str_contains("2021. november", $document_name)) {
-		$added = date("Y-m-d H:i:s", 1638327600);
+		$added_stamp = 1630807200;
+		$added = date("Y-m-d H:i:s", $added_stamp);
+	} else if (str_contains($document_name, "2021. szeptember")) {
+		$added_stamp = 1633399200;
+		$added = date("Y-m-d H:i:s", $added_stamp);
+	} else if (str_contains($document_name, "2021. október")) {
+		$added_stamp = 1636081200;
+		$added = date("Y-m-d H:i:s", $added_stamp);
+	} else if (str_contains($document_name, "2021. november")) {
+		$added_stamp = 1638327600;
+		$added = date("Y-m-d H:i:s", $added_stamp);
 	}
 	
-	// with 70% probability, we also generate a new date when it was downloaded
-	if (mt_rand(1,100) > 70) {
-		$downloadedAt = date("Y-m-d H:i:s", mt_rand($added, 1639155600));
+	// with 80% probability, we also generate a new date when it was downloaded
+	if (mt_rand(1,100) > 20) {
+		$downloadedAt = date("Y-m-d H:i:s", mt_rand($added_stamp, 1639155600));
 	} else {
 		$downloadedAt = NULL;
 	}
 	
-	$decorateDocumentQuery = 'UPDATE documents SET document_added = :dad, document_downloaded = :ddn WHERE document_id = :did';
+	$decorateDocumentQuery = 'UPDATE document SET document_added = :dad, document_downloaded = :ddn WHERE document_id = :did';
 	$decorateDocumentStmt = $pdo->prepare($decorateDocumentQuery);
 	$decorateDocumentStmt->execute(
 		array(
@@ -69,6 +77,6 @@ foreach ($documentIds as $row) {
 		)
 	);
 	
-	echo("Dokumentum módosítva: " . $document_name . ". Hozzáadva: " . $added . ", letöltve: " . $downloadedAt . ".\r\n");
+	echo("Dokumentum módosítva: " . $document_name . ". Hozzáadva: " . $added . ", letöltve: " . $downloadedAt . "." . "\r\n");
 }
 ?>
