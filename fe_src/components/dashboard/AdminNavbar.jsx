@@ -22,16 +22,21 @@ shall be included in all copies or substantial portions of the Software.
 */
 import * as React from 'react';
 import Countdown from 'react-countdown';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Navbar, Container, Nav, Button,
+  Button,
+  Container,
+  Nav,
+  Navbar,
 } from 'react-bootstrap';
 
-import { useAppSelector } from '../../store/hooks';
-import { loginExpires } from '../../store/userSlice';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { checkLoginStatus, loginExpires } from '../../store/userSlice';
 
 function Header({ routes }) {
+  const dispatch = useAppDispatch();
   const expires = useAppSelector(loginExpires);
+  const navigate = useNavigate();
 
   const location = useLocation();
   const mobileSidebarToggle = (e) => {
@@ -68,6 +73,17 @@ function Header({ routes }) {
     return 'Dokumentumok';
   };
 
+  if (expires) {
+    const idleCheck = setInterval(() => {
+      if ((expires * 1000 - Date.now() < 0)) {
+        clearInterval(idleCheck);
+        navigate('/logout');
+      }
+    }, 5000);
+  }
+
+  const recordActivity = () => dispatch(checkLoginStatus());
+
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
@@ -91,7 +107,7 @@ function Header({ routes }) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto" navbar>
             <Nav.Item>
-              <Link to="/profile" className="m-0 nav-link">
+              <Link to="/profile" className="m-0 nav-link" onClick={recordActivity}>
                 <span className="no-icon">Profilom</span>
               </Link>
             </Nav.Item>

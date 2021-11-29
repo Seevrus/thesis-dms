@@ -47,11 +47,11 @@ const RegistrationCompletitionForm = () => {
 
   const taxNumber = useAppSelector(userTaxNumber);
   const [isFormValidated, setIsFormValidated] = useState(false);
-  const [emailAddress, setEmailAddress] = useState('till.zoltan90@gmail.com');
-  const [emailAddressRepeat, setEmailAddressRepeat] = useState('till.zoltan90@gmail.com');
+  const [emailAddress, setEmailAddress] = useState('');
+  const [emailAddressRepeat, setEmailAddressRepeat] = useState('');
   const [emailAddressError, setEmailAddressError] = useState('');
-  const [newLoginPassword, setNewLoginPassword] = useState('Password1');
-  const [newLoginPasswordRepeat, setNewLoginPasswordRepeat] = useState('Password1');
+  const [newLoginPassword, setNewLoginPassword] = useState('');
+  const [newLoginPasswordRepeat, setNewLoginPasswordRepeat] = useState('');
   const [newLoginPasswordError, setNewLoginPasswordError] = useState('');
   const [registrationError, setRegistrationError] = useState('');
 

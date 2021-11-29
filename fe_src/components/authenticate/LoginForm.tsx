@@ -46,8 +46,8 @@ const LoginForm = () => {
   // End of redirections
 
   const [isFormValidated, setIsFormValidated] = useState<boolean>(false);
-  const [taxNumber, setTaxNumber] = useState<string>('1315760217');
-  const [loginPassword, setLoginPassword] = useState<string>('Password1');
+  const [taxNumber, setTaxNumber] = useState<string>('8713053299');
+  const [loginPassword, setLoginPassword] = useState<string>('jelszo');
   const [taxNumberError, setTaxNumberError] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
