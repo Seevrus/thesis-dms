@@ -111,11 +111,7 @@ const Profile = () => {
   };
 
   if (isComponentLoading) {
-    return (
-      <Container className="mt-5 mb-5">
-        <Loading />
-      </Container>
-    );
+    return <Loading />;
   }
 
   return (
