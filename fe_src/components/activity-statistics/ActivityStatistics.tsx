@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
-import {
-  Card,
-  Col,
-  Container,
-  Row,
-} from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../store/hooks';
 import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
 import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
 import Loading from '../utils/Loading';
+import AvgDeliveryTime from './AvgDeliveryTime';
+import UserActivityDiagram from './UserActivityDiagram';
 
 const ActivityStatistics = () => {
   const navigate = useNavigate();
@@ -44,35 +41,8 @@ const ActivityStatistics = () => {
 
   return (
     <Container fluid>
-      <Card>
-        <Card.Header>
-          <Card.Title as="h4">Felhasználói aktivitás</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          <Row>
-            <Col md="8">
-              Ide kerül egy oszlopdiagram
-            </Col>
-            <Col md="4">Egyedi felhasználó</Col>
-          </Row>
-        </Card.Body>
-      </Card>
-
-      <Card>
-        <Card.Header>
-          <Card.Title as="h4">Átlagos kézbesítési idő</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          <Row>
-            <Col md="6">
-              Ide kerül egy tortadiagram
-            </Col>
-            <Col md="6">
-              És ide egy másik
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
+      <UserActivityDiagram />
+      <AvgDeliveryTime />
     </Container>
   );
 };
