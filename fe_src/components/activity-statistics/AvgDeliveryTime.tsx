@@ -3,7 +3,7 @@ import ChartistGraph from 'react-chartist';
 
 const AvgDeliveryTime = () => {
   const data = {
-    labels: ['1 hét', '1 hónap', '>1 hónap'],
+    labels: ['1 hét', '1 hó', '>1 hó'],
     series: [20, 50, 30],
   };
 
@@ -11,20 +11,23 @@ const AvgDeliveryTime = () => {
     labelInterpolationFnc(label: string) {
       return label;
     },
-    height: '100%',
+    chartPadding: 0,
+    height: '220px',
+    width: '220px',
   };
 
   const responsiveOptions = [
-    ['screen and (min-width: 640px)', {
-      // chartPadding: 30,
-      // labelOffset: 100,
-      // labelDirection: 'explode',
-      height: '110%',
+    ['screen and (min-width: 500px)', {
+      height: '270px',
+      width: '270px',
     }],
-    ['screen and (min-width: 1024px)', {
-      // labelOffset: 80,
-      // chartPadding: 20,
-      height: '120%',
+    ['screen and (min-width: 770px)', {
+      height: '300px',
+      width: '300px',
+    }],
+    ['screen and (min-width: 1200px)', {
+      height: '400px',
+      width: '400px',
     }],
   ];
 
@@ -35,7 +38,8 @@ const AvgDeliveryTime = () => {
       </Card.Header>
       <Card.Body>
         <Row>
-          <Col md="6">
+          <Col xs md="6" className="text-center">
+            <div><h4>Bérjegyzék</h4></div>
             <ChartistGraph
               data={data}
               type="Pie"
@@ -43,7 +47,8 @@ const AvgDeliveryTime = () => {
               responsiveOptions={responsiveOptions}
             />
           </Col>
-          <Col md="6">
+          <Col xs md="6" className="text-center">
+            <div><h4>Tájékoztató</h4></div>
             <ChartistGraph
               data={data}
               type="Pie"
