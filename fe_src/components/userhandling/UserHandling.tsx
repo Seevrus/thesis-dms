@@ -51,6 +51,10 @@ const UserHandling = () => {
 
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
+  useEffect(() => {
+    document.title = 'Felhasználók kezelése';
+  }, []);
+
   // Redirect user is they are not supposed to be here
   const emailStatus = useAppSelector(userEmailStatus);
   const loginStatus = useAppSelector(userLoginStatus);
