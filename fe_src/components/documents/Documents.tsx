@@ -3,9 +3,9 @@ import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum } from '../../store/userSliceTypes';
-import { userEmailStatus } from '../../store/userSlice';
-import { fetchDocuments, selectDocumentIds } from '../../store/documentsSlice';
+import { EmailStatusEnum } from '../../store/user/userSliceTypes';
+import { userEmailStatus } from '../../store/user/userSlice';
+import { fetchDocuments, selectDocumentIds } from '../../store/documents/documentsSlice';
 
 import Loading from '../utils/Loading';
 import SingleDocument from './SingleDocument';

@@ -7,7 +7,7 @@ import {
 } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
-import { UserPermissionsEnum } from '../../store/userSliceTypes';
+import { UserPermissionsEnum } from '../../store/user/userSliceTypes';
 
 interface UserPermissionsProps {
   userPermissionsST: `${UserPermissionsEnum}`[];

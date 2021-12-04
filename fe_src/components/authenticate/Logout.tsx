@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../store/hooks';
 
-import { logout } from '../../store/userSlice';
+import { logout } from '../../store/user/userSlice';
 
 const Logout = () => {
   const dispatch = useAppDispatch();

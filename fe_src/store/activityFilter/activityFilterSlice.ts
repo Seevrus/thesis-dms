@@ -21,8 +21,8 @@ import {
   SaveFilterRequestT,
 } from './activityFilterSliceTypes';
 // eslint-disable-next-line import/no-cycle
-import { RootState } from './store';
-import { BaseResponseT } from './commonTypes';
+import { RootState } from '../store';
+import { BaseResponseT } from '../commonTypes';
 
 const initialState: ActivityFilterSliceT = {
   activeFilter: {

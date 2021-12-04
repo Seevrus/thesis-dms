@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from './store/hooks';
-import { LoginStatusEnum } from './store/userSliceTypes';
-import { checkLoginStatus, userLoginStatus } from './store/userSlice';
+import { LoginStatusEnum } from './store/user/userSliceTypes';
+import { checkLoginStatus, userLoginStatus } from './store/user/userSlice';
 import Admin from './components/dashboard/Admin';
 import LoadableEmailValidationForm from './components/authenticate/LoadableEmailValidationForm';
 import LoadableLoginForm from './components/authenticate/LoadableLoginForm';

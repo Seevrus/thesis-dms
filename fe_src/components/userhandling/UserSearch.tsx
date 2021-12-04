@@ -8,16 +8,16 @@ import {
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import { OtherUserT } from 'store/otherUsersSliceTypes';
+import debounce from '../utils/debounce';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { OtherUserT, UserSearchTypeEnum } from '../../store/otherUsers/otherUsersSliceTypes';
 import {
   searchUsers,
   selectSearchResults,
   selectSelectedUser,
   setUser,
-} from '../../store/otherUsersSlice';
+} from '../../store/otherUsers/otherUsersSlice';
 import { OptionsT } from '../../interfaces/common';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import debounce from '../utils/debounce';
 
 const animatedComponents = makeAnimated();
 
@@ -31,7 +31,10 @@ const UserSearch = () => {
 
   useEffect(
     () => {
-      dispatch(searchUsers(''));
+      dispatch(searchUsers({
+        keyword: '',
+        searchType: UserSearchTypeEnum.ALL,
+      }));
     }, [dispatch],
   );
 
@@ -60,7 +63,10 @@ const UserSearch = () => {
   };
 
   const handleInputChange = (keyword: string) => {
-    dispatch(searchUsers(keyword));
+    dispatch(searchUsers({
+      keyword,
+      searchType: UserSearchTypeEnum.ALL,
+    }));
   };
 
   return (

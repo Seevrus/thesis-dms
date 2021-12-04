@@ -3,7 +3,7 @@ import { Container, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/user/userSliceTypes';
 import {
   companyName,
   updateProfile,
@@ -12,7 +12,7 @@ import {
   userLoginStatus,
   userRealName,
   userTaxNumber,
-} from '../../store/userSlice';
+} from '../../store/user/userSlice';
 import CompanyName from '../form-components/CompanyName';
 import EmailAddress from '../form-components/EmailAddress';
 import Password from '../form-components/Password';

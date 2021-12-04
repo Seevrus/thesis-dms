@@ -7,7 +7,7 @@ import {
 } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
-import { EmailStatusEnum } from '../../store/userSliceTypes';
+import { EmailStatusEnum } from '../../store/user/userSliceTypes';
 
 interface EmailStatusProps {
   emailStatusST: `${EmailStatusEnum}`;

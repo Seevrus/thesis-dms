@@ -21,10 +21,10 @@ import {
   isUserRealNameModified,
   isValidUntilModified,
   selectActiveFilter,
-} from '../../store/activityFilterSlice';
-import { listUserActivity, selectActivities } from '../../store/userActivitySlice';
-import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
-import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
+} from '../../store/activityFilter/activityFilterSlice';
+import { listUserActivity, selectActivities } from '../../store/userActivity/userActivitySlice';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/user/userSliceTypes';
+import { userEmailStatus, userLoginStatus } from '../../store/user/userSlice';
 import Loading from '../utils/Loading';
 
 import BrowseFilters from './BrowseFilters';

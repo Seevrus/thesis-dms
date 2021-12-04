@@ -9,12 +9,12 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/user/userSliceTypes';
 import {
   userEmailStatus,
   userLoginStatus,
   validateEmailAddress,
-} from '../../store/userSlice';
+} from '../../store/user/userSlice';
 
 import EmailCode from '../form-components/EmailCode';
 import { testEmailCode } from '../utils/helpers';

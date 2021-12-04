@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { BaseResponseT } from './commonTypes';
+import { BaseResponseT } from '../commonTypes';
 import {
   EmailValidationRequestT,
   EmailValidationResponseT,
@@ -15,8 +15,8 @@ import {
   UserSliceT,
 } from './userSliceTypes';
 // eslint-disable-next-line import/no-cycle
-import { RootState } from './store';
-import { checkUpdateProfileResponseForErrors, sleep } from './helpers';
+import { RootState } from '../store';
+import { checkUpdateProfileResponseForErrors, sleep } from '../helpers';
 
 const initialState: UserSliceT = {
   loginStatus: undefined,

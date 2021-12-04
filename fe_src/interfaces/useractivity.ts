@@ -1,4 +1,4 @@
-import { ActivityFilterT } from '../store/activityFilterSliceTypes';
+import { ActivityFilterT } from '../store/activityFilter/activityFilterSliceTypes';
 
 export type FilterListProps = {
   canHide: boolean;

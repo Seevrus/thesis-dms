@@ -25,8 +25,8 @@ import {
 } from 'react-router-dom';
 
 import { useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
-import { userEmailStatus, userLoginStatus, userPermissions } from '../../store/userSlice';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/user/userSliceTypes';
+import { userEmailStatus, userLoginStatus, userPermissions } from '../../store/user/userSlice';
 
 import getDashboardRoutes from './routes';
 import Loading from '../utils/Loading';

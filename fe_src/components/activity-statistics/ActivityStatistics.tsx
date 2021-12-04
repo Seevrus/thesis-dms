@@ -3,8 +3,8 @@ import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum, LoginStatusEnum } from '../../store/userSliceTypes';
-import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
+import { EmailStatusEnum, LoginStatusEnum } from '../../store/user/userSliceTypes';
+import { userEmailStatus, userLoginStatus } from '../../store/user/userSlice';
 import Loading from '../utils/Loading';
 import AvgDeliveryTime from './AvgDeliveryTime';
 import UserActivityDiagram from './UserActivityDiagram';

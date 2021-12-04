@@ -1,4 +1,4 @@
-import { BaseResponseT, OutcomeT } from './commonTypes';
+import { BaseResponseT, OutcomeT } from '../commonTypes';
 
 export enum UserPermissionsEnum {
   INACTIVE = 'INACTIVE',

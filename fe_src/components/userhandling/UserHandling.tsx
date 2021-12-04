@@ -17,20 +17,21 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { UserSearchTypeEnum } from '../../store/otherUsers/otherUsersSliceTypes';
 import {
   searchUsers,
   selectSelectedUser,
   setUser,
   updateUser,
-} from '../../store/otherUsersSlice';
+} from '../../store/otherUsers/otherUsersSlice';
 import {
   EmailStatusEnum,
   LoginStatusEnum,
   UpdateProfileRequestT,
   UserPermissionsEnum,
   UserStatusEnum,
-} from '../../store/userSliceTypes';
-import { userEmailStatus, userLoginStatus } from '../../store/userSlice';
+} from '../../store/user/userSliceTypes';
+import { userEmailStatus, userLoginStatus } from '../../store/user/userSlice';
 import Attempts from '../form-components/Attempts';
 import CompanyName from '../form-components/CompanyName';
 import EmailAddress from '../form-components/EmailAddress';
@@ -124,7 +125,10 @@ const UserHandling = () => {
       dispatch(updateUser(requestData))
         .then(() => {
           setUpdateFeedback('Módosítások mentése sikeres.');
-          dispatch(searchUsers(''))
+          dispatch(searchUsers({
+            keyword: '',
+            searchType: UserSearchTypeEnum.ALL,
+          }))
             .then(() => {
               dispatch(setUser(selectedUser.taxNumber));
             });

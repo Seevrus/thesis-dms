@@ -21,10 +21,10 @@ import {
   fetchColumnOptions,
   filterModified,
   selectActiveFilter,
-} from '../../store/activityFilterSlice';
+} from '../../store/activityFilter/activityFilterSlice';
 import { OptionsT } from '../../interfaces/common';
 import { FilterListProps } from '../../interfaces/useractivity';
-import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
+import { UserActivityColumnsEnum } from '../../store/userActivity/userActivitySliceTypes';
 import { createOption } from '../utils/helpers';
 
 import './filter-list.scss';

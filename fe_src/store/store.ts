@@ -1,11 +1,11 @@
 /* eslint-disable import/no-cycle */
 import { configureStore } from '@reduxjs/toolkit';
 
-import activityFilterSlice from './activityFilterSlice';
-import documentsSlice from './documentsSlice';
-import otherUsersSlice from './otherUsersSlice';
-import userActivityScile from './userActivitySlice';
-import userSlice from './userSlice';
+import activityFilterSlice from './activityFilter/activityFilterSlice';
+import documentsSlice from './documents/documentsSlice';
+import otherUsersSlice from './otherUsers/otherUsersSlice';
+import userActivityScile from './userActivity/userActivitySlice';
+import userSlice from './user/userSlice';
 
 const store = configureStore({
   reducer: {

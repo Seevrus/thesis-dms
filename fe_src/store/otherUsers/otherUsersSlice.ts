@@ -4,16 +4,16 @@ import { forEach } from 'ramda';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // eslint-disable-next-line import/no-cycle
-import { RootState } from './store';
-import { BaseResponseT } from './commonTypes';
+import { RootState } from '../store';
+import { BaseResponseT } from '../commonTypes';
 import {
   FetchCompaniesResponseT,
   OtherUsersSliceT,
   SearchUserRequestT,
   SearchUserResponseT,
 } from './otherUsersSliceTypes';
-import { UpdateProfileRequestT, UpdateProfileResponseT } from './userSliceTypes';
-import { checkUpdateProfileResponseForErrors } from './helpers';
+import { UpdateProfileRequestT, UpdateProfileResponseT } from '../user/userSliceTypes';
+import { checkUpdateProfileResponseForErrors } from '../helpers';
 
 const initialState: OtherUsersSliceT = {
   companies: [],
@@ -25,9 +25,9 @@ export const searchUsers = createAsyncThunk<
 SearchUserResponseT, SearchUserRequestT, { rejectValue: BaseResponseT }
 >(
   'otherUsers/searchUsers',
-  async (keyword, { rejectWithValue }) => {
+  async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/user/handle/search.php?keyword=${keyword}`);
+      const response = await axios.post('/api/user/handle/search.php', requestData);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);

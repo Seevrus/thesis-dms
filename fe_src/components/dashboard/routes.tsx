@@ -26,7 +26,7 @@ import {
 } from 'ramda';
 import { v4 as uuidv4 } from 'uuid';
 
-import { UserPermissionsEnum } from '../../store/userSliceTypes';
+import { UserPermissionsEnum } from '../../store/user/userSliceTypes';
 import Typography from '../views/Typography';
 import Icons from '../views/Icons';
 import LoadableActivityStatistics from '../activity-statistics/LoadableActivityStatistics';

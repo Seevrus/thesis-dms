@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import { DocumentT, FetchDocumentsRequestT } from './documentsSliceTypes';
-import { BaseResponseT } from './commonTypes';
+import { BaseResponseT } from '../commonTypes';
 // eslint-disable-next-line import/no-cycle
-import { RootState } from './store';
+import { RootState } from '../store';
 
 const documentsAdapter = createEntityAdapter<DocumentT>();
 const initialState = documentsAdapter.getInitialState();

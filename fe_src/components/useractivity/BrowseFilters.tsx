@@ -12,13 +12,13 @@ import makeAnimated from 'react-select/animated';
 
 import { OptionsT } from '../../interfaces/common';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { SavedFilterT } from '../../store/activityFilterSliceTypes';
+import { SavedFilterT } from '../../store/activityFilter/activityFilterSliceTypes';
 import {
   filterCleared,
   filterModified,
   getMatchingSavedFilter,
   getSavedFilters,
-} from '../../store/activityFilterSlice';
+} from '../../store/activityFilter/activityFilterSlice';
 
 const animatedComponents = makeAnimated();
 

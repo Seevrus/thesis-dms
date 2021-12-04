@@ -8,7 +8,7 @@ import {
 } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getMatchingSavedFilter, saveFilter, selectActiveFilter } from '../../store/activityFilterSlice';
+import { getMatchingSavedFilter, saveFilter, selectActiveFilter } from '../../store/activityFilter/activityFilterSlice';
 
 import './filter-list.scss';
 

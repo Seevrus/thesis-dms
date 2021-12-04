@@ -1,5 +1,5 @@
-import { BaseResponseT } from './commonTypes';
-import { ActivityRequestT } from './userActivitySliceTypes';
+import { BaseResponseT } from '../commonTypes';
+import { ActivityRequestT } from '../userActivity/userActivitySliceTypes';
 
 export interface ActivityFilterT extends ActivityRequestT {}
 

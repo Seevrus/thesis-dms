@@ -1,5 +1,10 @@
-import { BaseResponseT } from './commonTypes';
-import { EmailStatusEnum, UserPermissionsEnum, UserStatusEnum } from './userSliceTypes';
+import { BaseResponseT } from '../commonTypes';
+import { EmailStatusEnum, UserPermissionsEnum, UserStatusEnum } from '../user/userSliceTypes';
+
+export enum UserSearchTypeEnum {
+  ALL = 'ALL',
+  LAST_LOGIN = 'LAST_LOGIN',
+}
 
 interface CompanyWithIdT {
   id: number;
@@ -27,7 +32,10 @@ export interface FetchCompaniesResponseT extends BaseResponseT {
   companies: CompanyWithIdT[];
 }
 
-export type SearchUserRequestT = string | number;
+export type SearchUserRequestT = {
+  keyword: string | number;
+  searchType: UserSearchTypeEnum;
+};
 
 export interface SearchUserResponseT extends BaseResponseT {
   users: OtherUserT[];

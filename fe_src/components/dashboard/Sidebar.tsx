@@ -21,7 +21,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { checkLoginStatus, loginExpires } from '../../store/userSlice';
+import { checkLoginStatus, loginExpires } from '../../store/user/userSlice';
 
 import logo from '../../assets/img/reactlogo.png';
 

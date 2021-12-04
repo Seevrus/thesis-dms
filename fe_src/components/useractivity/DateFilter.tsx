@@ -22,8 +22,8 @@ import DatePicker from 'react-date-picker';
 import { FilterListProps } from '../../interfaces/useractivity';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { filterModified, selectActiveFilter } from '../../store/activityFilterSlice';
-import { UserActivityColumnsEnum } from '../../store/userActivitySliceTypes';
+import { filterModified, selectActiveFilter } from '../../store/activityFilter/activityFilterSlice';
+import { UserActivityColumnsEnum } from '../../store/userActivity/userActivitySliceTypes';
 
 const CheckboxLabelE = {
   validUntil: 'Korlátlan',

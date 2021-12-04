@@ -31,7 +31,7 @@ import {
 } from 'react-bootstrap';
 
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { checkLoginStatus, loginExpires } from '../../store/userSlice';
+import { checkLoginStatus, loginExpires } from '../../store/user/userSlice';
 
 function Header({ routes }) {
   const dispatch = useAppDispatch();

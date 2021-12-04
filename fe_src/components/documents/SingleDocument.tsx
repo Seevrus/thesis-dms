@@ -12,10 +12,10 @@ import {
 
 import { Mapper } from '../../interfaces/common';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { DocumentT } from '../../store/documentsSliceTypes';
+import { DocumentT } from '../../store/documents/documentsSliceTypes';
 import {
   deleteDocument, isDocumentAvailable, removeDeletedDocument, selectDocumentById,
-} from '../../store/documentsSlice';
+} from '../../store/documents/documentsSlice';
 
 import './single-document.scss';
 import information from '../../img/information.svg';

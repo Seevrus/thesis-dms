@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchCompanies, selectCompanies } from '../../store/otherUsersSlice';
+import { fetchCompanies, selectCompanies } from '../../store/otherUsers/otherUsersSlice';
 
 interface CompanyNameProps {
   disabled?: boolean;

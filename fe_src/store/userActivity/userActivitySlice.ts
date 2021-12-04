@@ -1,9 +1,9 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { BaseResponseT } from './commonTypes';
+import { BaseResponseT } from '../commonTypes';
 // eslint-disable-next-line import/no-cycle
-import { RootState } from './store';
+import { RootState } from '../store';
 import { ActivityRequestT, UserActivityT } from './userActivitySliceTypes';
 
 const userActivityAdapter = createEntityAdapter<UserActivityT>();

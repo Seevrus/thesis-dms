@@ -11,8 +11,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { EmailStatusEnum } from '../../store/userSliceTypes';
-import { login, userEmailStatus, userLoginStatus } from '../../store/userSlice';
+import { EmailStatusEnum } from '../../store/user/userSliceTypes';
+import { login, userEmailStatus, userLoginStatus } from '../../store/user/userSlice';
 import Password from '../form-components/Password';
 import TaxNumber from '../form-components/TaxNumber';
 import { testTaxNumber } from '../utils/helpers';
