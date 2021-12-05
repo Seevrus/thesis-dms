@@ -34,7 +34,7 @@ export interface FetchCompaniesResponseT extends BaseResponseT {
 
 export type SearchUserRequestT = {
   keyword: string | number;
-  searchType: UserSearchTypeEnum;
+  searchType: UserSearchTypeEnum.ALL;
 };
 
 export interface SearchUserResponseT extends BaseResponseT {

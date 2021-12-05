@@ -1,29 +1,30 @@
 <?php
-abstract class EMAIL_STATUS
-{
+abstract class EMAIL_STATUS {
   const NO_EMAIL = 'NO_EMAIL';
   const NOT_VALIDATED = 'NOT_VALIDATED';
   const VALID_EMAIL = 'VALID_EMAIL';
 };
 
-abstract class LOGIN_STATUS
-{
+abstract class LOGIN_STATUS {
   const NOT_LOGGED_IN = 'NOT_LOGGED_IN';
   const LOGGED_IN = 'LOGGED_IN';
 };
 
-abstract class USER_PERMISSIONS
-{
+abstract class USER_PERMISSIONS {
   const REGULAR = 'REGULAR';
   const ACTIVITY_ADMINISTRATOR = 'ACTIVITY_ADMINISTRATOR';
   const USER_ADMINISTRATOR = 'USER_ADMINISTRATOR';
   const DOCUMENT_CREATOR = 'DOCUMENT_CREATOR';
 };
 
-abstract class USER_STATUS
-{
+abstract class USER_STATUS {
   const INACTIVE = 'INACTIVE';
   CONST ACTIVE = 'ACTIVE';
+}
+
+abstract class USER_SEARCH_TYPE {
+  const ALL = 'ALL';
+  const LAST_LOGIN = 'LAST_LOGIN';
 }
 
 function mapDbUserPermission($dbUserPermission) {

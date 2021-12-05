@@ -1,14 +1,39 @@
-import { equals, findIndex } from 'ramda';
+/* eslint-disable quote-props */
+import {
+  all,
+  complement,
+  equals,
+  findIndex,
+  isNil,
+  values,
+} from 'ramda';
+import { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import ChartistGraph from 'react-chartist';
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { fetchLoginStatistics, selectLoginStatistics } from '../../store/statistics/statisticsSlice';
+import { Mapper } from '../../interfaces/common';
+import SimpleUser from './SimpleUser';
 
 import './user-activity-diagram.scss';
 
-const animatedComponents = makeAnimated();
+const ACTIVITY_LABELS: Mapper = {
+  '1 hét': 'lastWeek',
+  '2 hét': 'lastTwoWeeks',
+  '1 hónap': 'lastMonth',
+  '2 hónap': 'lastTwoMonths',
+  '3 hónap': 'lastThreeMonths',
+  '6 hónap': 'lastSixMonths',
+  'több': 'moreThanSixMonths',
+};
 
 const UserActivityDiagram = () => {
+  const dispatch = useAppDispatch();
+
+  const loginStatistics = useAppSelector(selectLoginStatistics);
+  const [series, setSeries] = useState(new Array(7).fill(0));
+
   const data = {
     labels: [
       '1 hét',
@@ -19,16 +44,26 @@ const UserActivityDiagram = () => {
       '6 hónap',
       'több',
     ],
-    series: [
-      0.10,
-      0.30,
-      0.20,
-      0.15,
-      0.10,
-      0.04,
-      0.01,
-    ],
+    series,
   };
+
+  useEffect(() => {
+    dispatch(fetchLoginStatistics());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (all(complement(isNil), values(loginStatistics))) {
+      setSeries([
+        loginStatistics[ACTIVITY_LABELS['1 hét']],
+        loginStatistics[ACTIVITY_LABELS['2 hét']],
+        loginStatistics[ACTIVITY_LABELS['1 hónap']],
+        loginStatistics[ACTIVITY_LABELS['2 hónap']],
+        loginStatistics[ACTIVITY_LABELS['3 hónap']],
+        loginStatistics[ACTIVITY_LABELS['6 hónap']],
+        loginStatistics[ACTIVITY_LABELS['több']],
+      ]);
+    }
+  }, [loginStatistics]);
 
   const options = {
     distributeSeries: true,
@@ -80,24 +115,7 @@ const UserActivityDiagram = () => {
               }}
             />
           </Col>
-          <Col lg="4">
-            <Row>
-              <Select
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                isClearable
-                noOptionsMessage={() => 'Nincs több találat'}
-                // onChange={handleChange}
-                // options={optionsState}
-                placeholder="Egyedi felhasználó..."
-                // value={defaultOption}
-              />
-            </Row>
-            <Row className="user-data-row">
-              <p className="user-data">Utolsó belépés: 2021. 12. 03.</p>
-              <p className="user-data">Eltelt idő: 42 nap</p>
-            </Row>
-          </Col>
+          <SimpleUser />
         </Row>
       </Card.Body>
     </Card>

@@ -1,11 +1,99 @@
+import {
+  all,
+  complement,
+  isNil,
+  reject,
+  values,
+} from 'ramda';
+import { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import ChartistGraph from 'react-chartist';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { DeliveryT } from '../../store/statistics/statisticsSliceTypes';
+import {
+  fetchDeliveryStatistics,
+  selectInfoLetterDeliveryStatistics,
+  selectPayrollDeliveryStatistics,
+} from '../../store/statistics/statisticsSlice';
+
+const DELIVERY_LABELS = {
+  '1 hét': 'lastWeek',
+  '1 hónap': 'lastMonth',
+  '> 1 hónap': 'moreThanOneMonth',
+  'N/A': 'notDownloaded',
+};
 
 const AvgDeliveryTime = () => {
-  const data = {
-    labels: ['1 hét', '1 hó', '>1 hó'],
-    series: [20, 50, 30],
+  const dispatch = useAppDispatch();
+
+  const labels = [
+    '1 hét',
+    '1 hónap',
+    '> 1 hónap',
+    'N/A',
+  ];
+
+  const payrollDeliveryStatistics = useAppSelector(selectPayrollDeliveryStatistics);
+  const infoLetterDeliveryStatistics = useAppSelector(selectInfoLetterDeliveryStatistics);
+  const [infoLetterLabels, setInfoLetterLabels] = useState(labels);
+  const [infoLetterSeries, setInfoLetterSeries] = useState<number[]>(new Array(4).fill(0));
+  const [payrollLabels, setPayrollLabels] = useState(labels);
+  const [payrollSeries, setPayrollSeries] = useState<number[]>(new Array(4).fill(0));
+
+  const setData = (
+    dataLabels: string[],
+    setLabels: React.Dispatch<React.SetStateAction<string[]>>,
+    statistics: DeliveryT,
+    setSeries: React.Dispatch<React.SetStateAction<number[]>>,
+  ) => {
+    if (all(complement(isNil), values(statistics))) {
+      setLabels(reject(
+        (l: string) => statistics[DELIVERY_LABELS[l]] === 0,
+        dataLabels,
+      ));
+      setSeries(reject(
+        (v: number) => v === 0,
+        [
+          statistics[DELIVERY_LABELS['1 hét']],
+          statistics[DELIVERY_LABELS['1 hónap']],
+          statistics[DELIVERY_LABELS['> 1 hónap']],
+          statistics[DELIVERY_LABELS['N/A']],
+        ],
+      ));
+    }
   };
+
+  const infoLetterData = {
+    labels: infoLetterLabels,
+    series: infoLetterSeries,
+  };
+
+  const payrollData = {
+    labels: payrollLabels,
+    series: payrollSeries,
+  };
+
+  useEffect(() => {
+    dispatch(fetchDeliveryStatistics());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setData(
+      labels,
+      setPayrollLabels,
+      payrollDeliveryStatistics,
+      setPayrollSeries,
+    );
+  }, [payrollDeliveryStatistics]);
+
+  useEffect(() => {
+    setData(
+      labels,
+      setInfoLetterLabels,
+      infoLetterDeliveryStatistics,
+      setInfoLetterSeries,
+    );
+  }, [infoLetterDeliveryStatistics]);
 
   const options = {
     labelInterpolationFnc(label: string) {
@@ -41,7 +129,7 @@ const AvgDeliveryTime = () => {
           <Col xs md="6" className="text-center">
             <div><h4>Bérjegyzék</h4></div>
             <ChartistGraph
-              data={data}
+              data={payrollData}
               type="Pie"
               options={options}
               responsiveOptions={responsiveOptions}
@@ -50,7 +138,7 @@ const AvgDeliveryTime = () => {
           <Col xs md="6" className="text-center">
             <div><h4>Tájékoztató</h4></div>
             <ChartistGraph
-              data={data}
+              data={infoLetterData}
               type="Pie"
               options={options}
               responsiveOptions={responsiveOptions}

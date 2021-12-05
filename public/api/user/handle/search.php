@@ -9,29 +9,63 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/api_utils/statusEnums.php';
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/auth_utils/protections.php';
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/db/connectToDb.php';
+require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/db/statistics/searchUsersSimple.php';
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/db/user/searchUsers.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   try {
-    // csrf and login protection
-    $protectionProblem = protections(true, true, true, USER_PERMISSIONS::USER_ADMINISTRATOR);
-    if ($protectionProblem) {
+    $requestBody = json_decode(file_get_contents("php://input"));
+
+    if (!isset($requestBody->keyword) || !isset($requestBody->searchType)) {
       http_response_code(403);
-      echo $protectionProblem;
+      echo json_encode(
+        array(
+          'outcome' => 'failure',
+          'message' => 'Invalid request formation!'
+        )
+      );
       exit(1);
     }
 
-    $searchString = $_GET["keyword"];
+    $keyword = $requestBody->keyword;
+    $searchType = $requestBody->searchType;
+
+    // csrf and login protection
+    if ($searchType == USER_SEARCH_TYPE::ALL) {
+      $protectionProblem = protections(true, true, true, USER_PERMISSIONS::USER_ADMINISTRATOR);
+      if ($protectionProblem) {
+        http_response_code(403);
+        echo $protectionProblem;
+        exit(1);
+      }
+    } else if ($searchType == USER_SEARCH_TYPE::LAST_LOGIN) {
+      $protectionProblem = protections(true, true, true, USER_PERMISSIONS::ACTIVITY_ADMINISTRATOR);
+      if ($protectionProblem) {
+        http_response_code(403);
+        echo $protectionProblem;
+        exit(1);
+      }
+    }
+
     $pdo = connectToDb();
 
-    $usersJSON = searchUsers($pdo, $searchString);
-    $users = json_decode($usersJSON);
-    if ($users->outcome == 'failure') {
-      http_response_code(401);
+    if ($searchType == USER_SEARCH_TYPE::ALL) {
+      $usersJSON = searchUsers($pdo, $keyword);
+      $users = json_decode($usersJSON);
+      if ($users->outcome == 'failure') {
+        http_response_code(401);
+      }
+      echo $usersJSON;
+    } else if ($searchType == USER_SEARCH_TYPE::LAST_LOGIN) {
+      $usersJSON = searchUsersSimple($pdo, $keyword);
+      $users = json_decode($usersJSON);
+      if ($users->outcome == 'failure') {
+        http_response_code(401);
+      }
+      echo $usersJSON;
     }
-    echo $usersJSON;
 
   } catch (Exception $e) {
     http_response_code(403);
