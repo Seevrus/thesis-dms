@@ -13,7 +13,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/statistics/last
 
 header('Content-Type: application/json; charset=utf-8');
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   try {
     // csrf and login protection
     $protectionProblem = protections(true, true, true, USER_PERMISSIONS::ACTIVITY_ADMINISTRATOR);
@@ -23,8 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       exit(1);
     }
 
+    $queryParams = json_decode(file_get_contents("php://input"));
+    $companyName = $queryParams->companyName ?? '%';
+
     $pdo = connectToDb();
-    $lastLoginJSON = lastLogin($pdo);
+    $lastLoginJSON = lastLogin($pdo, $companyName);
     $lastLogin = json_decode($lastLoginJSON);
     if ($lastLogin->outcome == 'failure') {
       http_response_code(401);

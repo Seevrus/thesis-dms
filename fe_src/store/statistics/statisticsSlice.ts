@@ -6,6 +6,7 @@ import { RootState } from '../store';
 import { BaseResponseT } from '../commonTypes';
 import {
   DeliveryStatisticsResponseT,
+  LoginStatisticsRequestT,
   LoginStatisticsResponseT,
   SearchSimpleUserRequestT,
   SearchSimpleUserResponseT,
@@ -53,12 +54,12 @@ DeliveryStatisticsResponseT, null, { rejectValue: BaseResponseT }
 );
 
 export const fetchLoginStatistics = createAsyncThunk<
-LoginStatisticsResponseT, null, { rejectValue: BaseResponseT }
+LoginStatisticsResponseT, LoginStatisticsRequestT, { rejectValue: BaseResponseT }
 >(
   'statistics/fetchLoginStatistics',
-  async (_, { rejectWithValue }) => {
+  async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.get('api/statistics/lastlogin.php');
+      const response = await axios.post('api/statistics/lastlogin.php', requestData);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);

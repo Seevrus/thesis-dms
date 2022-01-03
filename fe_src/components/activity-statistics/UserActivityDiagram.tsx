@@ -14,6 +14,7 @@ import ChartistGraph from 'react-chartist';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchLoginStatistics, selectLoginStatistics } from '../../store/statistics/statisticsSlice';
 import { Mapper } from '../../interfaces/common';
+import SimpleCompany from './SimpleCompany';
 import SimpleUser from './SimpleUser';
 
 import './user-activity-diagram.scss';
@@ -32,6 +33,7 @@ const UserActivityDiagram = () => {
   const dispatch = useAppDispatch();
 
   const loginStatistics = useAppSelector(selectLoginStatistics);
+  const [companyName, setCompanyName] = useState<string>(undefined);
   const [series, setSeries] = useState(new Array(7).fill(0));
 
   const data = {
@@ -48,8 +50,8 @@ const UserActivityDiagram = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchLoginStatistics());
-  }, [dispatch]);
+    dispatch(fetchLoginStatistics({ companyName }));
+  }, [companyName, dispatch]);
 
   useEffect(() => {
     if (all(complement(isNil), values(loginStatistics))) {
@@ -97,8 +99,11 @@ const UserActivityDiagram = () => {
 
   return (
     <Card>
-      <Card.Header>
-        <Card.Title as="h4">Felhasználói aktivitás</Card.Title>
+      <Card.Header className="statistics-header">
+        <Card.Title as="h4" className="statistics-title">
+          Felhasználói aktivitás
+        </Card.Title>
+        <SimpleCompany setCompanyName={setCompanyName} />
       </Card.Header>
       <Card.Body>
         <Row>

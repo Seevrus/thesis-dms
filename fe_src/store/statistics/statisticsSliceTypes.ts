@@ -30,6 +30,10 @@ export interface DeliveryStatisticsResponseT extends BaseResponseT {
   info: DeliveryT;
 }
 
+export interface LoginStatisticsRequestT {
+  companyName?: string;
+}
+
 export interface LoginStatisticsResponseT extends BaseResponseT {
   statistics: LastLoginT;
 }

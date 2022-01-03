@@ -1,3 +1,22 @@
+.statistics-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.statistics-select-row {
+  flex-direction: row-reverse;
+  margin-right: 0;
+}
+
+.statistics-select {
+  width: 220px;
+}
+
+.statistics-title {
+  padding-right: 10%;
+}
+
 .user-data-row {
   flex-direction: column;
   margin-top: 15px;

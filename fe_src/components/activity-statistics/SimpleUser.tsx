@@ -74,8 +74,9 @@ const SimpleUser = () => {
 
   return (
     <Col lg="4">
-      <Row>
+      <Row className="statistics-select-row">
         <Select
+          className="statistics-select"
           closeMenuOnSelect
           components={animatedComponents}
           isClearable
