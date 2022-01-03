@@ -15,6 +15,9 @@ import {
   selectInfoLetterDeliveryStatistics,
   selectPayrollDeliveryStatistics,
 } from '../../store/statistics/statisticsSlice';
+import SimpleCompany from './SimpleCompany';
+
+import './user-activity-diagram.scss';
 
 const DELIVERY_LABELS = {
   '1 hét': 'lastWeek',
@@ -39,6 +42,7 @@ const AvgDeliveryTime = () => {
   const [infoLetterSeries, setInfoLetterSeries] = useState<number[]>(new Array(4).fill(0));
   const [payrollLabels, setPayrollLabels] = useState(labels);
   const [payrollSeries, setPayrollSeries] = useState<number[]>(new Array(4).fill(0));
+  const [companyName, setCompanyName] = useState<string>(undefined);
 
   const setData = (
     dataLabels: string[],
@@ -74,8 +78,8 @@ const AvgDeliveryTime = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchDeliveryStatistics());
-  }, [dispatch]);
+    dispatch(fetchDeliveryStatistics({ companyName }));
+  }, [companyName, dispatch]);
 
   useEffect(() => {
     setData(
@@ -121,8 +125,11 @@ const AvgDeliveryTime = () => {
 
   return (
     <Card>
-      <Card.Header>
-        <Card.Title as="h4">Átlagos kézbesítési idő</Card.Title>
+      <Card.Header className="statistics-header">
+        <Card.Title as="h4" className="statistics-title">
+          Átlagos kézbesítési idő
+        </Card.Title>
+        <SimpleCompany setCompanyName={setCompanyName} />
       </Card.Header>
       <Card.Body>
         <Row>

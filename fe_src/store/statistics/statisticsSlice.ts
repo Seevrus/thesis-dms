@@ -6,10 +6,10 @@ import { RootState } from '../store';
 import { BaseResponseT } from '../commonTypes';
 import {
   DeliveryStatisticsResponseT,
-  LoginStatisticsRequestT,
   LoginStatisticsResponseT,
   SearchSimpleUserRequestT,
   SearchSimpleUserResponseT,
+  StatisticsRequestT,
   StatisticsSliceT,
 } from './statisticsSliceTypes';
 
@@ -40,12 +40,12 @@ const initialState: StatisticsSliceT = {
 };
 
 export const fetchDeliveryStatistics = createAsyncThunk<
-DeliveryStatisticsResponseT, null, { rejectValue: BaseResponseT }
+DeliveryStatisticsResponseT, StatisticsRequestT, { rejectValue: BaseResponseT }
 >(
   'statistics/fetchDeliverytatistics',
-  async (_, { rejectWithValue }) => {
+  async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.get('api/statistics/delivery.php');
+      const response = await axios.post('api/statistics/delivery.php', requestData);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -54,7 +54,7 @@ DeliveryStatisticsResponseT, null, { rejectValue: BaseResponseT }
 );
 
 export const fetchLoginStatistics = createAsyncThunk<
-LoginStatisticsResponseT, LoginStatisticsRequestT, { rejectValue: BaseResponseT }
+LoginStatisticsResponseT, StatisticsRequestT, { rejectValue: BaseResponseT }
 >(
   'statistics/fetchLoginStatistics',
   async (requestData, { rejectWithValue }) => {
