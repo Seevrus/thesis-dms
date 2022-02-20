@@ -18,6 +18,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
       u.user_email,
       u.email_status,
       u.user_password,
+      u.user_login_attempt,
       u.user_last_login_attempt,
       c.company_name
     FROM user u
@@ -32,7 +33,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
     return json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Failed login attempt (404)',
+        'message' => 'Sikertelen bejelentkezés',
       )
     );
   }
@@ -51,7 +52,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
     return json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Failed login attempt (inactive)',
+        'message' => 'Sikertelen bejelentkezés',
       )
     );
   }
@@ -78,7 +79,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
     return json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Failed login attempt (ddos)',
+        'message' => 'Túl sok sikertelen bejelentkezési kísérlet',
       )
     );
   }
@@ -92,7 +93,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
     return json_encode(
       array(
         'outcome' => 'failure',
-        'message' => 'Failed login attempt (pwd)',
+        'message' => 'Sikertelen bejelentkezés',
       )
     );
   }

@@ -47,7 +47,7 @@ function validateEmail(PDO $pdo, string $taxNumber, string $emailCode) : string 
       return json_encode(
         array(
           'outcome' => 'success',
-          'message' => 'Email successfully updated',
+          'message' => 'Email successfully verified',
           'email_status' => mapEmailStatusToDb(EMAIL_STATUS::VALID_EMAIL),
         )
       );
