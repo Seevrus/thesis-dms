@@ -7,11 +7,6 @@ import {
   propEq,
 } from 'ramda';
 
-export const sleep = (ms = 2000) => {
-  console.log('Kindly remember to remove `sleep`');
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 // TODO: I do not really handle partial errors other than displaying them
 // eslint-disable-next-line import/prefer-default-export
 export const checkUpdateProfileResponseForErrors = (response: AxiosResponse) => head(

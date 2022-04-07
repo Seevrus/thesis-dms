@@ -16,7 +16,7 @@ import {
 } from './userSliceTypes';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '../store';
-import { checkUpdateProfileResponseForErrors, sleep } from '../helpers';
+import { checkUpdateProfileResponseForErrors } from '../helpers';
 
 const initialState: UserSliceT = {
   loginStatus: undefined,
@@ -34,8 +34,7 @@ const initialState: UserSliceT = {
 export const checkLoginStatus = createAsyncThunk<LoginResponseT, void>(
   'user/checkLoginStatus',
   async () => {
-    const response = await axios.get('/api/auth/checkLogin.php');
-    await sleep();
+    const response = await axios.get('./api/auth/checkLogin.php');
     return response.data;
   },
 );
@@ -46,7 +45,7 @@ LoginResponseT, LoginRequestT, { rejectValue: BaseResponseT }
   'user/login',
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/user/login.php', credentials);
+      const response = await axios.post('./api/user/login.php', credentials);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -58,7 +57,7 @@ export const logout = createAsyncThunk<LogoutResponseT, void, { rejectValue: Bas
   'user/logout',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/user/logout.php');
+      const response = await axios.post('./api/user/logout.php');
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -74,7 +73,7 @@ UpdateProfileRequestT,
   'user/updateProfile',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/user/update.php', requestData);
+      const response = await axios.post('./api/user/update.php', requestData);
       // TODO: I do not really handle partial errors other than displaying them
       const errors = checkUpdateProfileResponseForErrors(response);
       if (errors) {
@@ -96,7 +95,7 @@ EmailValidationResponseT, EmailValidationRequestT, { rejectValue: BaseResponseT 
   'user/validateEmailAddress',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/user/emailvalidation.php', requestData);
+      const response = await axios.post('./api/user/emailvalidation.php', requestData);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);

@@ -30,7 +30,7 @@ function selectDocuments(
             AND document_visible = :dvis
             AND (ISNULL(d.document_valid)
             OR d.document_valid > NOW())
-          ORDER BY added
+          ORDER BY added DESC
           LIMIT :dfrom, :dto';
         $fetchQueryStmt = $pdo->prepare($fetchQuery);
         $fetchQueryStmt->execute(

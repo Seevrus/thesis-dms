@@ -45,7 +45,7 @@ DeliveryStatisticsResponseT, StatisticsRequestT, { rejectValue: BaseResponseT }
   'statistics/fetchDeliverytatistics',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('api/statistics/delivery.php', requestData);
+      const response = await axios.post('./api/statistics/delivery.php', requestData);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -59,7 +59,7 @@ LoginStatisticsResponseT, StatisticsRequestT, { rejectValue: BaseResponseT }
   'statistics/fetchLoginStatistics',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('api/statistics/lastlogin.php', requestData);
+      const response = await axios.post('./api/statistics/lastlogin.php', requestData);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -73,7 +73,7 @@ SearchSimpleUserResponseT, SearchSimpleUserRequestT, { rejectValue: BaseResponse
   'statistics/fetchSimpleUser',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('api/user/handle/search.php', requestData);
+      const response = await axios.post('./api/user/handle/search.php', requestData);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);

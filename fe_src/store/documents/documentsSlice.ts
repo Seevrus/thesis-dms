@@ -9,7 +9,7 @@ const documentsAdapter = createEntityAdapter<DocumentT>();
 const initialState = documentsAdapter.getInitialState();
 
 export const deleteDocument = async (id: number) => {
-  const response = await axios.post('/api/document/delete.php', { documentId: id });
+  const response = await axios.post('./api/document/delete.php', { documentId: id });
   return response.data as BaseResponseT;
 };
 
@@ -17,7 +17,7 @@ export const fetchDocuments = createAsyncThunk<DocumentT[], FetchDocumentsReques
   'documents/fetchDocuments',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/document/list.php', requestData);
+      const response = await axios.post('./api/document/list.php', requestData);
       return response.data.documents;
     } catch (e) {
       return rejectWithValue(e.response.data as BaseResponseT);
@@ -26,7 +26,7 @@ export const fetchDocuments = createAsyncThunk<DocumentT[], FetchDocumentsReques
 );
 
 export const isDocumentAvailable = async (documentId: number) => {
-  const response = await axios.head(`/api/document/view.php?documentId=${documentId}`);
+  const response = await axios.head(`./api/document/view.php?documentId=${documentId}`);
   return response.headers['content-type'] === 'application/pdf';
 };
 

@@ -130,6 +130,7 @@ function listUserActivity(
       JOIN company c ON u.company_code = c.company_id
       JOIN document_category dc ON d.category_id = dc.category_id' 
       . $conditionString . '
+      ORDER BY d.document_added DESC 
       LIMIT 50';
     
     $activityQueryStmt = $pdo->query($activityQuery);

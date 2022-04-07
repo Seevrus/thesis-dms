@@ -13,7 +13,7 @@ export const listUserActivity = createAsyncThunk<UserActivityT[], ActivityReques
   'userActivity/listUserActivity',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/user/activity/list.php', requestData);
+      const response = await axios.post('./api/user/activity/list.php', requestData);
       return response.data.activities;
     } catch (e) {
       return rejectWithValue(e.response.data as BaseResponseT);
