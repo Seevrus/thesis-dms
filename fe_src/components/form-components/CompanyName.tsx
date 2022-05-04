@@ -42,7 +42,6 @@ const CompanyName = ({
           {!disabled && (
           <Form.Control
             as="select"
-            default={companyName}
             onChange={onCompanyChange}
           >
             {companies.map((company) => (

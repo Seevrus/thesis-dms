@@ -16,7 +16,7 @@ function isLoggedin (): bool {
 
       return false;
     } else {
-      $_SESSION['expires'] = $now + 3600;
+      $_SESSION['expires'] = $now + 900;
       return true;
     }
   } else {

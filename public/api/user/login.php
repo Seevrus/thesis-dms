@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $_SESSION['userEmail'] = $fetchUser->user_email;
       $_SESSION['emailStatus'] = $emailStatus;
       $_SESSION['companyName'] = $fetchUser->company_name;
-      $expires = time() + 3600;
+      $expires = time() + 900;
       $_SESSION['expires'] = $expires;
 
       if ($emailStatus == EMAIL_STATUS::NO_EMAIL) {

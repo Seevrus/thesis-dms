@@ -27,14 +27,11 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 import { UserPermissionsEnum } from '../../store/user/userSliceTypes';
-import Typography from '../views/Typography';
-import Icons from '../views/Icons';
 import LoadableActivityStatistics from '../activity-statistics/LoadableActivityStatistics';
 import LoadableDocuments from '../documents/LoadableDocuments';
 import LoadableProfile from '../profile/LoadableProfile';
 import LoadableUserActivity from '../useractivity/LoadableUserActivity';
 import LoadableUserHandling from '../userhandling/LoadableUserHandling';
-import TableList from '../views/TableList';
 
 const dashboardRoutes = [
   {
@@ -81,33 +78,6 @@ const dashboardRoutes = [
     component: <LoadableUserHandling />,
     layout: '',
     permission: UserPermissionsEnum.USER_ADMINISTRATOR,
-  },
-  {
-    id: uuidv4(),
-    path: '/typography',
-    name: 'Typography',
-    icon: 'nc-icon nc-paper-2',
-    component: <Typography />,
-    layout: '',
-    permission: '',
-  },
-  {
-    id: uuidv4(),
-    path: '/icons',
-    name: 'Icons',
-    icon: 'nc-icon nc-atom',
-    component: <Icons />,
-    layout: '',
-    permission: '',
-  },
-  {
-    id: uuidv4(),
-    path: '/table',
-    name: 'Table List',
-    icon: 'nc-icon nc-notes',
-    component: <TableList />,
-    layout: '',
-    permission: '',
   },
 ];
 

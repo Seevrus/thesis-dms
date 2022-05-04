@@ -10,9 +10,9 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEn
 header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  setcookie(session_name(), "", time() - 3600); //send browser command remove session id from cookie
+  setcookie(session_name(), "", time() - 900); // send browser command remove session id from cookie
 	session_unset();
-	session_destroy(); //remove session id login from server storage
+	session_destroy(); // remove session id login from server storage
 	session_write_close();
 
   echo json_encode(

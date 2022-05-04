@@ -5,10 +5,18 @@
       {
         "useBuiltIns": "entry",
         "corejs": 3,
-        "bugfixes": true
+        "bugfixes": true,
+        "targets": {
+          "esmodules": true
+        }
       }
     ],
-    "@babel/preset-react"
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic"
+      }
+    ]
   ],
   "plugins": ["@babel/plugin-syntax-dynamic-import"]
 }

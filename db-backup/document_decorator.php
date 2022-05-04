@@ -45,24 +45,24 @@ foreach ($documentIds as $row) {
 	$document_name = $row["document_name"];
 	
 	// based on the name
-	if (str_contains($document_name, "2021. szeptember")) {
+	if (str_contains($document_name, "2022. január")) {
 		// we generate a new date when it was added
-		$added_stamp = 1633424400;
+		$added_stamp = 1643612400;
 		$added = date("Y-m-d H:i:s", $added_stamp);
-	} else if (str_contains($document_name, "2021. október")) {
-		$added_stamp = 1636106400;
+	} else if (str_contains($document_name, "2022. február")) {
+		$added_stamp = 1646031600;
 		$added = date("Y-m-d H:i:s", $added_stamp);
-	} else if (str_contains($document_name, "2021. november")) {
-		$added_stamp = 1638698400;
+	} else if (str_contains($document_name, "2022. március")) {
+		$added_stamp = 1648706400;
 		$added = date("Y-m-d H:i:s", $added_stamp);
-	} else if (str_contains($document_name, "2021. december")) {
-		$added_stamp = 1641376800;
+	} else if (str_contains($document_name, "2022. április")) {
+		$added_stamp = 1651298400;
 		$added = date("Y-m-d H:i:s", $added_stamp);
 	}
 	
 	// with 80% probability, we also generate a new date when it was downloaded
 	if (mt_rand(1,100) > 20) {
-		$downloadedAt = date("Y-m-d H:i:s", mt_rand($added_stamp, 1642186800));
+		$downloadedAt = date("Y-m-d H:i:s", mt_rand($added_stamp, 1651644000));
 	} else {
 		$downloadedAt = NULL;
 	}

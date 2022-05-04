@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/create
 header('Content-Type: application/json;charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $MAX_ALLOWED_DOCUMENTS = 100;
+    $MAX_ALLOWED_DOCUMENTS = 1000;
 
     try {
       $protectionProblem = protections(true, true, true, USER_PERMISSIONS::DOCUMENT_CREATOR);

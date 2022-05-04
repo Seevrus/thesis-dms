@@ -2,7 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './fe_src/index.tsx',
+  context: path.resolve(__dirname, 'fe_src'),
+  entry: './index.tsx',
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'public', 'fe_dist'),
