@@ -74,6 +74,7 @@ const BrowseFilters = () => {
             closeMenuOnSelect={false}
             components={animatedComponents}
             isClearable
+            isMulti={false}
             noOptionsMessage={() => 'Nincs több találat'}
             onChange={handleChange}
             options={optionsState}

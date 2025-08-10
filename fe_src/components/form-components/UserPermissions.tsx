@@ -10,8 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserPermissionsEnum } from '../../store/user/userSliceTypes';
 
 interface UserPermissionsProps {
-  userPermissionsST: `${UserPermissionsEnum}`[];
-  setUserPermissionsST: React.Dispatch<React.SetStateAction<`${UserPermissionsEnum}`[]>>;
+  userPermissionsST: UserPermissionsEnum[];
+  setUserPermissionsST: React.Dispatch<React.SetStateAction<UserPermissionsEnum[]>>;
 }
 
 const UserPermissions = ({
@@ -26,7 +26,7 @@ const UserPermissions = ({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const permission = e.target.id as `${UserPermissionsEnum}`;
+    const permission = e.target.id as UserPermissionsEnum;
     const permissionSwitch = e.target.checked;
     if (permission === UserPermissionsEnum.INACTIVE) {
       if (permissionSwitch) {
@@ -53,7 +53,7 @@ const UserPermissions = ({
           <Form.Label>Jogosultságok</Form.Label>
           <InputGroup className="mb-3">
             {Object.keys(UserPermissionsEnum).map(
-              (userPermission: `${UserPermissionsEnum}`) => (
+              (userPermission) => (
                 userPermission !== UserPermissionsEnum.DOCUMENT_CREATOR && (
                 <Form.Check
                   inline
@@ -62,7 +62,7 @@ const UserPermissions = ({
                   label={userPermissionsTranslate[userPermission]}
                   name="user-permission"
                   type="checkbox"
-                  checked={userPermissionsST.includes(userPermission)}
+                  checked={userPermissionsST.includes(userPermission as UserPermissionsEnum)}
                   onChange={handleChange}
                 />
                 )

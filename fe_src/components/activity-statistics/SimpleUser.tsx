@@ -24,7 +24,7 @@ const SimpleUser = () => {
 
   const users = useAppSelector(selectSimpleUsers);
   const selectedUser = useAppSelector(selectSelectedUser);
-  const [userOptions, setUserOptions] = useState<OptionsT[]>();
+  const [userOptions, setUserOptions] = useState<OptionsT[]>([]);
   const [lastLoginTime, setLastLoginTime] = useState<Date>(null);
 
   useEffect(
@@ -56,7 +56,7 @@ const SimpleUser = () => {
     }, [selectedUser],
   );
 
-  const handleChange = (user: OptionsT) => {
+  const handleChange = (user) => {
     if (user) {
       const userTaxNumber = Number(user.value);
       dispatch(setUser(userTaxNumber));
@@ -80,6 +80,7 @@ const SimpleUser = () => {
           closeMenuOnSelect
           components={animatedComponents}
           isClearable
+          isMulti={false}
           noOptionsMessage={() => 'Nincs több találat'}
           onChange={handleChange}
           onInputChange={debounce(handleInputChange, 500)}

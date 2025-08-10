@@ -82,7 +82,7 @@ const UserHandling = () => {
   const [passwordST, setPasswordST] = useState('');
   const [taxNumberST, setTaxNumberST] = useState('');
   const [unlockUserST, setUnlockUserST] = useState(false);
-  const [userPermissionsST, setUserPermissionsST] = useState<`${UserPermissionsEnum}`[]>([]);
+  const [userPermissionsST, setUserPermissionsST] = useState<UserPermissionsEnum[]>([]);
   const [userRealNameST, setUserRealNameST] = useState('');
   const [updateFeedback, setUpdateFeedback] = useState('');
 

@@ -1,4 +1,4 @@
-import { BaseResponseT } from 'store/commonTypes';
+import { BaseResponseT } from "../commonTypes.ts";
 import { UserSearchTypeEnum } from '../otherUsers/otherUsersSliceTypes';
 
 export interface DeliveryT {

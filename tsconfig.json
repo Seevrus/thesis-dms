@@ -1,17 +1,7 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false,
-    "allowJs": true,
-    "baseUrl": "./fe_src",
-    "jsx": "react-jsx",
-    "lib": ["DOM", "ES2017", "ES2020"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "./public/fe_dist/",
-    "sourceMap": true,
-    "target": "es2017",
-  }
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }

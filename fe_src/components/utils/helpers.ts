@@ -1,4 +1,4 @@
-import { OptionsT } from 'interfaces/common';
+import { OptionsT } from '../../interfaces/common';
 import { paramCase } from 'param-case';
 
 export const createOption = (label: string): OptionsT => ({

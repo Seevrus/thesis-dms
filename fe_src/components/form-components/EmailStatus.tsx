@@ -34,7 +34,7 @@ const EmailStatus = ({
         <Form.Group controlId={`inline-email-status-${uuidv4()}`}>
           <Form.Label>Email státusz</Form.Label>
           <InputGroup className="mb-3">
-            {Object.keys(EmailStatusEnum).map((emailStatus: `${EmailStatusEnum}`) => (
+            {Object.keys(EmailStatusEnum).map((emailStatus) => (
               <Form.Check
                 inline
                 id={emailStatus}

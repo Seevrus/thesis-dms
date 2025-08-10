@@ -77,6 +77,7 @@ const UserSearch = () => {
             className="filter-list-dropdown"
             closeMenuOnSelect
             components={animatedComponents}
+            isMulti={false}
             isSearchable
             noOptionsMessage={() => 'Nincs több találat'}
             onChange={handleChange}

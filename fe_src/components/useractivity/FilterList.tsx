@@ -53,7 +53,7 @@ const FilterList = ({
     setActiveOptions(map(createOption, prop(columnName, activeFilter)));
   }, [activeFilter, columnName]);
 
-  const handleChange = (selectedOptions: OptionsT[]) => {
+  const handleChange = (selectedOptions: readonly OptionsT[]) => {
     const selectedOptionsArray: string[] = map(prop('label'), selectedOptions);
     dispatch(filterModified(
       pipe(

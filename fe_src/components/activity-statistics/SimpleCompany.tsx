@@ -14,7 +14,7 @@ interface SimpleCompanyPropsT {
 const SimpleCompany = ({ setCompanyName }: SimpleCompanyPropsT) => {
   const animatedComponents = makeAnimated();
 
-  const [companyOptions, setCompanyOptions] = useState();
+  const [companyOptions, setCompanyOptions] = useState<OptionsT[]>();
 
   useEffect(() => {
     fetchColumnOptions('companyName')
@@ -23,7 +23,7 @@ const SimpleCompany = ({ setCompanyName }: SimpleCompanyPropsT) => {
       });
   }, []);
 
-  const handleChange = (company: OptionsT) => {
+  const handleChange = (company) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     company ? setCompanyName(company.label) : setCompanyName(undefined);
   };
@@ -34,6 +34,7 @@ const SimpleCompany = ({ setCompanyName }: SimpleCompanyPropsT) => {
       closeMenuOnSelect
       components={animatedComponents}
       isClearable
+      isMulti={false}
       noOptionsMessage={() => 'Nincs több találat'}
       onChange={handleChange}
       options={companyOptions}
