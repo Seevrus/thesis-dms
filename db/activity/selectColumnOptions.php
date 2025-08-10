@@ -61,4 +61,3 @@ function selectColumnOptions(PDO $pdo, string $columnName): string {
     );
   }
 }
-?>

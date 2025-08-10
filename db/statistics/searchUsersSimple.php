@@ -15,8 +15,8 @@ function searchUsersSimple(PDO $pdo, string $query): string {
         c.company_name AS companyName,
         u.user_real_name AS userRealName,
         u.user_last_login_attempt AS lastLogin
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         u.user_tax_number LIKE @searchString OR
         u.user_real_name LIKE @searchString OR

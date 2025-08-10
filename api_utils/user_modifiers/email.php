@@ -1,7 +1,7 @@
 <?php
-require_once dirname(dirname(__FILE__)) . '/emailer.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/auth_utils/protections.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/db/update/updateEmail.php';
+require_once dirname(__FILE__, 2) . '/emailer.php';
+require_once dirname(__FILE__, 3) . '/auth_utils/protections.php';
+require_once dirname(__FILE__, 3) . '/db/update/updateEmail.php';
 
 if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
   $protectionProblem = protections(false, false, true, USER_PERMISSIONS::USER_ADMINISTRATOR);
@@ -85,4 +85,3 @@ if ($_SESSION['taxNumber'] != $requestData->taxNumber) {
     }
   }
 }
-?>

@@ -3,8 +3,8 @@ function lastLogin(PDO $pdo, string $companyName): string {
   try {
     $lastWeekQuery = 'SELECT
       COUNT(user_tax_number)
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND u.user_last_login_attempt BETWEEN (NOW() - INTERVAL 7 DAY) AND NOW()
@@ -15,8 +15,8 @@ function lastLogin(PDO $pdo, string $companyName): string {
     
     $lastTwoWeeksQuery = 'SELECT
       COUNT(user_tax_number)
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND u.user_last_login_attempt BETWEEN (NOW() - INTERVAL 14 DAY) AND (NOW() - INTERVAL 7 DAY)
@@ -27,8 +27,8 @@ function lastLogin(PDO $pdo, string $companyName): string {
     
     $lastMonthQuery = 'SELECT
       COUNT(user_tax_number)
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND u.user_last_login_attempt BETWEEN (NOW() - INTERVAL 1 MONTH) AND (NOW() - INTERVAL 14 DAY)
@@ -39,8 +39,8 @@ function lastLogin(PDO $pdo, string $companyName): string {
     
     $lastTwoMonthsQuery = 'SELECT
       COUNT(user_tax_number)
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND u.user_last_login_attempt BETWEEN (NOW() - INTERVAL 2 MONTH) AND (NOW() - INTERVAL 1 MONTH)
@@ -51,8 +51,8 @@ function lastLogin(PDO $pdo, string $companyName): string {
 
     $lastThreeMonthsQuery = 'SELECT
       COUNT(user_tax_number)
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND u.user_last_login_attempt BETWEEN (NOW() - INTERVAL 3 MONTH) AND (NOW() - INTERVAL 2 MONTH)
@@ -63,8 +63,8 @@ function lastLogin(PDO $pdo, string $companyName): string {
 
     $lastSixMonthsQuery = 'SELECT
       COUNT(user_tax_number)
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND u.user_last_login_attempt BETWEEN (NOW() - INTERVAL 6 MONTH) AND (NOW() - INTERVAL 3 MONTH)
@@ -75,8 +75,8 @@ function lastLogin(PDO $pdo, string $companyName): string {
     
     $moreThanSixMonthsQuery = 'SELECT
       COUNT(user_tax_number)
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE 
         c.company_name LIKE :cn
         AND u.user_last_login_attempt < (NOW() - INTERVAL 6 MONTH)
@@ -87,8 +87,8 @@ function lastLogin(PDO $pdo, string $companyName): string {
     
     $allQuery = 'SELECT
       COUNT(user_tax_number)
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE 
         c.company_name LIKE :cn
         AND u.user_status = 1';
@@ -121,4 +121,3 @@ function lastLogin(PDO $pdo, string $companyName): string {
     );
   }
 }
-?>

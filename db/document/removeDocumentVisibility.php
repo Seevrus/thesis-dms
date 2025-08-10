@@ -9,7 +9,7 @@ function removeDocumentVisibility(PDO $pdo, string $taxNumber, string $documentI
     $fetchQuery = 'SELECT
         document_downloaded,
         document_path
-      FROM document
+      FROM wp_document
       WHERE
         document_id = :did
         AND user_tax_number = :utn
@@ -43,7 +43,7 @@ function removeDocumentVisibility(PDO $pdo, string $taxNumber, string $documentI
     }
 
     $updateQuery = 'UPDATE
-        document
+        wp_document
       SET
         document_visible = :dvis,
         document_path = :dpath
@@ -74,4 +74,3 @@ function removeDocumentVisibility(PDO $pdo, string $taxNumber, string $documentI
     );
   }
 }
-?>

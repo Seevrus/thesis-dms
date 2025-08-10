@@ -4,7 +4,7 @@ function updateFilter(PDO $pdo, string $filterId, $filter): string {
     // do some clean-up
     $filterId = htmlspecialchars($filterId, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
-    $updateFilterQuery = 'UPDATE user_activity_filter
+    $updateFilterQuery = 'UPDATE wp_user_activity_filter
       SET ufilter = :fr
       WHERE filter_id = :fid';
     
@@ -31,4 +31,3 @@ function updateFilter(PDO $pdo, string $filterId, $filter): string {
     );
   }
 }
-?>

@@ -7,7 +7,7 @@ function getDocumentPath(PDO $pdo, string $taxNumber, string $documentId) : stri
 
       $fetchQuery = 'SELECT
           document_path
-        FROM document 
+        FROM wp_document 
         WHERE
           document_id = :did
           AND document_visible = :dvis
@@ -47,4 +47,3 @@ function getDocumentPath(PDO $pdo, string $taxNumber, string $documentId) : stri
     );
   }
 }
-?>

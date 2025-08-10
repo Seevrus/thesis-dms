@@ -10,7 +10,7 @@ function registerDocumentDownload(PDO $pdo, string $taxNumber, string $documentI
 
     $fetchQuery = 'SELECT
         document_downloaded
-      FROM document
+      FROM wp_document
       WHERE
         user_tax_number = :utn
         AND document_id = :did';
@@ -26,7 +26,7 @@ function registerDocumentDownload(PDO $pdo, string $taxNumber, string $documentI
     // If not already registered, the register it
     if (is_null($documentRow['document_downloaded'])) {
       $registerQuery = 'UPDATE
-          document
+          wp_document
         SET
           document_downloaded = :dnow
         WHERE
@@ -55,4 +55,3 @@ function registerDocumentDownload(PDO $pdo, string $taxNumber, string $documentI
     );
   }
 }
-?>

@@ -27,4 +27,3 @@ if (in_array($_SERVER['REQUEST_METHOD'], array('GET', 'HEAD'))) {
     );
   }
 }
-?>

@@ -11,4 +11,3 @@ function saveFile(string $url) {
     return false;
   }
 }
-?>

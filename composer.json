@@ -1,14 +1,17 @@
 {
-    "name": "tz/thesis-dms",
-    "description": "Document management system using PHP RESTful APIs",
-    "type": "project",
-    "authors": [
-        {
-            "name": "Zoltan Till",
-            "email": "tiller2004@gmail.com"
-        }
-    ],
-    "require": {
-        "phpmailer/phpmailer": "^6.5"
+  "name": "tz/thesis-dms",
+  "description": "Document management system using PHP RESTful APIs",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Zoltan Till",
+      "email": "tiller2004@gmail.com"
     }
+  ],
+  "require": {
+    "ext-fileinfo": "*",
+    "ext-json": "*",
+    "ext-pdo": "*",
+    "phpmailer/phpmailer": "6.10.0"
+  }
 }

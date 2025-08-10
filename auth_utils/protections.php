@@ -19,4 +19,3 @@ function protections(bool $csrf, bool $login, bool $permissions, $permissionRequ
 
   return false;
 }
-?>

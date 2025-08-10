@@ -23,8 +23,8 @@ function selectDocuments(
             d.document_added AS added,
             d.document_downloaded AS downloadedAt,
             d.document_valid AS validUntil
-          FROM document d
-          JOIN document_category c ON d.category_id = c.category_id
+          FROM wp_document d
+          JOIN wp_document_category c ON d.category_id = c.category_id
           WHERE
             d.user_tax_number = :utn
             AND document_visible = :dvis
@@ -49,8 +49,8 @@ function selectDocuments(
           d.document_added AS added,
           d.document_downloaded AS downloadedAt,
           d.document_valid AS validUntil
-        FROM document d
-        JOIN document_category c ON d.category_id = c.category_id
+        FROM wp_document d
+        JOIN wp_document_category c ON d.category_id = c.category_id
         WHERE
           d.user_tax_number = :utn
           AND d.category_id = cid
@@ -88,4 +88,3 @@ function selectDocuments(
     );
   }
 }
-?>

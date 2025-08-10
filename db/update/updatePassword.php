@@ -6,7 +6,7 @@ function updatePassword(PDO $pdo, string $taxNumber, string $password): string {
 
     $selectUserQuery = 'SELECT
         user_email, email_status, user_password
-      FROM user
+      FROM wp_user
       WHERE user_tax_number = :utn';
     $selectUserStmt = $pdo->prepare($selectUserQuery);
     $selectUserStmt->execute(array( ':utn' => $taxNumber ));
@@ -26,7 +26,7 @@ function updatePassword(PDO $pdo, string $taxNumber, string $password): string {
 
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     $updatePasswordQuery = 'UPDATE
-        user
+        wp_user
       SET
         user_password = :pw,
         user_login_attempt = 0
@@ -56,4 +56,3 @@ function updatePassword(PDO $pdo, string $taxNumber, string $password): string {
     );
   }
 }
-?>

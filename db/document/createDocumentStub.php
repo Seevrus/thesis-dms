@@ -1,5 +1,5 @@
 <?php
-require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/generateRandomString.php';
+require_once dirname(__FILE__, 3) . '/api_utils/generateRandomString.php';
 
 function createDocumentStub(
   PDO $pdo,
@@ -16,7 +16,7 @@ function createDocumentStub(
     $validUntil = htmlspecialchars($validUntil, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
     $documentQuery = 'INSERT
-      INTO document (
+      INTO wp_document (
         user_tax_number,
         document_name,
         category_id,
@@ -30,8 +30,8 @@ function createDocumentStub(
         :dvis,
         :dvalid
       )';
-    $docuemntStmt = $pdo->prepare($documentQuery);
-    $docuemntStmt->execute(
+    $documentStmt = $pdo->prepare($documentQuery);
+    $documentStmt->execute(
       array(
         ':did' => $taxNumber,
         ':dname' => $documentName,
@@ -46,7 +46,7 @@ function createDocumentStub(
     // enable file upload to this record via a token
     $documentUploadCode = generateRandomString();
     $codeQuery = 'INSERT
-      INTO document_code (
+      INTO wp_document_code (
         document_id,
         upload_code
       )
@@ -79,4 +79,3 @@ function createDocumentStub(
     );
   }
 }
-?>

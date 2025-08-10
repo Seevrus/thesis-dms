@@ -92,4 +92,3 @@ function mapUserStatusToDb($userStatus) {
       return 1;
   }
 }
-?>

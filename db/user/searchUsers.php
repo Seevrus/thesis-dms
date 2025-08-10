@@ -19,8 +19,8 @@ function searchUsers(PDO $pdo, string $query): string {
         u.email_status AS emailStatus,
         u.user_login_attempt,
         u.user_last_login_attempt
-      FROM user u
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_user u
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         u.user_tax_number LIKE @searchString OR
         u.user_real_name LIKE @searchString OR
@@ -34,7 +34,7 @@ function searchUsers(PDO $pdo, string $query): string {
     // obtain user permissions
     $userPermissionsQuery = 'SELECT
       *
-    FROM user_permissions
+    FROM wp_user_permissions
     WHERE user_tax_number = :utn';
     $userPermissionsStmt = $pdo->prepare($userPermissionsQuery);
 
@@ -70,7 +70,7 @@ function searchUsers(PDO $pdo, string $query): string {
       unset($extendedUser["user_login_attempt"]);
       unset($extendedUser["user_last_login_attempt"]);
 
-      array_push($usersResult, $extendedUser);
+      $usersResult[] = $extendedUser;
     }
 
     return json_encode(
@@ -89,4 +89,3 @@ function searchUsers(PDO $pdo, string $query): string {
     );
   }
 }
-?>

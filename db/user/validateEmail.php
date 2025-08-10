@@ -10,7 +10,7 @@ function validateEmail(PDO $pdo, string $taxNumber, string $emailCode) : string 
   // It would be nice to double-check this assumption
   $checkHashQuery = 'SELECT
       email_code
-    FROM user_email_code
+    FROM wp_user_email_code
     WHERE user_tax_number = :utn';
   $checkHashStmt = $pdo->prepare($checkHashQuery);
   $checkHashStmt->execute(
@@ -22,7 +22,7 @@ function validateEmail(PDO $pdo, string $taxNumber, string $emailCode) : string 
   
   if (password_verify($emailCode, $userRow['email_code'])) {
     $updateEmailQuery = 'UPDATE
-        user
+        wp_user
       SET email_status = :st
       WHERE user_tax_number = :utn';
     $updateEmailStmt = $pdo->prepare($updateEmailQuery);
@@ -34,7 +34,7 @@ function validateEmail(PDO $pdo, string $taxNumber, string $emailCode) : string 
     );
 
     $deleteEmailCodeQuery = 'DELETE
-      FROM user_email_code
+      FROM wp_user_email_code
       WHERE user_tax_number = :utn';
     $deleteEmailCodeStmt = $pdo->prepare($deleteEmailCodeQuery);
     $deleteEmailCodeStmt->execute(
@@ -68,4 +68,3 @@ function validateEmail(PDO $pdo, string $taxNumber, string $emailCode) : string 
     );
   }
 }
-?>

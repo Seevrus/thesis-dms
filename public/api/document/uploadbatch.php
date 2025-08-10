@@ -7,11 +7,11 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/saveFile.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/api_utils/statusEnums.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/auth_utils/protections.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/connectToDb.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/db/document/createDocument.php';
+require_once dirname(__FILE__, 4) . '/api_utils/saveFile.php';
+require_once dirname(__FILE__, 4) . '/api_utils/statusEnums.php';
+require_once dirname(__FILE__, 4) . '/auth_utils/protections.php';
+require_once dirname(__FILE__, 4) . '/db/connectToDb.php';
+require_once dirname(__FILE__, 4) . '/db/document/createDocument.php';
 
 header('Content-Type: application/json;charset=utf-8');
 
@@ -152,4 +152,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     )
   );
 }
-?>

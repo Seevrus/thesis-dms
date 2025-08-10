@@ -4,7 +4,7 @@ function selectCompanies(PDO $pdo): string {
     $fetchCompanyQuery = 'SELECT 
         company_id AS id,
         company_name AS companyName
-      FROM company';
+      FROM wp_company';
 
     $fetchCompanyStmt = $pdo->prepare($fetchCompanyQuery);
     $fetchCompanyStmt->execute();

@@ -12,52 +12,40 @@ function listUserActivity(
   try {
     $conditionStrings = array();
     if (!empty($companyName)) {
-      array_push(
-        $conditionStrings,
-        htmlspecialchars(
+      $conditionStrings[] = htmlspecialchars(
           'c.company_name LIKE \'' . implode('\' OR c.company_name LIKE \'', $companyName) . '\'',
           ENT_COMPAT | ENT_HTML401, 'UTF-8'
-        )
       );
     }
     if (!empty($userRealName)) {
-      array_push(
-        $conditionStrings,
-        htmlspecialchars(
+      $conditionStrings[] = htmlspecialchars(
           'u.user_real_name LIKE \'' . implode('\' OR u.user_real_name LIKE \'', $userRealName) . '\'',
           ENT_COMPAT | ENT_HTML401, 'UTF-8'
-        )
       );
     }
     if (!empty($categoryName)) {
-      array_push(
-        $conditionStrings,
-        htmlspecialchars(
+      $conditionStrings[] = htmlspecialchars(
           'dc.category_name LIKE \'' . implode('\' OR dc.category_name LIKE \'', $categoryName) . '\'',
           ENT_COMPAT | ENT_HTML401, 'UTF-8'
-        )
       );
     }
     if (!empty($documentName)) {
-      array_push(
-        $conditionStrings,
-        htmlspecialchars(
+      $conditionStrings[] = htmlspecialchars(
           'd.document_name LIKE \'' . implode('\' OR d.document_name LIKE \'', $documentName) . '\'',
           ENT_COMPAT | ENT_HTML401, 'UTF-8'
-        )
       );
     }
     if (!empty($added)) {
       if (isset($added->from) && !isset($added->to)) {
         $from = htmlspecialchars($added->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_added' . ' >= \'' . $from . '\'');
+        $conditionStrings[] = 'd.document_added' . ' >= \'' . $from . '\'';
       } else if (!isset($added->from) && isset($added->to)) {
         $to = htmlspecialchars($added->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_added' . ' <= \'' . $to . '\'');
+        $conditionStrings[] = 'd.document_added' . ' <= \'' . $to . '\'';
       } else if (isset($added->from) && isset($added->to)) {
         $from = htmlspecialchars($added->from, ENT_COMPAT | ENT_HTML401, 'UTF-8');
         $to = htmlspecialchars($added->to, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-        array_push($conditionStrings, 'd.document_added' . ' >= \'' . $from . '\' AND d.document_added' . ' <= \'' . $to . '\'');
+        $conditionStrings[] = 'd.document_added' . ' >= \'' . $from . '\' AND d.document_added' . ' <= \'' . $to . '\'';
       }
     }
     if (!empty($validUntil)) {
@@ -82,7 +70,7 @@ function listUserActivity(
       }
 
       if (isset($finalCondition)) {
-        array_push($conditionStrings, $finalCondition);
+        $conditionStrings[] = $finalCondition;
         unset($finalCondition);
       }
     }
@@ -108,7 +96,7 @@ function listUserActivity(
       }
 
       if (isset($finalCondition)) {
-        array_push($conditionStrings, $finalCondition);
+        $conditionStrings[] = $finalCondition;
       }
     }
 
@@ -125,10 +113,10 @@ function listUserActivity(
         d.document_added AS added,
         d.document_valid AS validUntil,
         d.document_downloaded AS downloadedAt
-      FROM document d
-      JOIN user u ON d.user_tax_number = u.user_tax_number
-      JOIN company c ON u.company_code = c.company_id
-      JOIN document_category dc ON d.category_id = dc.category_id' 
+      FROM wp_document d
+      JOIN wp_user u ON d.user_tax_number = u.user_tax_number
+      JOIN wp_company c ON u.company_code = c.company_id
+      JOIN wp_document_category dc ON d.category_id = dc.category_id'
       . $conditionString . '
       ORDER BY d.document_added DESC 
       LIMIT 50';
@@ -150,4 +138,3 @@ function listUserActivity(
     );
   }
 }
-?>

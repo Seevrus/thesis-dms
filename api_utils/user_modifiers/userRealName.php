@@ -1,6 +1,6 @@
 <?php
-require_once dirname(dirname(dirname(__FILE__))) . '/auth_utils/protections.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/db/update/updateUserRealName.php';
+require_once dirname(__FILE__, 3) . '/auth_utils/protections.php';
+require_once dirname(__FILE__, 3) . '/db/update/updateUserRealName.php';
 
 $protectionProblem = protections(false, false, true, USER_PERMISSIONS::USER_ADMINISTRATOR);
 if ($protectionProblem) {
@@ -27,4 +27,3 @@ if ($protectionProblem) {
     );
   }
 }
-?>

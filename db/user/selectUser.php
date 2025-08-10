@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Europe/Budapest');
 
-require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/statusEnums.php';
+require_once dirname(__FILE__, 3) . '/api_utils/statusEnums.php';
 
 function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
   $MAX_ATTEMPT_TIMESPAN_HOURS = 1;
@@ -21,8 +21,8 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
       u.user_login_attempt,
       u.user_last_login_attempt,
       c.company_name
-    FROM user u
-    JOIN company c ON u.company_code = c.company_id
+    FROM wp_user u
+    JOIN wp_company c ON u.company_code = c.company_id
     WHERE user_tax_number = :utn';
   $selectUserStmt = $pdo->prepare($selectUserQuery);
   $selectUserStmt->execute(array( ':utn' => $taxNumber));
@@ -41,7 +41,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
   // case 2: inactive user
   $userPermissionsQuery = 'SELECT
       *
-    FROM user_permissions
+    FROM wp_user_permissions
     WHERE user_tax_number = :utn';
   $userPermissionsStmt = $pdo->prepare($userPermissionsQuery);
   $userPermissionsStmt->execute(array( ':utn' => $taxNumber));
@@ -59,7 +59,7 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
 
   // case 3.0: reset login attempts if they have occured long ago
   $updateTrialsQuery = 'UPDATE
-      user
+      wp_user
     SET user_login_attempt = :uatmpt
     WHERE user_tax_number = :utn';
   $updateTrialsStmt = $pdo->prepare($updateTrialsQuery);
@@ -120,4 +120,3 @@ function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
     )
   );
 }
-?>

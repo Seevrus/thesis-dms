@@ -8,7 +8,7 @@ function listFilters(PDO $pdo, string $taxNumber): string {
         filter_id as id,
         filter_name as filterName,
         ufilter as activityFilter
-      FROM user_activity_filter
+      FROM wp_user_activity_filter
       WHERE user_tax_number = :utn';
     
     $listFilterStmt = $pdo->prepare($listFilterQuery);
@@ -35,4 +35,3 @@ function listFilters(PDO $pdo, string $taxNumber): string {
     );
   }
 }
-?>

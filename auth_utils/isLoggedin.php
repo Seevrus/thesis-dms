@@ -23,4 +23,3 @@ function isLoggedin (): bool {
     return false;
   }
 }
-?>

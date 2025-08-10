@@ -1,5 +1,5 @@
 <?php
-require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/statusEnums.php';
+require_once dirname(__FILE__, 3) . '/api_utils/statusEnums.php';
 
 function modifyEmail(
   PDO $pdo,
@@ -21,7 +21,7 @@ function modifyEmail(
     // TODO: for now, I assume that only a valid request can reach up to this point.
     // It would be nice to double-check this assumption
     $updateEmailQuery = 'UPDATE
-        user
+        wp_user
       SET
         user_email = :uem,
         email_status = :est,
@@ -39,7 +39,7 @@ function modifyEmail(
     );
 
     $updateEmailCodeQuery = 'INSERT
-      INTO user_email_code (
+      INTO wp_user_email_code (
         user_tax_number,
         email_code
       )
@@ -72,4 +72,3 @@ function modifyEmail(
     );
   }
 }
-?>

@@ -5,7 +5,7 @@ function saveFilter(PDO $pdo, string $taxNumber, string $filterName, $filter): s
     $filterName = htmlspecialchars($filterName, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
     $saveQuery = 'INSERT
-      INTO user_activity_filter (
+      INTO wp_user_activity_filter (
         user_tax_number,
         filter_name,
         ufilter
@@ -40,4 +40,3 @@ function saveFilter(PDO $pdo, string $taxNumber, string $filterName, $filter): s
     );
   }
 }
-?>

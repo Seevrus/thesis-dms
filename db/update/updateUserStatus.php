@@ -1,5 +1,5 @@
 <?php
-require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/statusEnums.php';
+require_once dirname(__FILE__, 3) . '/api_utils/statusEnums.php';
 
 function updateUserStatus(PDO $pdo, string $taxNumber, string $userStatus): string {
   try {
@@ -7,7 +7,7 @@ function updateUserStatus(PDO $pdo, string $taxNumber, string $userStatus): stri
     $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
     $userStatus = htmlspecialchars($userStatus, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
-    $updateUserStatusQuery = 'UPDATE user SET user_status = :st WHERE user_tax_number = :utn';
+    $updateUserStatusQuery = 'UPDATE wp_user SET user_status = :st WHERE user_tax_number = :utn';
     $updateUserStatusStmt = $pdo->prepare($updateUserStatusQuery);
     $updateUserStatusStmt->execute(
       array(
@@ -32,4 +32,3 @@ function updateUserStatus(PDO $pdo, string $taxNumber, string $userStatus): stri
     );
   }
 }
-?>

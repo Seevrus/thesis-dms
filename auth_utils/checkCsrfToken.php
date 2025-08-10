@@ -10,4 +10,3 @@ function checkCsrfToken() : bool {
     return false;
   }
 }
-?>

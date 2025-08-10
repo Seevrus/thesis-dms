@@ -3,9 +3,9 @@ function averageDelivery(PDO $pdo, string $companyName): string {
   try {
     $lastWeekQuery = 'SELECT
         COUNT(document_id)
-      FROM document d
-      JOIN user u ON d.user_tax_number = u.user_tax_number
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_document d
+      JOIN wp_user u ON d.user_tax_number = u.user_tax_number
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND d.document_downloaded IS NOT NULL
@@ -29,9 +29,9 @@ function averageDelivery(PDO $pdo, string $companyName): string {
     
     $lastMonthQuery = 'SELECT
         COUNT(document_id)
-      FROM document d
-      JOIN user u ON d.user_tax_number = u.user_tax_number
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_document d
+      JOIN wp_user u ON d.user_tax_number = u.user_tax_number
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND d.document_downloaded IS NOT NULL
@@ -55,9 +55,9 @@ function averageDelivery(PDO $pdo, string $companyName): string {
     
     $moreThanOneMonthQuery = 'SELECT
         COUNT(document_id)
-      FROM document d
-      JOIN user u ON d.user_tax_number = u.user_tax_number
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_document d
+      JOIN wp_user u ON d.user_tax_number = u.user_tax_number
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND d.document_downloaded IS NOT NULL
@@ -81,9 +81,9 @@ function averageDelivery(PDO $pdo, string $companyName): string {
 
     $notDownloadedQuery = 'SELECT
         COUNT(document_id)
-      FROM document d
-      JOIN user u ON d.user_tax_number = u.user_tax_number
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_document d
+      JOIN wp_user u ON d.user_tax_number = u.user_tax_number
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND d.document_downloaded IS NULL
@@ -106,9 +106,9 @@ function averageDelivery(PDO $pdo, string $companyName): string {
     
     $allQuery = 'SELECT
         COUNT(document_id)
-      FROM document d
-      JOIN user u ON d.user_tax_number = u.user_tax_number
-      JOIN company c ON u.company_code = c.company_id
+      FROM wp_document d
+      JOIN wp_user u ON d.user_tax_number = u.user_tax_number
+      JOIN wp_company c ON u.company_code = c.company_id
       WHERE
         c.company_name LIKE :cn
         AND d.category_id = :cid';
@@ -156,4 +156,3 @@ function averageDelivery(PDO $pdo, string $companyName): string {
     );
   }
 }
-?>

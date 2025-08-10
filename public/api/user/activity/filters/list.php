@@ -6,10 +6,10 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
-require_once dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/api_utils/statusEnums.php';
-require_once dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/auth_utils/protections.php';
-require_once dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/db/connectToDb.php';
-require_once dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/db/activity/filter/listFilters.php';
+require_once dirname(__FILE__, 6) . '/api_utils/statusEnums.php';
+require_once dirname(__FILE__, 6) . '/auth_utils/protections.php';
+require_once dirname(__FILE__, 6) . '/db/connectToDb.php';
+require_once dirname(__FILE__, 6) . '/db/activity/filter/listFilters.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -49,4 +49,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     )
   );
 }
-?>

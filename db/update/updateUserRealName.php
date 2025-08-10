@@ -6,7 +6,7 @@ function updateUserRealName(PDO $pdo, string $taxNumber, string $newName): strin
     $newName = htmlspecialchars($newName, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
     $updateNameQuery = 'UPDATE
-        user
+        wp_user
       SET
         user_real_name = :urn
       WHERE
@@ -35,4 +35,3 @@ function updateUserRealName(PDO $pdo, string $taxNumber, string $newName): strin
     );
   }
 }
-?>

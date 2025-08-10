@@ -1,7 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
-require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
+require_once dirname(__FILE__, 2) . '/vendor/autoload.php';
 
 function emailer(string $recipient, string $subject, string $message) : string {
   $credentials = parse_ini_file('../../../email.ini');
@@ -27,4 +27,3 @@ function emailer(string $recipient, string $subject, string $message) : string {
     return 'Message sent!';
   }
 }
-?>

@@ -1,5 +1,5 @@
 <?php
-require_once dirname(dirname(dirname(__FILE__))) . '/api_utils/statusEnums.php';
+require_once dirname(__FILE__, 3) . '/api_utils/statusEnums.php';
 
 function updateUserPermissions(PDO $pdo, string $taxNumber, $userPermissions): string {
   try {
@@ -7,7 +7,7 @@ function updateUserPermissions(PDO $pdo, string $taxNumber, $userPermissions): s
     $taxNumber = htmlspecialchars($taxNumber, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 
     $deleteOldPermissionsQuery = 'DELETE
-      FROM user_permissions
+      FROM wp_user_permissions
       WHERE user_tax_number = :utn';
     $deleteOldPermissionsStmt = $pdo->prepare($deleteOldPermissionsQuery);
     $deleteOldPermissionsStmt->execute(array( ':utn' => $taxNumber ));
@@ -19,11 +19,11 @@ function updateUserPermissions(PDO $pdo, string $taxNumber, $userPermissions): s
         ':utn' => $taxNumber,
         ':pm' => mapUserPermissionToDb($permissionEnumValue),
       );
-      array_push($rowsToInsert, $row);
+      $rowsToInsert[] = $row;
     }
 
     $insertNewPermissionsQuery = 'INSERT
-      INTO user_permissions (user_tax_number, user_permission)
+      INTO wp_user_permissions (user_tax_number, user_permission)
       VALUES (:utn, :pm)';
     $insertNewPermissionsStmt = $pdo->prepare($insertNewPermissionsQuery);
 
@@ -47,4 +47,3 @@ function updateUserPermissions(PDO $pdo, string $taxNumber, $userPermissions): s
     );
   }
 }
-?>

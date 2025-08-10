@@ -13,7 +13,7 @@ function registerUploadedDocument(
 
     $documentCheckerQuery = 'SELECT
       *
-      FROM document_code
+      FROM wp_document_code
       WHERE
         document_id = :did
         AND upload_code = :dcode';
@@ -38,7 +38,7 @@ function registerUploadedDocument(
 
     // delete upload token from database
     $documentCheckerCleanUpQuery = 'DELETE
-      FROM document_code
+      FROM wp_document_code
       WHERE
         document_id = :did
         AND upload_code = :dcode';
@@ -52,7 +52,7 @@ function registerUploadedDocument(
 
     // save path in database
     $documentQuery = 'UPDATE
-        document
+        wp_document
       SET
         document_path = :dpath,
         document_visible = 1
@@ -80,4 +80,3 @@ function registerUploadedDocument(
     );
   }
 }
-?>
