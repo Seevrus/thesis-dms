@@ -37,7 +37,7 @@ const App = () => {
 
   return (
     <>
-      <Router basename="/">
+      <Router basename="/webporta">
         <Routes>
           <Route path="/*" element={rootComponent} />
           <Route

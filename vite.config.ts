@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   base: "/webporta",
   build: {
+    emptyOutDir: true,
     outDir: "../public/webporta",
   },
   root: "fe_src",
