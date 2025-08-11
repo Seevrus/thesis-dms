@@ -61,7 +61,7 @@ function Sidebar({ color, image, routes }) {
             />
           </div>
           <span className="simple-text">
-            Thesis-DMS
+            Webporta
           </span>
         </div>
         <Nav>

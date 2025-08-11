@@ -27,7 +27,7 @@ SearchUserResponseT, SearchUserRequestT, { rejectValue: BaseResponseT }
   'otherUsers/searchUsers',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('./api/user/handle/search.php', requestData);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/handle/search.php`, requestData);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -41,7 +41,7 @@ FetchCompaniesResponseT, null, { rejectValue: BaseResponseT }
   'otherUsers/selectCompanies',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('./api/company/search.php');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/company/search.php`);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
@@ -57,7 +57,7 @@ UpdateProfileRequestT,
   'otherUsers/updateUser',
   async (requestData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('./api/user/update.php', requestData);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/update.php`, requestData);
       // TODO: I do not really handle partial errors other than displaying them
       const errors = checkUpdateProfileResponseForErrors(response);
       if (errors) {

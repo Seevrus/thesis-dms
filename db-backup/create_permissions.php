@@ -4,7 +4,7 @@ date_default_timezone_set('Europe/Budapest');
 header('Content-type: text/html; charset=utf-8');
 
 function connectToDb(): PDO {
-    $credentials = parse_ini_file(dirname(__FILE__, 2) . '/wp_db.ini');
+    $credentials = parse_ini_file(dirname(__FILE__, 3) . '/wp_db.ini');
     $options = [
       \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
       \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
@@ -44,14 +44,19 @@ if (($handle = fopen("MockPermissions.csv", "r")) !== FALSE) {
 			:up
 		  )';
 		$insertUserStmt = $pdo->prepare($insertUserQuery);
-		$insertUserStmt->execute(
-		  array(
-		    ':utn' => $user_tax_number,
-			':up' => $permission
-		  )
-		);
-		
-		echo("Jogosultság hozzáadva: " . $user_tax_number . ": " . $permission . "\r\n");
+
+        try {
+            $insertUserStmt->execute(
+              array(
+                ':utn' => $user_tax_number,
+                ':up' => $permission
+              )
+            );
+
+            echo("Jogosultság hozzáadva: " . $user_tax_number . ": " . $permission . "<br>");
+        } catch (PDOException $e) {
+            echo $e->getMessage() . "<br>";
+        }
     }
     fclose($handle);
 }

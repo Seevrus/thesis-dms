@@ -4,7 +4,7 @@ date_default_timezone_set('Europe/Budapest');
 header('Content-type: text/html; charset=utf-8');
 
 function connectToDb(): PDO {
-    $credentials = parse_ini_file(dirname(__FILE__, 2) . '/wp_db.ini');
+    $credentials = parse_ini_file(dirname(__FILE__, 3) . '/wp_db.ini');
     $options = [
       \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
       \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
@@ -64,22 +64,30 @@ if (($handle = fopen("MockUsers.csv", "r")) !== FALSE) {
 			:ula,
 			:ulla
 		  )';
+
 		$insertUserStmt = $pdo->prepare($insertUserQuery);
-		$insertUserStmt->execute(
-		  array(
-		    ':utn' => $user_tax_number,
-			':cc' => $company_code,
-			':ust' => $user_status,
-			':un' => $user_real_name,
-			':uem' => empty($user_email) ? NULL : $user_email,
-			':est' => $email_status,
-			':pwd' => $user_password,
-			':ula' => $user_login_attempt,
-			':ulla' => empty($user_last_login_attempt) ? NULL : $user_last_login_attempt
-		  )
-		);
-		
-		echo("Felhasználó hozzáadva: " . $user_real_name . " (" . $user_tax_number . ")\r\n");
+
+        try {
+            $insertUserStmt->execute(
+                array(
+                    ':utn' => $user_tax_number,
+                    ':cc' => $company_code,
+                    ':ust' => $user_status,
+                    ':un' => $user_real_name,
+                    ':uem' => empty($user_email) ? NULL : $user_email,
+                    ':est' => $email_status,
+                    ':pwd' => $user_password,
+                    ':ula' => $user_login_attempt,
+                    ':ulla' => empty($user_last_login_attempt) ? NULL : $user_last_login_attempt
+                )
+            );
+
+            echo("Felhasználó hozzáadva: " . $user_real_name . " (" . $user_tax_number . ")\r\n");
+        } catch (PDOException $e) {
+            echo $e->getMessage() . "<br>";
+        }
     }
     fclose($handle);
+} else {
+    echo "Fájl nem található";
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const fetchCsrfToken = async () => {
-  const response = await axios.get('./api/auth/csrf.php');
+  const response = await axios.get(`${import.meta.env.VITE_API_URL}/auth/csrf.php`);
   return response.data.csrfToken;
 };
 

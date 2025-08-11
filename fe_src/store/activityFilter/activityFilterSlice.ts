@@ -43,7 +43,7 @@ const initialState: ActivityFilterSliceT = {
 
 export const fetchColumnOptions = async (columnName: keyof ActivityFilterT) => {
   try {
-    const response = await axios.post('./api/user/activity/options.php', { columnName });
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/activity/options.php`, { columnName });
     return response.data.options as string[];
   } catch (e) {
     throw new Error(e.data.message);
@@ -54,7 +54,7 @@ export const fetchFilters = createAsyncThunk<ActivityFilterResponseT, void>(
   'activityFilter/fetchFilters',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('./api/user/activity/filters/list.php');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/activity/filters/list.php`);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data as BaseResponseT);
@@ -66,7 +66,7 @@ export const saveFilter = createAsyncThunk<BaseResponseT, SaveFilterRequestT>(
   'activityFilter/saveFilter',
   async (request, { rejectWithValue }) => {
     try {
-      const response = await axios.post('./api/user/activity/filters/save.php', request);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/activity/filters/save.php`, request);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data as BaseResponseT);
