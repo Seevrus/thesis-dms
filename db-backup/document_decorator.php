@@ -3,16 +3,15 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 date_default_timezone_set('Europe/Budapest');
 header('Content-type: text/html; charset=utf-8');
 
-function connectToDb(): PDO
-{
-    $credentials = parse_ini_file(dirname(dirname(__FILE__)) . '/db.ini');
+function connectToDb(): PDO {
+    $credentials = parse_ini_file(dirname(__FILE__, 2) . '/wp_db.ini');
     $options = [
       \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
       \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
       \PDO::ATTR_EMULATE_PREPARES   => false,
     ];
     $dsn = 'mysql:host=' . $credentials['host'] . 
-           ';dbname=' . $credentials['db'] . 
+           ';dbname=' . $credentials['db'] .
            ';charset=' . $credentials['charset'];
     try {
         $pdo = new PDO(
@@ -28,7 +27,7 @@ function connectToDb(): PDO
     return $pdo;
 }
 
-function str_contains($haystack, $needle) {
+function str_contains($haystack, $needle): bool {
 	return $needle !== '' && mb_strpos($haystack, $needle) !== false;
 }
 
@@ -36,7 +35,7 @@ function str_contains($haystack, $needle) {
 $pdo = connectToDb();
 
 // select all document ID-s
-$selectDocumentIdsQuery = 'SELECT document_id, document_name FROM document';
+$selectDocumentIdsQuery = 'SELECT document_id, document_name FROM wp_document';
 $selectDocumentIdsStmt = $pdo->query($selectDocumentIdsQuery);
 $documentIds = $selectDocumentIdsStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -67,7 +66,7 @@ foreach ($documentIds as $row) {
 		$downloadedAt = NULL;
 	}
 	
-	$decorateDocumentQuery = 'UPDATE document SET document_added = :dad, document_downloaded = :ddn WHERE document_id = :did';
+	$decorateDocumentQuery = 'UPDATE wp_document SET document_added = :dad, document_downloaded = :ddn WHERE document_id = :did';
 	$decorateDocumentStmt = $pdo->prepare($decorateDocumentQuery);
 	$decorateDocumentStmt->execute(
 		array(
@@ -79,4 +78,3 @@ foreach ($documentIds as $row) {
 	
 	echo("Dokumentum módosítva: " . $document_name . ". Hozzáadva: " . $added . ", letöltve: " . $downloadedAt . "." . "\r\n");
 }
-?>

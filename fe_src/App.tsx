@@ -37,7 +37,7 @@ const App = () => {
 
   return (
     <>
-      <Router>
+      <Router basename="/">
         <Routes>
           <Route path="/*" element={rootComponent} />
           <Route

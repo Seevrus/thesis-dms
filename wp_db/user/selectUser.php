@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Europe/Budapest');
 
-require_once dirname(__FILE__, 3) . '/api_utils/statusEnums.php';
+require_once dirname(__FILE__, 3) . '/wp_api_utils/statusEnums.php';
 
 function selectUser(PDO $pdo, string $taxNumber, string $password) : string {
   $MAX_ATTEMPT_TIMESPAN_HOURS = 1;

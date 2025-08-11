@@ -11,6 +11,7 @@
   "require": {
     "ext-fileinfo": "*",
     "ext-json": "*",
+    "ext-mbstring": "*",
     "ext-pdo": "*",
     "phpmailer/phpmailer": "6.10.0"
   }

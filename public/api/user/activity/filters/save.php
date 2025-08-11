@@ -6,10 +6,10 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
-require_once dirname(__FILE__, 6) . '/api_utils/statusEnums.php';
-require_once dirname(__FILE__, 6) . '/auth_utils/protections.php';
-require_once dirname(__FILE__, 6) . '/db/connectToDb.php';
-require_once dirname(__FILE__, 6) . '/db/activity/filter/saveFilter.php';
+require_once dirname(__FILE__, 6) . '/wp_api_utils/statusEnums.php';
+require_once dirname(__FILE__, 6) . '/wp_auth_utils/protections.php';
+require_once dirname(__FILE__, 6) . '/wp_db/connectToDb.php';
+require_once dirname(__FILE__, 6) . '/wp_db/activity/filter/saveFilter.php';
 
 header('Content-Type: application/json; charset=utf-8');
 

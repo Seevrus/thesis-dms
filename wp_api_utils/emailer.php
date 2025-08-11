@@ -4,7 +4,7 @@ use PHPMailer\PHPMailer\SMTP;
 require_once dirname(__FILE__, 2) . '/vendor/autoload.php';
 
 function emailer(string $recipient, string $subject, string $message) : string {
-  $credentials = parse_ini_file('../../../email.ini');
+  $credentials = parse_ini_file('../../../wp_email.ini');
 
   $mail = new PHPMailer();
   $mail->isSMTP();

@@ -6,9 +6,9 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
-require_once dirname(__FILE__, 4) . '/api_utils/statusEnums.php';
-require_once dirname(__FILE__, 4) . '/auth_utils/protections.php';
-require_once dirname(__FILE__, 4) . '/db/connectToDb.php';
+require_once dirname(__FILE__, 4) . '/wp_api_utils/statusEnums.php';
+require_once dirname(__FILE__, 4) . '/wp_auth_utils/protections.php';
+require_once dirname(__FILE__, 4) . '/wp_db/connectToDb.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -39,42 +39,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdo = connectToDb();
 
     if ($requestData->userRealName) {
-      require_once dirname(__FILE__, 4) . '/api_utils/user_modifiers/userRealName.php';
+      require_once dirname(__FILE__, 4) . '/wp_api_utils/user_modifiers/userRealName.php';
       $requestAnswer[] = $userRealNameModifyResult;
     }
 
     if (!!$requestData->companyName) {
-      require_once dirname(__FILE__, 4) . '/api_utils/user_modifiers/companyName.php';
+      require_once dirname(__FILE__, 4) . '/wp_api_utils/user_modifiers/companyName.php';
       $requestAnswer[] = $companyModifyResult;
     }
 
     if (!!$requestData->userStatus) {
-      require_once dirname(__FILE__, 4) . '/api_utils/user_modifiers/userStatus.php';
+      require_once dirname(__FILE__, 4) . '/wp_api_utils/user_modifiers/userStatus.php';
       $requestAnswer[] = $userStatusModifyResult;
     }
 
     if (!!$requestData->userEmail) {
-      require_once dirname(__FILE__, 4) . '/api_utils/user_modifiers/email.php';
+      require_once dirname(__FILE__, 4) . '/wp_api_utils/user_modifiers/email.php';
       $requestAnswer[] = $emailModifyResult;
     }
 
     if (!!$requestData->emailStatus) {
-      require_once dirname(__FILE__, 4) . '/api_utils/user_modifiers/emailStatus.php';
+      require_once dirname(__FILE__, 4) . '/wp_api_utils/user_modifiers/emailStatus.php';
       $requestAnswer[] = $emailStatusModifyResult;
     }
 
     if (!!$requestData->password) {
-      require_once dirname(__FILE__, 4) . '/api_utils/user_modifiers/password.php';
+      require_once dirname(__FILE__, 4) . '/wp_api_utils/user_modifiers/password.php';
       $requestAnswer[] = $passwordModifyResult;
     }
 
     if ($requestData->attempts) {
-      require_once dirname(__FILE__, 4) . '/api_utils/user_modifiers/attempts.php';
+      require_once dirname(__FILE__, 4) . '/wp_api_utils/user_modifiers/attempts.php';
       array_push($requestAnswer, $attemptsModifyResult);
     }
 
     if (array_key_exists('userPermissions', $requestData)) {
-      require_once dirname(__FILE__, 4) . '/api_utils/user_modifiers/userPermissions.php';
+      require_once dirname(__FILE__, 4) . '/wp_api_utils/user_modifiers/userPermissions.php';
       array_push($requestAnswer, $userPermissionsModifyResult);
     }
 

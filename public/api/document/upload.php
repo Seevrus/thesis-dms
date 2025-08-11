@@ -6,12 +6,12 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
-require_once dirname(__FILE__, 4) . '/api_utils/generateRandomString.php';
-require_once dirname(__FILE__, 4) . '/api_utils/saveFile.php';
-require_once dirname(__FILE__, 4) . '/api_utils/statusEnums.php';
-require_once dirname(__FILE__, 4) . '/auth_utils/protections.php';
-require_once dirname(__FILE__, 4) . '/db/connectToDb.php';
-require_once dirname(__FILE__, 4) . '/db/document/registerUploadedDocument.php';
+require_once dirname(__FILE__, 4) . '/wp_api_utils/generateRandomString.php';
+require_once dirname(__FILE__, 4) . '/wp_api_utils/saveFile.php';
+require_once dirname(__FILE__, 4) . '/wp_api_utils/statusEnums.php';
+require_once dirname(__FILE__, 4) . '/wp_auth_utils/protections.php';
+require_once dirname(__FILE__, 4) . '/wp_db/connectToDb.php';
+require_once dirname(__FILE__, 4) . '/wp_db/document/registerUploadedDocument.php';
 
 header('Content-Type: application/json; charset=utf-8');
 

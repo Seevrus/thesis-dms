@@ -1,6 +1,6 @@
 <?php
-require_once dirname(__FILE__, 3) . '/auth_utils/protections.php';
-require_once dirname(__FILE__, 3) . '/db/update/updateCompany.php';
+require_once dirname(__FILE__, 3) . '/wp_auth_utils/protections.php';
+require_once dirname(__FILE__, 3) . '/wp_db/update/updateCompany.php';
 
 $protectionProblem = protections(false, false, true, USER_PERMISSIONS::USER_ADMINISTRATOR);
 if ($protectionProblem) {

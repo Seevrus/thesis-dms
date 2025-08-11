@@ -25,7 +25,7 @@ const LoginForm = () => {
   const [isComponentLoading, setIsComponentLoading] = useState(true);
 
   useEffect(() => {
-    document.title = 'Thesis-DMS';
+    document.title = 'Zephyr Webporta';
   }, []);
 
   // Redirect user is they are not supposed to be here
@@ -50,8 +50,8 @@ const LoginForm = () => {
   // End of redirections
 
   const [isFormValidated, setIsFormValidated] = useState<boolean>(false);
-  const [taxNumber, setTaxNumber] = useState<string>('8713053299');
-  const [loginPassword, setLoginPassword] = useState<string>('jelszo');
+  const [taxNumber, setTaxNumber] = useState<string>('');
+  const [loginPassword, setLoginPassword] = useState<string>('');
   const [taxNumberError, setTaxNumberError] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
@@ -94,7 +94,7 @@ const LoginForm = () => {
         <Col md="8">
           <Card className="login">
             <Card.Header>
-              <Card.Title as="h4">Thesis-DMS Bejelentkezés</Card.Title>
+              <Card.Title as="h4">Webporta Bejelentkezés</Card.Title>
             </Card.Header>
             <Card.Body>
               <Form noValidate validated={isFormValidated}>

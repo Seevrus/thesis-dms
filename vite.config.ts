@@ -3,8 +3,9 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/webporta",
   build: {
-    outDir: "../public/fe_dist",
+    outDir: "../public/webporta",
   },
   root: "fe_src",
   plugins: [react()],

@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__, 3) . '/api_utils/generateRandomString.php';
+require_once dirname(__FILE__, 3) . '/wp_api_utils/generateRandomString.php';
 
 function createDocument(
   PDO $pdo,

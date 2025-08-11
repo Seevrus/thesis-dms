@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__, 3) . '/api_utils/statusEnums.php';
+require_once dirname(__FILE__, 3) . '/wp_api_utils/statusEnums.php';
 
 function updateEmailStatus(PDO $pdo, string $taxNumber, string $emailStatus): string {
   try {

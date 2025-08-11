@@ -3,16 +3,15 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 date_default_timezone_set('Europe/Budapest');
 header('Content-type: text/html; charset=utf-8');
 
-function connectToDb(): PDO
-{
-    $credentials = parse_ini_file(dirname(dirname(__FILE__)) . '/db.ini');
+function connectToDb(): PDO {
+    $credentials = parse_ini_file(dirname(__FILE__, 2) . '/wp_db.ini');
     $options = [
       \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
       \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
       \PDO::ATTR_EMULATE_PREPARES   => false,
     ];
     $dsn = 'mysql:host=' . $credentials['host'] . 
-           ';dbname=' . $credentials['db'] . 
+           ';dbname=' . $credentials['db'] .
            ';charset=' . $credentials['charset'];
     try {
         $pdo = new PDO(
@@ -44,7 +43,7 @@ if (($handle = fopen("MockUsers.csv", "r")) !== FALSE) {
 		$user_last_login_attempt = $data[8];
 		
 		$insertUserQuery = 'INSERT
-		  INTO user (
+		  INTO wp_user (
 		    user_tax_number,
 			company_code,
 			user_status,
@@ -84,4 +83,3 @@ if (($handle = fopen("MockUsers.csv", "r")) !== FALSE) {
     }
     fclose($handle);
 }
-?>

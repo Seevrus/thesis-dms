@@ -81,7 +81,7 @@ const dashboardRoutes = [
   },
 ];
 
-const getDashboardRoutes = (userPermissions: `${UserPermissionsEnum}`[]) => filter(
+const getDashboardRoutes = (userPermissions: UserPermissionsEnum[]) => filter(
   propSatisfies(
     either(
       isEmpty,

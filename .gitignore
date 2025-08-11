@@ -152,9 +152,9 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,composer,visualstudiocode
 
 ### MISC
-public/fe_dist/*
-db.ini
-db_wp.ini
-email.ini
-email_wp.ini
+public/webporta/*
+wp_db.ini
+wp_db.remote.ini
+wp_email.ini
+wp_email.remote.ini
 key.ini
