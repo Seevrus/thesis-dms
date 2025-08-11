@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 date_default_timezone_set('Europe/Budapest');
 header('Content-type: text/html; charset=utf-8');
 
@@ -10,7 +11,7 @@ function connectToDb(): PDO {
       \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
       \PDO::ATTR_EMULATE_PREPARES   => false,
     ];
-    $dsn = 'mysql:host=' . $credentials['host'] . 
+    $dsn = 'mysql:host=' . $credentials['host'] .
            ';dbname=' . $credentials['db'] .
            ';charset=' . $credentials['charset'];
     try {
@@ -27,10 +28,6 @@ function connectToDb(): PDO {
     return $pdo;
 }
 
-function str_contains($haystack, $needle): bool {
-	return $needle !== '' && mb_strpos($haystack, $needle) !== false;
-}
-
 // connect to database
 $pdo = connectToDb();
 
@@ -42,30 +39,30 @@ $documentIds = $selectDocumentIdsStmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($documentIds as $row) {
 	$document_id = $row["document_id"];
 	$document_name = $row["document_name"];
-	
+
 	// based on the name
-	if (str_contains($document_name, "2022. január")) {
+	if (str_contains($document_name, "2025. augusztus")) {
 		// we generate a new date when it was added
-		$added_stamp = 1643612400;
+		$added_stamp = 1756706400;
 		$added = date("Y-m-d H:i:s", $added_stamp);
-	} else if (str_contains($document_name, "2022. február")) {
-		$added_stamp = 1646031600;
+	} else if (str_contains($document_name, "2025. szeptember")) {
+		$added_stamp = 1759298400;
 		$added = date("Y-m-d H:i:s", $added_stamp);
-	} else if (str_contains($document_name, "2022. március")) {
-		$added_stamp = 1648706400;
+	} else if (str_contains($document_name, "2025. október")) {
+		$added_stamp = 1761980400;
 		$added = date("Y-m-d H:i:s", $added_stamp);
-	} else if (str_contains($document_name, "2022. április")) {
-		$added_stamp = 1651298400;
+	} else if (str_contains($document_name, "2025. november")) {
+		$added_stamp = 1764572400;
 		$added = date("Y-m-d H:i:s", $added_stamp);
 	}
-	
+
 	// with 80% probability, we also generate a new date when it was downloaded
 	if (mt_rand(1,100) > 20) {
-		$downloadedAt = date("Y-m-d H:i:s", mt_rand($added_stamp, 1651644000));
+		$downloadedAt = date("Y-m-d H:i:s", mt_rand($added_stamp, 1767164400));
 	} else {
 		$downloadedAt = NULL;
 	}
-	
+
 	$decorateDocumentQuery = 'UPDATE wp_document SET document_added = :dad, document_downloaded = :ddn WHERE document_id = :did';
 	$decorateDocumentStmt = $pdo->prepare($decorateDocumentQuery);
 	$decorateDocumentStmt->execute(
@@ -75,6 +72,6 @@ foreach ($documentIds as $row) {
 			':did' => $document_id
 		)
 	);
-	
+
 	echo("Dokumentum módosítva: " . $document_name . ". Hozzáadva: " . $added . ", letöltve: " . $downloadedAt . "." . "\r\n");
 }

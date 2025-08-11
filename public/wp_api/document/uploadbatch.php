@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'url' => $document->url,
             'validUntil' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
           );
-          array_push($response, $fileResponse);
+          $response[] = $fileResponse;
           continue;
         }
 
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'url' => $document->url,
             'validUntil' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
           );
-          array_push($response, $fileResponse);
+          $response[] = $fileResponse;
           continue;
         }
 
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'url' => $document->url,
             'validUntil' => $validUntil == 0 ? null : date("Y-m-d H:i:s", $validUntil),
           );
-          array_push($response, $fileResponse);
+          $response[] = $fileResponse;
           continue;
         }
 

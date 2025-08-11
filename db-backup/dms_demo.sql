@@ -27,28 +27,28 @@ SET time_zone = "+00:00";
 -- Tábla szerkezet ehhez a táblához `company`
 --
 
-DROP TABLE IF EXISTS `company`;
-CREATE TABLE `company` (
+DROP TABLE IF EXISTS `wp_company`;
+CREATE TABLE `wp_company` (
   `company_id` bigint(10) UNSIGNED NOT NULL,
   `company_name` varchar(45) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `company`
+-- A tábla adatainak kiíratása `wp_company`
 --
 
-INSERT INTO `company` (`company_id`, `company_name`) VALUES
+INSERT INTO `wp_company` (`company_id`, `company_name`) VALUES
 (1, 'Balázs és Tsa Bt.'),
 (2, 'Jónás Nyrt.');
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `document`
+-- Tábla szerkezet ehhez a táblához `wp_document`
 --
 
-DROP TABLE IF EXISTS `document`;
-CREATE TABLE `document` (
+DROP TABLE IF EXISTS `wp_document`;
+CREATE TABLE `wp_document` (
   `document_id` bigint(10) UNSIGNED NOT NULL,
   `user_tax_number` bigint(10) UNSIGNED NOT NULL,
   `document_name` varchar(100) COLLATE utf8_hungarian_ci NOT NULL,
@@ -61,10 +61,10 @@ CREATE TABLE `document` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `document`
+-- A tábla adatainak kiíratása `wp_document`
 --
 
-INSERT INTO `document` (`document_id`, `user_tax_number`, `document_name`, `category_id`, `document_added`, `document_visible`, `document_valid`, `document_downloaded`, `document_path`) VALUES
+INSERT INTO `wp_document` (`document_id`, `user_tax_number`, `document_name`, `category_id`, `document_added`, `document_visible`, `document_valid`, `document_downloaded`, `document_path`) VALUES
 (1, 8994312129, 'Munkabér 2021. szeptember', 1, '2021-10-05 11:00:00', 1, NULL, '2022-01-02 01:54:36', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195821_zTVtnQvM.pdf'),
 (2, 8994312129, 'Munkabér 2021. október', 1, '2021-11-05 11:00:00', 1, NULL, '2021-11-12 02:59:26', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195821_wgWywRF9.pdf'),
 (3, 8994312129, 'Munkabér 2021. november', 1, '2021-12-05 11:00:00', 1, NULL, '2022-01-08 06:40:30', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195821_jmZE4o5u.pdf'),
@@ -349,7 +349,7 @@ INSERT INTO `document` (`document_id`, `user_tax_number`, `document_name`, `cate
 (282, 8785725024, 'Munkabér 2021. október', 1, '2021-11-05 11:00:00', 1, '2026-09-30 23:59:59', '2021-12-10 01:17:22', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195824_akJPBW6a.pdf'),
 (283, 8785725024, 'Munkabér 2021. november', 1, '2021-12-05 11:00:00', 1, '2026-10-31 23:59:59', '2021-12-27 02:50:24', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195824_ZbG0d4af.pdf'),
 (284, 8785725024, 'Munkabér 2021. december', 1, '2022-01-05 11:00:00', 1, '2026-11-30 23:59:59', NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195824_0zy1pCAP.pdf');
-INSERT INTO `document` (`document_id`, `user_tax_number`, `document_name`, `category_id`, `document_added`, `document_visible`, `document_valid`, `document_downloaded`, `document_path`) VALUES
+INSERT INTO `wp_document` (`document_id`, `user_tax_number`, `document_name`, `category_id`, `document_added`, `document_visible`, `document_valid`, `document_downloaded`, `document_path`) VALUES
 (285, 8787269676, 'Munkabér 2021. október', 1, '2021-11-05 11:00:00', 1, '2026-09-30 23:59:59', NULL, 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195824_eNeTnSE8.pdf'),
 (286, 8787269676, 'Munkabér 2021. november', 1, '2021-12-05 11:00:00', 1, '2026-10-31 23:59:59', '2021-12-15 05:11:09', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195825_8PS1Phan.pdf'),
 (287, 8787269676, 'Munkabér 2021. december', 1, '2022-01-05 11:00:00', 1, '2026-11-30 23:59:59', '2022-01-06 02:43:36', 'D:\\OneDrive\\web\\thesis-dms/doc/doc_20220114195825_WZJZJ1Dn.pdf'),
@@ -389,31 +389,31 @@ INSERT INTO `document` (`document_id`, `user_tax_number`, `document_name`, `cate
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `document_category`
+-- Tábla szerkezet ehhez a táblához `wp_document_category`
 --
 
-DROP TABLE IF EXISTS `document_category`;
-CREATE TABLE `document_category` (
+DROP TABLE IF EXISTS `wp_document_category`;
+CREATE TABLE `wp_document_category` (
   `category_id` bigint(10) UNSIGNED NOT NULL,
   `category_name` varchar(250) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `document_category`
+-- A tábla adatainak kiíratása `wp_document_category`
 --
 
-INSERT INTO `document_category` (`category_id`, `category_name`) VALUES
+INSERT INTO `wp_document_category` (`category_id`, `category_name`) VALUES
 (1, 'Bérjegyzék'),
 (2, 'Tájékoztató');
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `user`
+-- Tábla szerkezet ehhez a táblához `wp_user`
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+DROP TABLE IF EXISTS `wp_user`;
+CREATE TABLE `wp_user` (
   `user_tax_number` bigint(10) UNSIGNED NOT NULL,
   `company_code` bigint(10) UNSIGNED NOT NULL,
   `user_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1,
@@ -426,10 +426,10 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `user`
+-- A tábla adatainak kiíratása `wp_user`
 --
 
-INSERT INTO `user` (`user_tax_number`, `company_code`, `user_status`, `user_real_name`, `user_email`, `email_status`, `user_password`, `user_login_attempt`, `user_last_login_attempt`) VALUES
+INSERT INTO `wp_user` (`user_tax_number`, `company_code`, `user_status`, `user_real_name`, `user_email`, `email_status`, `user_password`, `user_login_attempt`, `user_last_login_attempt`) VALUES
 (8050006918, 2, 1, 'Pintér Jarmilla', 'dhrakar@me.com', 2, '$2y$10$6dXBt/3Yv4PfXOkeI.GVWOqE6xQYKSiUbQ5JpzhjsviJ4DPYGjM32', 2, '2021-11-01 21:19:41'),
 (8083605219, 1, 1, 'Szilágyi Szörénke', 'microfab@comcast.net', 2, '$2y$10$GkUgPgfVReZmLv3x9KhMc..pLWEoiLoN5Dqnsm1sM1wslqgBZxURq', 4, '2021-10-03 17:15:31'),
 (8086995111, 2, 1, 'Ruzsinszki Deodát', 'oechslin@comcast.net', 2, '$2y$10$C1P8ZEMoqsO2G68zI7aRV.u.VVtI.o1JQhap2Zn5FpDGMNOCF7B82', 2, '2021-11-13 07:14:42'),
@@ -494,11 +494,11 @@ INSERT INTO `user` (`user_tax_number`, `company_code`, `user_status`, `user_real
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `user_activity_filter`
+-- Tábla szerkezet ehhez a táblához `wp_user_activity_filter`
 --
 
-DROP TABLE IF EXISTS `user_activity_filter`;
-CREATE TABLE `user_activity_filter` (
+DROP TABLE IF EXISTS `wp_user_activity_filter`;
+CREATE TABLE `wp_user_activity_filter` (
   `filter_id` int(10) UNSIGNED NOT NULL,
   `user_tax_number` bigint(10) UNSIGNED NOT NULL,
   `filter_name` varchar(250) COLLATE utf8mb4_hungarian_ci NOT NULL,
@@ -506,21 +506,21 @@ CREATE TABLE `user_activity_filter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `user_activity_filter`
+-- A tábla adatainak kiíratása `wp_user_activity_filter`
 --
 
-INSERT INTO `user_activity_filter` (`filter_id`, `user_tax_number`, `filter_name`, `ufilter`) VALUES
+INSERT INTO `wp_user_activity_filter` (`filter_id`, `user_tax_number`, `filter_name`, `ufilter`) VALUES
 (1, 8713053299, 'Jónás Nyrt. dolgozói', '{\"companyName\":[\"J\\u00f3n\\u00e1s Nyrt.\"],\"userRealName\":[],\"categoryName\":[],\"documentName\":[],\"added\":{},\"validUntil\":{\"checked\":true},\"downloaded\":{\"checked\":false}}'),
 (2, 8713053299, 'Balázs Nyrt. Dolgozói', '{\"companyName\":[\"Bal\\u00e1zs \\u00e9s Tsa Bt.\"],\"userRealName\":[],\"categoryName\":[],\"documentName\":[],\"added\":{},\"validUntil\":{\"checked\":true},\"downloaded\":{\"checked\":false}}');
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `user_email_code`
+-- Tábla szerkezet ehhez a táblához `wp_user_email_code`
 --
 
-DROP TABLE IF EXISTS `user_email_code`;
-CREATE TABLE `user_email_code` (
+DROP TABLE IF EXISTS `wp_user_email_code`;
+CREATE TABLE `wp_user_email_code` (
   `user_tax_number` bigint(10) UNSIGNED NOT NULL,
   `email_code` varchar(100) CHARACTER SET latin2 COLLATE latin2_hungarian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
@@ -528,20 +528,20 @@ CREATE TABLE `user_email_code` (
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `user_permissions`
+-- Tábla szerkezet ehhez a táblához `wp_user_permissions`
 --
 
-DROP TABLE IF EXISTS `user_permissions`;
-CREATE TABLE `user_permissions` (
+DROP TABLE IF EXISTS `wp_user_permissions`;
+CREATE TABLE `wp_user_permissions` (
   `user_tax_number` bigint(10) UNSIGNED NOT NULL,
   `user_permission` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `user_permissions`
+-- A tábla adatainak kiíratása `wp_user_permissions`
 --
 
-INSERT INTO `user_permissions` (`user_tax_number`, `user_permission`) VALUES
+INSERT INTO `wp_user_permissions` (`user_tax_number`, `user_permission`) VALUES
 (8050006918, 0),
 (8083605219, 0),
 (8083605219, 3),
@@ -622,50 +622,50 @@ INSERT INTO `user_permissions` (`user_tax_number`, `user_permission`) VALUES
 --
 
 --
--- A tábla indexei `company`
+-- A tábla indexei `wp_company`
 --
-ALTER TABLE `company`
+ALTER TABLE `wp_company`
   ADD PRIMARY KEY (`company_id`),
   ADD UNIQUE KEY `company_name` (`company_name`);
 
 --
--- A tábla indexei `document`
+-- A tábla indexei `wp_document`
 --
-ALTER TABLE `document`
+ALTER TABLE `wp_document`
   ADD PRIMARY KEY (`document_id`),
   ADD KEY `felhasznalo_adoazonosito` (`user_tax_number`),
   ADD KEY `category_id` (`category_id`);
 
 --
--- A tábla indexei `document_category`
+-- A tábla indexei `wp_document_category`
 --
-ALTER TABLE `document_category`
+ALTER TABLE `wp_document_category`
   ADD PRIMARY KEY (`category_id`);
 
 --
--- A tábla indexei `user`
+-- A tábla indexei `wp_user`
 --
-ALTER TABLE `user`
+ALTER TABLE `wp_user`
   ADD PRIMARY KEY (`user_tax_number`),
   ADD KEY `company_code` (`company_code`);
 
 --
--- A tábla indexei `user_activity_filter`
+-- A tábla indexei `wp_user_activity_filter`
 --
-ALTER TABLE `user_activity_filter`
+ALTER TABLE `wp_user_activity_filter`
   ADD PRIMARY KEY (`filter_id`),
   ADD KEY `user_id` (`user_tax_number`);
 
 --
--- A tábla indexei `user_email_code`
+-- A tábla indexei `wp_user_email_code`
 --
-ALTER TABLE `user_email_code`
+ALTER TABLE `wp_user_email_code`
   ADD PRIMARY KEY (`user_tax_number`);
 
 --
--- A tábla indexei `user_permissions`
+-- A tábla indexei `wp_user_permissions`
 --
-ALTER TABLE `user_permissions`
+ALTER TABLE `wp_user_permissions`
   ADD PRIMARY KEY (`user_tax_number`,`user_permission`);
 
 --
@@ -673,21 +673,21 @@ ALTER TABLE `user_permissions`
 --
 
 --
--- AUTO_INCREMENT a táblához `document`
+-- AUTO_INCREMENT a táblához `wp_document`
 --
-ALTER TABLE `document`
+ALTER TABLE `wp_document`
   MODIFY `document_id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=320;
 
 --
--- AUTO_INCREMENT a táblához `document_category`
+-- AUTO_INCREMENT a táblához `wp_document_category`
 --
-ALTER TABLE `document_category`
+ALTER TABLE `wp_document_category`
   MODIFY `category_id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT a táblához `user_activity_filter`
+-- AUTO_INCREMENT a táblához `wp_user_activity_filter`
 --
-ALTER TABLE `user_activity_filter`
+ALTER TABLE `wp_user_activity_filter`
   MODIFY `filter_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
@@ -695,35 +695,35 @@ ALTER TABLE `user_activity_filter`
 --
 
 --
--- Megkötések a táblához `document`
+-- Megkötések a táblához `wp_document`
 --
-ALTER TABLE `document`
-  ADD CONSTRAINT `document_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `document_category` (`category_id`),
-  ADD CONSTRAINT `document_ibfk_2` FOREIGN KEY (`user_tax_number`) REFERENCES `user` (`user_tax_number`);
+ALTER TABLE `wp_document`
+  ADD CONSTRAINT `document_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `wp_document_category` (`category_id`),
+  ADD CONSTRAINT `document_ibfk_2` FOREIGN KEY (`user_tax_number`) REFERENCES `wp_user` (`user_tax_number`);
 
 --
--- Megkötések a táblához `user`
+-- Megkötések a táblához `wp_user`
 --
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company_code`) REFERENCES `company` (`company_id`);
+ALTER TABLE `wp_user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company_code`) REFERENCES `wp_company` (`company_id`);
 
 --
 -- Megkötések a táblához `user_activity_filter`
 --
-ALTER TABLE `user_activity_filter`
-  ADD CONSTRAINT `user_activity_filter_ibfk_1` FOREIGN KEY (`user_tax_number`) REFERENCES `user` (`user_tax_number`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `wp_user_activity_filter`
+  ADD CONSTRAINT `user_activity_filter_ibfk_1` FOREIGN KEY (`user_tax_number`) REFERENCES `wp_user` (`user_tax_number`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Megkötések a táblához `user_email_code`
+-- Megkötések a táblához `wp_user_email_code`
 --
-ALTER TABLE `user_email_code`
-  ADD CONSTRAINT `user_email_code_ibfk_1` FOREIGN KEY (`user_tax_number`) REFERENCES `user` (`user_tax_number`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `wp_user_email_code`
+  ADD CONSTRAINT `user_email_code_ibfk_1` FOREIGN KEY (`user_tax_number`) REFERENCES `wp_user` (`user_tax_number`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Megkötések a táblához `user_permissions`
+-- Megkötések a táblához `wp_user_permissions`
 --
-ALTER TABLE `user_permissions`
-  ADD CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`user_tax_number`) REFERENCES `user` (`user_tax_number`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `wp_user_permissions`
+  ADD CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`user_tax_number`) REFERENCES `wp_user` (`user_tax_number`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
