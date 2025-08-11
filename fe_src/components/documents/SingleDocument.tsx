@@ -93,7 +93,7 @@ const SingleDocument = ({ id } : SingleDocumentProps) => {
                 <Button
                   className="btn-fill"
                   disabled={!isDownloadable}
-                  href={`./api/document/view.php?documentId=${id}`}
+                  href={`${import.meta.env.VITE_API_URL}/document/view.php?documentId=${id}`}
                   target="_blank"
                 >
                   Letöltés
