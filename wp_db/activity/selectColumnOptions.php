@@ -2,16 +2,16 @@
 function mapColumnNameToTable(string $columnName) {
   switch ($columnName) {
     case 'companyName':
-      return 'company';
+      return 'wp_company';
     case 'userRealName':
-      return 'user';
+      return 'wp_user';
     case 'categoryName':
-      return 'document_category';
+      return 'wp_document_category';
     case 'documentName':
     case 'added':
     case 'validUntil':
     case 'downloaded':
-      return 'document';
+      return 'wp_document';
   }
 }
 
