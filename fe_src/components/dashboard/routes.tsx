@@ -27,7 +27,6 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 import { UserPermissionsEnum } from '../../store/user/userSliceTypes';
-import LoadableActivityStatistics from '../activity-statistics/LoadableActivityStatistics';
 import LoadableDocuments from '../documents/LoadableDocuments';
 import LoadableProfile from '../profile/LoadableProfile';
 import LoadableUserActivity from '../useractivity/LoadableUserActivity';
@@ -61,15 +60,15 @@ const dashboardRoutes = [
     layout: '',
     permission: UserPermissionsEnum.ACTIVITY_ADMINISTRATOR,
   },
-  {
-    id: uuidv4(),
-    path: '/activity-statistics',
-    name: 'Felhasználói statisztika',
-    icon: 'nc-icon nc-vector',
-    component: <LoadableActivityStatistics />,
-    layout: '',
-    permission: UserPermissionsEnum.ACTIVITY_ADMINISTRATOR,
-  },
+  // {
+  //   id: uuidv4(),
+  //   path: '/activity-statistics',
+  //   name: 'Felhasználói statisztika',
+  //   icon: 'nc-icon nc-vector',
+  //   component: <LoadableActivityStatistics />,
+  //   layout: '',
+  //   permission: UserPermissionsEnum.ACTIVITY_ADMINISTRATOR,
+  // },
   {
     id: uuidv4(),
     path: '/user-handling',
