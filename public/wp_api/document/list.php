@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $DOCUMENTS_TO_FETCH = 10;
   
   try {
-    $protectionProblem = protections(true, true, true, USER_PERMISSIONS::REGULAR);
+    $protectionProblem = protections(false, true, true, USER_PERMISSIONS::REGULAR);
     if ($protectionProblem) {
       http_response_code(403);
       echo $protectionProblem;

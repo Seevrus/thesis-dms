@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $MAX_ALLOWED_DOCUMENTS = 1000;
 
     try {
-      $protectionProblem = protections(true, true, true, USER_PERMISSIONS::DOCUMENT_CREATOR);
+      $protectionProblem = protections(false, true, true, USER_PERMISSIONS::DOCUMENT_CREATOR);
       if ($protectionProblem) {
         http_response_code(403);
         echo $protectionProblem;

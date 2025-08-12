@@ -15,7 +15,7 @@ header('Content-Type: application/json; charset=utf-8');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   try {
     // csrf and login protection
-    $protectionProblem = protections(true, true, false, USER_PERMISSIONS::REGULAR);
+    $protectionProblem = protections(false, true, false, USER_PERMISSIONS::REGULAR);
     if ($protectionProblem) {
       http_response_code(403);
       echo $protectionProblem;

@@ -2,7 +2,7 @@
 require_once dirname(__FILE__) . '/checkCsrfToken.php';
 require_once dirname(__FILE__) . '/isLoggedin.php';
 
-function protections(bool $csrf, bool $login, bool $permissions, $permissionRequirement) {
+function protections(bool $csrf, bool $login, bool $permissions, $permissionRequirement): bool|string {
   if (
     ($csrf && !checkCsrfToken())
     || ($login && !isLoggedin())

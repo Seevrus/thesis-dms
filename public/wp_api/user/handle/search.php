@@ -34,14 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // csrf and login protection
     if ($searchType == USER_SEARCH_TYPE::ALL) {
-      $protectionProblem = protections(true, true, true, USER_PERMISSIONS::USER_ADMINISTRATOR);
+      $protectionProblem = protections(false, true, true, USER_PERMISSIONS::USER_ADMINISTRATOR);
       if ($protectionProblem) {
         http_response_code(403);
         echo $protectionProblem;
         exit(1);
       }
     } else if ($searchType == USER_SEARCH_TYPE::LAST_LOGIN) {
-      $protectionProblem = protections(true, true, true, USER_PERMISSIONS::ACTIVITY_ADMINISTRATOR);
+      $protectionProblem = protections(false, true, true, USER_PERMISSIONS::ACTIVITY_ADMINISTRATOR);
       if ($protectionProblem) {
         http_response_code(403);
         echo $protectionProblem;

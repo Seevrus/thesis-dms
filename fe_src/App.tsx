@@ -18,8 +18,9 @@ const App = () => {
   const [loggedinState, setLoggedinState] = useState(loginStatus);
 
   useEffect(() => {
-    setupCsrfToken();
-    dispatch(checkLoginStatus());
+    setupCsrfToken().then(() => {
+      dispatch(checkLoginStatus());
+    })
   }, [dispatch]);
 
   useEffect(() => {

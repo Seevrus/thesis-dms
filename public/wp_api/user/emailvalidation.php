@@ -14,7 +14,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   try {
-    $protectionProblem = protections(true, true, false, null);
+    $protectionProblem = protections(false, true, false, null);
     if ($protectionProblem) {
       http_response_code(403);
       echo $protectionProblem;
