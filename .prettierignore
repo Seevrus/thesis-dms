@@ -1,0 +1,13 @@
+app/
+bootstrap/
+config/
+database/
+node_modules/
+routes/
+storage/
+tests/
+vendor/
+
+composer.json
+composer.lock
+pnpm-lock.yaml
