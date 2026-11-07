@@ -1,0 +1,27 @@
+# Frontend
+/node_modules
+/public/build
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+npm-debug.log
+
+# Laravel
+/bootstrap/ssr
+/resources/js/actions
+/resources/js/routes
+/resources/js/wayfinder
+/storage/*.key
+/storage/pail
+
+# PHP
+/.phpunit.cache
+/vendor
+.phpactor.json
+.phpunit.result.cache
+
+# Misc
+/auth.json
+.env
+.env.backup
+.env.production
