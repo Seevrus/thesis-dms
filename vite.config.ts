@@ -6,6 +6,7 @@ import laravel from "laravel-vite-plugin";
 import { bunny } from "laravel-vite-plugin/fonts";
 import { defineConfig } from "vite";
 
+// eslint-disable-next-line import-x/no-default-export
 export default defineConfig({
   plugins: [
     laravel({
