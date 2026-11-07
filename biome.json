@@ -21,11 +21,31 @@
         "noDuplicateMapKeys": "on",
         "noYamlBooleanKeys": "on"
       },
+      "performance": {
+        "noBarrelFile": "warn"
+      },
       "style": {
         "noCommonJs": "error",
         "noDefaultExport": "error",
         "noImplicitBoolean": "error",
-        "noInferrableTypes": "error"
+        "noInferrableTypes": "error",
+        "noShoutyConstants": "warn",
+        "noUnusedTemplateLiteral": "warn",
+        "useBlockStatements": "error",
+        "useCollapsedElseIf": "warn",
+        "useCollapsedIf": "warn",
+        "useDefaultSwitchClause": "error",
+        "useDestructuring": "warn",
+        "useExportType": "error",
+        "useImportType": "error",
+        "useNodejsImportProtocol": "warn"
+      },
+      "security": {
+        "noSecrets": "error"
+      },
+      "suspicious": {
+        "noAlert": "error",
+        "noImportCycles": "warn"
       },
       "preset": "recommended"
     }

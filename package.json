@@ -3,10 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc -b && vite build",
+    "dev": "vite",
     "format:check": "biome format .",
     "format:write": "biome format . --write",
+    "lint": "biome lint",
+    "lint:write": "biome lint --write",
     "preview": "vite preview"
   },
   "dependencies": {
