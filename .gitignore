@@ -25,4 +25,5 @@ npm-debug.log
 /.idea/workspace.xml
 .env
 .env.backup
+.env.development
 .env.production

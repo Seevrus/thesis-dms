@@ -230,6 +230,7 @@ export default defineConfig(
       "bootstrap/",
       "config/",
       "database/",
+      "docker/",
       "node_modules/",
       "resources/js/actions",
       "resources/js/routes",
